@@ -1,154 +1,47 @@
 import { Box, Button, Divider, IconButton, Typography, useTheme } from "@mui/material";
-import EnhancedTable from "../../../common/table/EnhancedTable";
+
 import { useNavigate } from "react-router";
+import { useEffect, useState } from "react";
+import EnhancedTable from "../../../common/table/EnhancedTable";
+type Customer = {
+  id: number;
+  registration_date: string;
+  first_name: string;
+  last_name: string;
+  phone_number1: string;
+  phone_number2: string;
+};
 
-// const columns: GridColDef<(typeof rows)[number]>[] = [
-//   { field: "date", headerName: "تاریخ ثبت", minWidth: 130, align: "right" },
-//   {
-//     field: "action",
-//     headerName: "عملیات",
-//     width: 90,
-
-//     align: "right",
-//     renderCell: (params) => (
-//       <ActionMenu id={params.id} />
-//     )
-//   },
-
-//   {
-//     field: "name",
-//     headerName: "نام ",
-//     minWidth: 150,
-
-//     align: "right",
-//   },
-//   {
-//     field: "lastName",
-//     headerName: "نام خانوادگی",
-//     minWidth: 150,
-
-//     align: "right",
-//   },
-//   {
-//     field: "nationalId",
-//     headerName: "کد ملی",
-
-//     minWidth: 110,
-
-//     align: "right",
-//   },
-//   {
-//     field: "nationalId",
-//     headerName: "کد ملی",
-
-//     minWidth: 110,
-
-//     align: "right",
-//   },
-//   {
-//     field: "phoneNumber",
-//     headerName: " شماره تماس",
-
-//     minWidth: 110,
-
-//     align: "right",
-//   },
-//   {
-//     field: "guardian",
-//     headerName: " قیم",
-
-//     minWidth: 110,
-
-//     align: "right",
-//   },
-//   {
-//     field: "heirs",
-//     headerName: " وارث",
-
-//     minWidth: 110,
-
-//     align: "right",
-//     renderCell: (params) => (
-
-//       <div>
-//       {params.value.map((heir:string, index:number) => (
-//         <Typography key={index}>{heir}</Typography>
-//       ))}
-//     </div>
-
-//     )
-//   },
-//   {
-//     field: "heirsShare",
-//     headerName: "  سهم وارث (%)",
-
-//     minWidth: 110,
-
-//     align: "center",
-//     renderCell: (params) => (
-
-//       <div>
-//       {params.value.map((share:number, index:number) => (
-//         <Typography key={index}>{share}</Typography>
-//       ))}
-//     </div>
-
-//     )
-//   },
-// ];
-
-// const rows = [
-//   {
-//     id: "1",
-//     date: "1403/03/10",
-//     action: "مشاهده",
-//     name: "علی",
-//     lastName: "رضایی",
-//     nationalId: "0012345678",
-//     phoneNumber: "09123456789",
-//     guardian: "مریم رضایی",
-//     heirs: ["محمد رضایی", "فاطمه رضایی"],
-//     heirsShare: [50, 50],
-//   },
-//   {
-//     id: "2",
-//     date: "1403/03/11",
-//     action: "ویرایش",
-//     name: "زهرا",
-//     lastName: "احمدی",
-//     nationalId: "0098765432",
-//     phoneNumber: "09987654321",
-//     guardian: "حسن احمدی",
-//     heirs: ["علی احمدی"],
-//     heirsShare: [100],
-//   },
-//   {
-//     id: "3",
-//     date: "1403/03/12",
-//     action: "حذف",
-//     name: "مینا",
-//     lastName: "کریمی",
-//     nationalId: "0076543210",
-//     phoneNumber: "09121234567",
-//     guardian: "نرگس کریمی",
-//     heirs: ["فاطمه کریمی", "حسین کریمی"],
-//     heirsShare: [60, 40],
-//   },
-// ];
-
-const columns = [
+const columns: TableColumnDef[] = [
   {
-    id: "name",
-    numeric: false,
+    id: "barcode",
     disablePadding: true,
-    label: "Dessert (100g serving)",
+    label: "کد محصول ",
+    type: "number",
   },
-  { id: "action", numeric: true, disablePadding: false, label: "فعالیت" },
-  { id: "calories", numeric: true, disablePadding: false, label: "Calories" },
-  { id: "fat", numeric: true, disablePadding: false, label: "Fat (g)" },
-  { id: "carbs", numeric: true, disablePadding: false, label: "Carbs (g)" },
-  { id: "protein", numeric: true, disablePadding: false, label: "Protein (g)" },
+  { id: "action", disablePadding: false, label: "عملیات", type: "text" },
+  { id: "name", disablePadding: false, label: "نام", type: "text" },
+  {
+    id: "category",
+    disablePadding: false,
+    label: " دسته",
+    type: "text",
+  },
+  {
+    id: "count",
+    disablePadding: false,
+    label: "تعداد",
+    type: "number",
+  },
+  {
+    id: "price",
+    disablePadding: false,
+    label: "قیمت (ریال)",
+    type: "number",
+  },
 ];
+type Order = "asc" | "desc";
+
 
 const rows = [
   { id: 1, name: "Cupcake", calories: 305, fat: 3.7, carbs: 67, protein: 4.3 },
@@ -217,7 +110,35 @@ const rows = [
 
 const CustomerList = () => {
   const theme = useTheme();
-const navigate = useNavigate()
+const navigate = useNavigate();
+// const [rows, setRows] = useState<Customer[]>([]);
+const [order, setOrder] = useState<Order>("asc");
+const [orderBy, setOrderBy] = useState<string>("registration_date");
+const [selected, setSelected] = useState<readonly number[]>([]);
+const [page, setPage] = useState(0);
+const [rowsPerPage, setRowsPerPage] = useState(10);
+
+
+
+const actions = [
+  {
+    label: "حذف",
+    function: (id: number) =>
+      console.log(`Delete user with ID: ${id}`,rows[id]),
+  },
+  {
+    label: "ویرایش",
+    function: (id: number) => {
+      navigate(`${rows[id]}/`);
+    },
+  },
+];
+
+
+useEffect(() => {
+  console.log("rowsPerPage", rowsPerPage);
+}, [rowsPerPage]);
+
   return (
     <Box className=" w-full flex flex-col gap-5">
       <Box className="w-full flex justify-between">
@@ -237,7 +158,24 @@ const navigate = useNavigate()
         </Button>
       </Box>
 
-      <EnhancedTable columns={columns} rows={rows} showCheckbox={true} />
+      <EnhancedTable
+          columns={columns}
+          rows={rows}
+          showCheckbox={true}
+          actions={actions}
+          order={order}
+          orderBy={orderBy}
+          selected={selected}
+          page={page}
+          isLoading={true}
+          rowsPerPage={rowsPerPage}
+          totalSize={rows.length}
+          setOrder={setOrder}
+          setOrderBy={setOrderBy}
+          setSelected={setSelected}
+          setPage={setPage}
+          setRowsPerPage={setRowsPerPage}
+        />
     </Box>
   );
 };

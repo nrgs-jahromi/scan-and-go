@@ -49,15 +49,21 @@ const AddProduct = () => {
               <Box className="w-full md:grid md:grid-cols-2 gap-8">
                 <FormikInput
                   fullWidth
-                  name="price"
-                  label="مبلغ سرمایه‌گذاری (ریال)"
-                  type="number"
+                  name="name"
+                  label="نام محصول"
+                  type="text"
                 />
                 <FormikInput
                   fullWidth
                   name="initialInterestRate"
                   label="نرخ سود اولیه"
                   type="number"
+                />
+                <FormikTextArea
+                  minRows={4}
+                  name="description"
+                  label="توضیحات"
+                  fullWidth
                 />
                 <FormikDatePicker name="startDate" label="تاریخ شروع" />
                 <FormikDatePicker name="finalDate" label="تاریخ پایان" />
@@ -89,14 +95,8 @@ const AddProduct = () => {
                     </Box>
                   </Box>
                 </Box>
-                <Box className="col-span-2">
-                  <FormikTextArea
-                    minRows={3}
-                    name="description"
-                    label="توضیحات"
-                    fullWidth
-                  />
-                </Box>
+                
+                
 
                 <FormikFileInput
                   name="investmentNotebookFile"
