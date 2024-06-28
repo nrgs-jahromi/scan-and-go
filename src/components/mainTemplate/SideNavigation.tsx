@@ -126,6 +126,11 @@ export default function SideNavigation() {
             category_id: "products",
             label: "افزودن محصول",
             path: "products/add",
+          }, {
+            id: "products-category",
+            category_id: "products",
+            label: "دسته‌بندی محصولات",
+            path: "products/categories",
           },
           {
             id: "products-list",
