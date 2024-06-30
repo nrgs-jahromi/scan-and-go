@@ -11,6 +11,7 @@ import CustomerList from "../pages/customers/list/CustomerList";
 import AddProduct from "../pages/products/AddProduct";
 import Profile from "../pages/profile/StoreProfile";
 import Categories from "../pages/products/categories/CategoriesPage";
+import InvoiceList from "../pages/invoices/InvoiceList";
 
 
 const AppRoutes: FC = () => {
@@ -27,6 +28,8 @@ const AppRoutes: FC = () => {
           <Route path="products" element={<CustomerList />} />
           <Route path="products/add" element={<AddProduct />} />
           <Route path="products/categories" element={<Categories />} />
+
+          <Route path="reports/invoices" element={<InvoiceList />} />
         </Route>
       </Routes>
     </BrowserRouter>

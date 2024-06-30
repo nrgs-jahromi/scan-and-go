@@ -13,10 +13,12 @@ import {
 import { SearchNormal1 } from "iconsax-react";
 
 type ButtonConfig = {
-  text: string;
-  onClick: () => void;
+  text?: string; // Make text optional
+  onClick?: () => void; // Make onClick optional
   variant?: ButtonProps["variant"]; // Optional variant property
+  customComponent?: React.ReactNode; // For custom components like DatePicker
 };
+
 
 type PageHeaderProps = {
   title: string;
@@ -68,14 +70,19 @@ const PageHeader: React.FC<PageHeaderProps> = ({
         )}
         {buttons &&
           buttons.map((button, index) => (
-            <Button
-              key={index}
-              variant={button.variant || "contained"} // Use the variant from props or default to "contained"
-              sx={{ height: "48px", minWidth: "120px", boxShadow: "none" }}
-              onClick={button.onClick}
-            >
-              {button.text}
-            </Button>
+            <React.Fragment key={index}>
+              {button.customComponent ? (
+                button.customComponent
+              ) : (
+                <Button
+                  variant={button.variant || "contained"} // Use the variant from props or default to "contained"
+                  sx={{ height: "48px", minWidth: "120px", boxShadow: "none" }}
+                  onClick={button.onClick}
+                >
+                  {button.text}
+                </Button>
+              )}
+            </React.Fragment>
           ))}
       </Box>
     </Box>
