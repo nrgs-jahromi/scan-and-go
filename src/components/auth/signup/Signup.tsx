@@ -1,24 +1,24 @@
 import { useFormik, FormikProvider, Form } from "formik";
 import { Box, Button, Typography, useMediaQuery } from "@mui/material";
-import theme from "../../theme";
 import * as Yup from "yup";
 import { useNavigate, useParams } from "react-router";
-import image from "../../assets/loginImage.png";
-import FormikInput from "../common/inputs/FormikInput";
+import image from "../../../assets/loginImage.png";
 import { Lock1, Sms } from "iconsax-react";
+import theme from "../../../theme";
+import FormikInput from "../../common/inputs/FormikInput";
 
-type LoginFormT = {
+type SignupFormT = {
   email: string;
   password: string;
 };
-const Login = () => {
+const Signup = () => {
   const navigate = useNavigate();
   const { token } = useParams();
   // 'token' variable contains the decoded token
   console.log("Decoded token:", token);
 
   const isLargeScreen = useMediaQuery("(min-width: 768px)");
-  const formik = useFormik<LoginFormT>({
+  const formik = useFormik<SignupFormT>({
     initialValues: {
       email: "",
       password: "",
@@ -31,9 +31,9 @@ const Login = () => {
     }),
     onSubmit: () => {},
   });
-  const handleSubmit = () => { navigate("/dashboard")};
-
-
+  const handleSubmit = () => {
+    navigate("/dashboard");
+  };
 
   return (
     <Box className="h-screen w-screen flex  ">
@@ -46,10 +46,10 @@ const Login = () => {
             {/* <img src={logo}></img> */}
             <Box>
               <Typography variant="h5" align="center" fontWeight={"bold"}>
-                ورود به بای‌نت
+                ثبت‌نام در بای‌نت
               </Typography>
               <Typography variant="body1" align="center">
-                به بای‌نت خوش آمدید. جهت ورود اطلاعات خود را وارد کنید.
+                به بای‌نت خوش آمدید. جهت ثبت‌نام اطلاعات خود را وارد کنید.
               </Typography>
             </Box>
             <Box className=" w-full  ">
@@ -59,7 +59,7 @@ const Login = () => {
                   name="email"
                   label="شماره همراه"
                   placeholder="شماره همراه"
-                  Icon = {<Sms/>}
+                  Icon={<Sms />}
                 />
                 <FormikInput
                   type="password"
@@ -67,9 +67,16 @@ const Login = () => {
                   label="رمز عبور"
                   placeholder="رمز عبور"
                   noPasswordVisibility={false}
-                  Icon={<Lock1/>}
-                />
-                <Typography variant="subtitle2" color={theme.palette.primary.main} textAlign={"end"} marginTop={-3} sx={{cursor:"pointer"}} onClick={()=>{navigate("/passrecovery")}}>فراموشی رمز عبور؟</Typography>
+                  Icon={<Lock1 />}
+                /><FormikInput
+                type="password"
+                name="password2"
+                label="تکرار رمز عبور"
+                placeholder="تکرار رمز عبور"
+                noPasswordVisibility={false}
+                Icon={<Lock1 />}
+              />
+               
               </Box>
               <Button
                 type="submit"
@@ -78,15 +85,15 @@ const Login = () => {
                 fullWidth
                 size="medium"
               >
-                ورود
+                تایید و ادامه
               </Button>
               <Button
-                onClick={()=>navigate("/signup/")}
+                onClick={handleSubmit}
                 variant="text"
                 fullWidth
                 size="medium"
               >
-                قبلا وارد نشده‌اید؟ ایجاد حساب کاربری
+                قبلا وارد شده‌اید؟ ورود
               </Button>
             </Box>
           </Form>
@@ -109,4 +116,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
