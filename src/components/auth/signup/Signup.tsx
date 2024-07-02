@@ -32,7 +32,7 @@ const Signup = () => {
     onSubmit: () => {},
   });
   const handleSubmit = () => {
-    navigate("/dashboard");
+    navigate("/signup/verify");
   };
 
   return (

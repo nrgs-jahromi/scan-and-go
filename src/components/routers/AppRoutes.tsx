@@ -13,6 +13,8 @@ import Profile from "../pages/profile/StoreProfile";
 import Categories from "../pages/products/categories/CategoriesPage";
 import InvoiceList from "../pages/invoices/InvoiceList";
 import Signup from "../auth/signup/Signup";
+import NumberVerification from "../auth/signup/VerifyNumber";
+import StoreInformation from "../pages/storeInfo/StoreInformation";
 
 
 const AppRoutes: FC = () => {
@@ -21,6 +23,8 @@ const AppRoutes: FC = () => {
       <Routes>
         <Route path="/login/:token?/" element={<Login />} />
         <Route path="/signup/" element={<Signup />} />
+        <Route path="/signup/verify" element={<NumberVerification />} />
+        <Route path="/signup/add-store-info/" element={<StoreInformation />} />
         <Route path="/passrecovery/" element={<ForgotPass />} />
         <Route path="/passrecovery/verify" element={<Verification />} />
         <Route path="/passrecovery/setnew/:token?" element={<PassRecovery />} />

@@ -25,6 +25,7 @@ const cacheRtl = createCache({
 type Props = {
   steps: StepT[];
   activeIndex: number;
+  erroneousSteps?: number[];
 };
 
 interface QontoConnectorProps extends StepConnectorProps {
@@ -50,8 +51,7 @@ const QontoConnector = styled(StepConnector, {
     },
   },
   [`& .${stepConnectorClasses.line}`]: {
-    borderColor:
-      theme.palette.mode === "dark" ? theme.palette.grey[800] : "white",
+    borderColor: theme.palette.mode === "dark" ? theme.palette.grey[800] : "white",
     borderTopWidth: 3,
     borderRadius: 1,
   },
@@ -97,8 +97,7 @@ function QontoStepIcon(props: StepIconProps) {
 const ColorlibStepIconRoot = styled("div")<{
   ownerState: { completed?: boolean; active?: boolean };
 }>(({ theme, ownerState }) => ({
-  backgroundColor:
-    theme.palette.mode === "dark" ? theme.palette.grey[700] : "white",
+  backgroundColor: theme.palette.mode === "dark" ? theme.palette.grey[700] : "white",
   zIndex: 1,
   color: theme.palette.primary.main,
   width: 50,
@@ -122,15 +121,12 @@ function ColorlibStepIcon(props: StepIconProps) {
   const { active, completed, className, icon } = props;
 
   return (
-    <ColorlibStepIconRoot
-      ownerState={{ completed, active }}
-      className={className}
-    >
+    <ColorlibStepIconRoot ownerState={{ completed, active }} className={className}>
       {icon}
     </ColorlibStepIconRoot>
   );
 }
-const CustomizedStepper: FC<Props> = ({ steps , activeIndex }) => {
+const CustomizedStepper: FC<Props> = ({ steps, activeIndex }) => {
   const isMdScreen = useMediaQuery(theme.breakpoints.up("md"));
   const stepNumber = steps.length;
   const [isMinimal, setIsMinimal] = useState(false);
@@ -157,13 +153,9 @@ const CustomizedStepper: FC<Props> = ({ steps , activeIndex }) => {
               <StepLabel
                 StepIconComponent={
                   isMdScreen
-                    ? (props) => (
-                        <ColorlibStepIcon {...props} icon={step.icon} />
-                      )
+                    ? (props) => <ColorlibStepIcon {...props} icon={step.icon} />
                     : stepNumber < 5
-                    ? (props) => (
-                        <ColorlibStepIcon {...props} icon={step.icon} />
-                      )
+                    ? (props) => <ColorlibStepIcon {...props} icon={step.icon} />
                     : QontoStepIcon
                 }
               >

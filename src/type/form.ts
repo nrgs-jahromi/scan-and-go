@@ -55,3 +55,31 @@ CustomerInfoT &
 GuardianInfoT &
 HeirInfoT &
 RefererInfoT;
+
+
+type StoreInfoT = {
+  store_name: string | null;
+  store_type: string | null;
+  business_number: string | null;
+  product_count: number | null;
+  store_contact_number: string | null;
+  store_address: string | null;
+};
+
+type BankInfoT = {
+  bank_name: string | null;
+  card_number: string | null;
+  account_number: string | null;
+  first_name: string | null;
+  last_name: string | null;
+  iban_number: string | null;
+};
+
+type OutputInfoT = {
+  logo: string | null;
+  english_name: string | null;
+  main_color: string | null;
+  url: string | null;
+};
+
+type StoreFormT = StoreInfoT & BankInfoT & OutputInfoT;
