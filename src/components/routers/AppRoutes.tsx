@@ -23,11 +23,11 @@ const AppRoutes: FC = () => {
       <Routes>
         <Route path="/login/:token?/" element={<Login />} />
         <Route path="/signup/" element={<Signup />} />
-        <Route path="/verify/:type?" element={<NumberVerification />} />
+        <Route path="/verify/:phoneNumber" element={<NumberVerification />} />
         <Route path="/signup/add-store-info/" element={<StoreInformation />} />
         <Route path="/passrecovery/" element={<ForgotPass />} />
         <Route path="/passrecovery/verify" element={<Verification />} />
-        <Route path="/setpassword/:otp?" element={<PassRecovery />} />
+        <Route path="/setpassword/:phoneNumber" element={<PassRecovery />} />
         <Route path="/*" element={<MainTemplate />}>
           <Route path="profile" element={<Profile />} />
           <Route path="dashboard" element={<Dashboard />} />

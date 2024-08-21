@@ -7,6 +7,8 @@ import { MuiOtpInput } from "mui-one-time-password-input";
 import { useState, useEffect } from "react";
 import theme from "../../../theme";
 import ConfirmationModal from "../../modal/ConfirmationModal";
+import { notif } from "../../common/notification/Notification";
+import { useUserVerification } from "../../../api/auth/verifyUser";
 
 type LoginFormT = {
   otp: string;
@@ -14,10 +16,14 @@ type LoginFormT = {
 
 const NumberVerification = () => {
   const navigate = useNavigate();
-  const { token } = useParams();
-  console.log("Decoded token:", token);
-
   const isLargeScreen = useMediaQuery("(min-width: 768px)");
+  const { phoneNumber } = useParams<{ phoneNumber: string }>();
+  const [otp, setOtp] = useState("");
+  const [timer, setTimer] = useState(10);
+  const [isTimerRunning, setIsTimerRunning] = useState(true);
+
+  const { mutate, isLoading, error } = useUserVerification();
+
   const formik = useFormik<LoginFormT>({
     initialValues: {
       otp: "",
@@ -25,30 +31,73 @@ const NumberVerification = () => {
     validationSchema: Yup.object().shape({
       otp: Yup.string().required("Please enter your verification code."),
     }),
-    onSubmit: () => {},
+    onSubmit: (values) => {
+      mutate(
+        {
+          body: {
+            mobile_number: phoneNumber || "",
+            verification_code: values.otp,
+          },
+        },
+        {
+          onSuccess: (data) => {
+            notif("با موفقیت وارد شدید.", { variant: "success" });
+            navigate(`/setpassword/${phoneNumber}`);
+          },
+          onError: (err) => {
+            notif("کد وارد شده معتبر نمی‌باشد.", { variant: "error" });
+          },
+        }
+      );
+    },
   });
-  const [otp, setOtp] = useState("");
-  const [timer, setTimer] = useState(10);
-  const [isTimerRunning, setIsTimerRunning] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleChange = (newValue: string) => {
     setOtp(newValue);
-  };
-
-  // const handleSubmit = () => {
-  //   setIsModalOpen(true);
-  // };
-
-  const handleSubmit = () => {
-    navigate(`/setpassword/${otp}`);
+    formik.setFieldValue("otp", newValue);
   };
 
   const handleResend = () => {
-    setTimer(10);
-    setIsTimerRunning(true);
-    setOtp("");
+    navigate("/signup");
   };
+
+  useEffect(() => {
+    const expirationTime = localStorage.getItem("verificationExpirationTime");
+    if (expirationTime) {
+      // Parse the expiration time from localStorage
+      const expirationDate = new Date(expirationTime);
+      const now = new Date();
+
+      // Calculate the difference in seconds
+      const timeLeft = Math.max(
+        0,
+        Math.floor((expirationDate.getTime() - now.getTime()) / 1000)
+      );
+      setTimer(timeLeft);
+      setIsTimerRunning(timeLeft > 0);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isTimerRunning && timer > 0) {
+      const countdown = setInterval(() => {
+        setTimer((prevTimer) => {
+          if (prevTimer <= 1) {
+            clearInterval(countdown);
+            setIsTimerRunning(false);
+            return 0;
+          }
+          return prevTimer - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(countdown);
+    }
+  }, [isTimerRunning, timer]);
+
+  // Calculate minutes and seconds
+  const minutes = Math.floor(timer / 60);
+  const seconds = timer % 60;
 
   useEffect(() => {
     if (isTimerRunning) {
@@ -66,33 +115,19 @@ const NumberVerification = () => {
     }
   }, [timer]);
 
-  const handleModalClose = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCompleteInfo = () => {
-    setIsModalOpen(false);
-    navigate("/signup/add-store-info/"); 
-  };
-
-  const handleGoToDashboard = () => {
-    setIsModalOpen(false);
-    navigate("/dashboard"); // مسیر به داشبورد
-  };
-
   return (
     <Box
-    className={`h-screen w-full flex bg-slate-100 items-center justify-center ${
-      isLargeScreen ? "" : "p-0"
-    }`}
-  >
-    <Box
-      className={`${
-        isLargeScreen
-          ? "w-[30rem] bg-white rounded-xl shadow-2xl p-10"
-          : "w-full h-full bg-white p-4"
-      } flex flex-col`}
+      className={`h-screen w-full flex bg-slate-100 items-center justify-center ${
+        isLargeScreen ? "" : "p-0"
+      }`}
     >
+      <Box
+        className={`${
+          isLargeScreen
+            ? "w-[30rem] bg-white rounded-xl shadow-2xl p-10"
+            : "w-full h-full bg-white p-4"
+        } flex flex-col`}
+      >
         <FormikProvider value={formik}>
           <Form
             onSubmit={formik.handleSubmit}
@@ -131,24 +166,18 @@ const NumberVerification = () => {
                       ارسال مجدد کد تایید
                     </Button>
                   ) : (
-                    `زمان باقی‌مانده: ${timer} ثانیه`
+                    `زمان باقی‌مانده: ${minutes} دقیقه و ${seconds} ثانیه`
                   )}
                 </Typography>
               </Box>
-              <Button
-                type="submit"
-                onClick={handleSubmit}
-                variant="contained"
-                fullWidth
-                size="medium"
-              >
+              <Button type="submit" variant="contained" fullWidth size="medium">
                 ادامه
               </Button>
             </Box>
           </Form>
         </FormikProvider>
       </Box>
-     
+
       {/* <ConfirmationModal
         isOpen={isModalOpen}
         onClose={handleModalClose}

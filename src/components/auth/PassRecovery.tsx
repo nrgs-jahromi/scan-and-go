@@ -2,25 +2,22 @@ import { useFormik, FormikProvider, Form } from "formik";
 import { Box, Button, Typography, useMediaQuery } from "@mui/material";
 import theme from "../../theme";
 import * as Yup from "yup";
-import { useNavigate } from "react-router";
-import changePasswod from "../../assets/changePassword.png";
-import logo from "../../assets/logo.svg";
+import { useNavigate, useParams } from "react-router";
 import FormikInput from "../common/inputs/FormikInput";
 import { Lock1 } from "iconsax-react";
+import { useSetPassword } from "../../api/auth/setPassword";
 
 type LoginFormT = {
   password: string;
   confirm: string;
 };
+
 const PassRecovery = () => {
   const navigate = useNavigate();
+  const { phoneNumber } = useParams<{ phoneNumber: string }>();
   const isLargeScreen = useMediaQuery("(min-width: 768px)");
 
-  // const {
-  //   mutate: changePassword,
-  //   isSuccess: isChangingPasswordSuccess,
-  //   isError: isChangingPasswordFail,
-  // } = usePasswordChanging();
+  const { mutate: setPassword, isLoading, isSuccess } = useSetPassword();
 
   const formik = useFormik<LoginFormT>({
     initialValues: {
@@ -34,31 +31,22 @@ const PassRecovery = () => {
         .required("Please confirm your new password."),
     }),
     onSubmit: (values) => {
-      console.log("values=", values);
+      if (formik.isValid && phoneNumber) {
+        setPassword(
+          { body: { mobile_number: phoneNumber, password: values.password } },
+          {
+            onSuccess: (response) => {
+              console.log("Password has been set:", response);
+              navigate("/login/");
+            },
+            onError: (error) => {
+              console.error("Failed to set password:", error);
+            },
+          }
+        );
+      }
     },
   });
-
-  const handleSet = () => {
-    if (formik.isValid) {
-      navigate("/login/");
-
-      // Only make the API call if the form is valid
-      // changePassword({
-      //   body: {
-      //     password: formik.values.password,
-      //   },
-      //   params: {
-      //     token: token,
-      //   },
-      // });
-    }
-  };
-
-  // useEffect(() => {
-  //   if (isChangingPasswordSuccess) {
-  //     navigate("/login/");
-  //   }
-  // }, []);
 
   return (
     <Box
@@ -78,7 +66,6 @@ const PassRecovery = () => {
             onSubmit={formik.handleSubmit}
             className="h-full w-full justify-center items-center flex flex-col"
           >
-            {/* <img src={logo}></img> */}
             <Box>
               <Typography variant="h5" align="center" fontWeight={"bold"}>
                 تعیین رمز عبور
@@ -106,18 +93,17 @@ const PassRecovery = () => {
               </Box>
               <Button
                 type="submit"
-                onClick={handleSet}
                 variant="contained"
                 fullWidth
                 size="medium"
+                disabled={isLoading} // دکمه را هنگام ارسال درخواست غیر فعال می‌کند
               >
-                تایید
+                {isLoading ? "در حال انجام..." : "تایید"}
               </Button>
             </Box>
           </Form>
         </FormikProvider>
       </Box>
-     
     </Box>
   );
 };

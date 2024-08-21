@@ -2,12 +2,14 @@ import { useFormik, FormikProvider, Form } from "formik";
 import { Box, Button, Typography, useMediaQuery } from "@mui/material";
 import * as Yup from "yup";
 import { useNavigate, useParams } from "react-router";
-import { Lock1, Sms } from "iconsax-react";
+import { Sms } from "iconsax-react";
 import FormikInput from "../../common/inputs/FormikInput";
+import { useGetOtp } from "../../../api/auth/getOTP";
+import { useEffect } from "react";
+import { notif } from "../../common/notification/Notification";
 
 type SignupFormT = {
-  email: string;
-  password: string;
+  mobile_number: string;
 };
 
 const Signup = () => {
@@ -17,24 +19,40 @@ const Signup = () => {
 
   const isLargeScreen = useMediaQuery("(min-width: 768px)");
 
+  const {
+    mutate: getOtp,
+    isLoading,
+    isSuccess,
+    isError,
+    data: signupData,
+  } = useGetOtp();
+
   const formik = useFormik<SignupFormT>({
     initialValues: {
-      email: "",
-      password: "",
+      mobile_number: "",
     },
     validationSchema: Yup.object().shape({
-      email: Yup.string()
-        .email("Please enter a valid email.")
-        .required("Please enter your account's email."),
-      password: Yup.string().required("Please enter your password."),
+      mobile_number: Yup.string()
+        .required("لطفا شماره همراه خود را وارد کنید.")
+        .matches(/^[0-9]{11}$/, "شماره همراه باید ۱۱ رقمی باشد."),
     }),
-    onSubmit: () => {},
+    onSubmit: (values) => {
+      getOtp({ body: { mobile_number: values.mobile_number } });
+    },
   });
 
-  const handleSubmit = () => {
-    navigate("/verify/signup");
-  };
-
+  useEffect(() => {
+    if (isSuccess) {
+      localStorage.setItem(
+        "verificationExpirationTime",
+        signupData!.expire_time
+      );
+      notif("کد احراز هویت برای شما پیامک شد.", { variant: "success" });
+      navigate(`/verify/${formik.values.mobile_number}`);
+    } else if (isError) {
+      notif("َشماره وارد شده معتبر نمی‌باشد", { variant: "error" });
+    }
+  }, [isSuccess, isError]);
   return (
     <Box
       className={`h-screen w-full flex bg-slate-100 items-center justify-center ${
@@ -64,25 +82,24 @@ const Signup = () => {
             <Box className="w-full">
               <Box className="flex flex-col gap-4 my-10 w-full">
                 <FormikInput
-                  type="email"
-                  name="email"
+                  type="text"
+                  name="mobile_number"
                   label="شماره همراه"
                   placeholder="شماره همراه"
                   Icon={<Sms />}
                 />
-                
               </Box>
               <Button
                 type="submit"
-                onClick={handleSubmit}
                 variant="contained"
                 fullWidth
                 size="medium"
+                disabled={isLoading} // غیر فعال کردن دکمه هنگام ارسال درخواست
               >
-                تایید و ادامه
+                {isLoading ? "در حال ارسال..." : "تایید و ادامه"}
               </Button>
               <Button
-                onClick={handleSubmit}
+                onClick={() => navigate("/login")}
                 variant="text"
                 fullWidth
                 size="medium"
