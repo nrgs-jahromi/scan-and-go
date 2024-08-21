@@ -1,37 +1,53 @@
 import { useFormik, FormikProvider, Form } from "formik";
 import { Box, Button, Typography, useMediaQuery } from "@mui/material";
-import theme from "../../theme";
 import * as Yup from "yup";
-import { useNavigate, useParams } from "react-router";
-import changePasswod from "../../assets/changePassword.png";
-import logo from "../../assets/logo.svg";
+import { useNavigate } from "react-router";
 import FormikInput from "../common/inputs/FormikInput";
 import { Sms } from "iconsax-react";
+import { useGetOtp } from "../../api/auth/getOTP";
+import { useEffect } from "react";
+import { notif } from "../common/notification/Notification";
 
-type LoginFormT = {
-  email: string;
+type FormT = {
+  mobile_number: string;
 };
 const ForgotPass = () => {
   const navigate = useNavigate();
-  const { token } = useParams();
-  // 'token' variable contains the decoded token
-  console.log("Decoded token:", token);
-
   const isLargeScreen = useMediaQuery("(min-width: 768px)");
-  const formik = useFormik<LoginFormT>({
+  const {
+    mutate: getOtp,
+    isLoading,
+    isSuccess,
+    isError,
+    data: signupData,
+  } = useGetOtp();
+
+  const formik = useFormik<FormT>({
     initialValues: {
-      email: "",
+      mobile_number: "",
     },
     validationSchema: Yup.object().shape({
-      email: Yup.string()
-        .email("Please enter a valid email.")
-        .required("Please enter you account's email."),
+      mobile_number: Yup.string()
+        .required("لطفا شماره همراه خود را وارد کنید.")
+        .matches(/^[0-9]{11}$/, "شماره همراه باید ۱۱ رقمی باشد."),
     }),
-    onSubmit: () => {},
+    onSubmit: (values) => {
+      getOtp({ body: { mobile_number: values.mobile_number } });
+    },
   });
-  const handleSubmit = () => {
-    navigate("/verify/passrecovery");
-  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      localStorage.setItem(
+        "verificationExpirationTime",
+        signupData!.expire_time
+      );
+      notif("کد احراز هویت برای شما پیامک شد.", { variant: "success" });
+      navigate(`/verify/${formik.values.mobile_number}`);
+    } else if (isError) {
+      notif("َشماره وارد شده معتبر نمی‌باشد", { variant: "error" });
+    }
+  }, [isSuccess, isError]);
 
   return (
     <Box
@@ -64,20 +80,14 @@ const ForgotPass = () => {
             <Box className=" w-full  ">
               <Box className="flex flex-col gap-8 my-10 w-full">
                 <FormikInput
-                  type="email"
-                  name="email"
+                  type="text"
+                  name="mobile_number"
                   label="شماره همراه"
                   placeholder="شماره همراه"
                   Icon={<Sms />}
                 />
               </Box>
-              <Button
-                type="submit"
-                onClick={handleSubmit}
-                variant="contained"
-                fullWidth
-                size="medium"
-              >
+              <Button type="submit" variant="contained" fullWidth size="medium">
                 ارسال کد
               </Button>
             </Box>

@@ -1,7 +1,7 @@
 import { useFormik, FormikProvider, Form } from "formik";
 import { Box, Button, Typography, useMediaQuery } from "@mui/material";
 import * as Yup from "yup";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import { Sms } from "iconsax-react";
 import FormikInput from "../../common/inputs/FormikInput";
 import { useGetOtp } from "../../../api/auth/getOTP";
@@ -14,8 +14,7 @@ type SignupFormT = {
 
 const Signup = () => {
   const navigate = useNavigate();
-  const { token } = useParams();
-  console.log("Decoded token:", token);
+
 
   const isLargeScreen = useMediaQuery("(min-width: 768px)");
 
@@ -94,7 +93,7 @@ const Signup = () => {
                 variant="contained"
                 fullWidth
                 size="medium"
-                disabled={isLoading} // غیر فعال کردن دکمه هنگام ارسال درخواست
+                disabled={isLoading}
               >
                 {isLoading ? "در حال ارسال..." : "تایید و ادامه"}
               </Button>
