@@ -36,8 +36,12 @@ const NumberVerification = () => {
     setOtp(newValue);
   };
 
+  // const handleSubmit = () => {
+  //   setIsModalOpen(true);
+  // };
+
   const handleSubmit = () => {
-    setIsModalOpen(true);
+    navigate(`/setpassword/${otp}`);
   };
 
   const handleResend = () => {
@@ -77,12 +81,22 @@ const NumberVerification = () => {
   };
 
   return (
-    <Box className="h-screen w-screen flex">
-      <Box className="flex w-full md:w-1/2 lg:w-2/5 justify-center items-center h-full">
+    <Box
+    className={`h-screen w-full flex bg-slate-100 items-center justify-center ${
+      isLargeScreen ? "" : "p-0"
+    }`}
+  >
+    <Box
+      className={`${
+        isLargeScreen
+          ? "w-[30rem] bg-white rounded-xl shadow-2xl p-10"
+          : "w-full h-full bg-white p-4"
+      } flex flex-col`}
+    >
         <FormikProvider value={formik}>
           <Form
             onSubmit={formik.handleSubmit}
-            className="h-full w-full p-10 justify-center items-center gap-10 flex flex-col"
+            className="h-full w-full justify-center items-center gap-10 flex flex-col"
           >
             <Box>
               <Typography variant="h5" align="center" fontWeight={"bold"}>
@@ -134,20 +148,8 @@ const NumberVerification = () => {
           </Form>
         </FormikProvider>
       </Box>
-      {isLargeScreen && (
-        <Box
-          sx={{
-            height: "100%",
-            width: "60%",
-            backgroundImage: `url(${changePasswod})`,
-            backgroundSize: "contain",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center center",
-            bgcolor: theme.palette.primary.main,
-          }}
-        />
-      )}
-      <ConfirmationModal
+     
+      {/* <ConfirmationModal
         isOpen={isModalOpen}
         onClose={handleModalClose}
         description="حساب کاربری شما با موفقیت ایجاد شد.آیا می‌خواهید اطلاعات فروشگاه خود را تکمیل کنید یا به داشبورد بروید؟"
@@ -156,7 +158,7 @@ const NumberVerification = () => {
         onCancelClick={handleCompleteInfo}
         onConfirmClick={handleGoToDashboard}
         mode="success"
-      />
+      /> */}
     </Box>
   );
 };

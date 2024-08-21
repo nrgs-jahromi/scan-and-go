@@ -31,80 +31,81 @@ const Login = () => {
     }),
     onSubmit: () => {},
   });
-  const handleSubmit = () => { navigate("/dashboard")};
-
-
+  const handleSubmit = () => {
+    navigate("/dashboard");
+  };
 
   return (
-    <Box className="h-screen w-screen flex  ">
-      <Box className=" flex w-full md:w-1/2 lg:w-2/5 justify-center items-center h-full">
-        <FormikProvider value={formik}>
-          <Form
-            onSubmit={formik.handleSubmit}
-            className="h-full w-full p-10 justify-center items-center gap-10 flex flex-col"
-          >
-            {/* <img src={logo}></img> */}
-            <Box>
-              <Typography variant="h5" align="center" fontWeight={"bold"}>
-                ورود به بای‌نت
-              </Typography>
-              <Typography variant="body1" align="center">
-                به بای‌نت خوش آمدید. جهت ورود اطلاعات خود را وارد کنید.
-              </Typography>
-            </Box>
-            <Box className=" w-full  ">
-              <Box className="flex flex-col gap-8 my-10 w-full">
-                <FormikInput
-                  type="email"
-                  name="email"
-                  label="شماره همراه"
-                  placeholder="شماره همراه"
-                  Icon = {<Sms/>}
-                />
-                <FormikInput
-                  type="password"
-                  name="password"
-                  label="رمز عبور"
-                  placeholder="رمز عبور"
-                  noPasswordVisibility={false}
-                  Icon={<Lock1/>}
-                />
-                <Typography variant="subtitle2" color={theme.palette.primary.main} textAlign={"end"} marginTop={-3} sx={{cursor:"pointer"}} onClick={()=>{navigate("/passrecovery")}}>فراموشی رمز عبور؟</Typography>
+    <Box className="h-screen w-full flex bg-slate-100 items-center justify-center ">
+      <Box className="w-[30rem]  bg-white rounded-xl shadow-2xl flex flex-col p-10	">
+        <Box>
+          <Typography variant="h5" align="center" fontWeight={"bold"}>
+            ورود به بای‌نت
+          </Typography>
+          <Typography variant="body1" align="center">
+            به بای‌نت خوش آمدید. جهت ورود اطلاعات خود را وارد کنید.
+          </Typography>
+        </Box>
+        <Box className=" flex w-full justify-center items-center h-full ">
+          <FormikProvider value={formik}>
+            <Form
+              onSubmit={formik.handleSubmit}
+              className="h-full w-full  justify-center items-center  flex flex-col"
+            >
+              {/* <img src={logo}></img> */}
+
+              <Box className=" w-full  ">
+                <Box className="flex flex-col  my-10 w-full">
+                  <FormikInput
+                    type="email"
+                    name="email"
+                    label="شماره همراه"
+                    placeholder="شماره همراه"
+                    Icon={<Sms />}
+                  />
+                  <FormikInput
+                    type="password"
+                    name="password"
+                    label="رمز عبور"
+                    placeholder="رمز عبور"
+                    noPasswordVisibility={false}
+                    Icon={<Lock1 />}
+                  />
+                  <Typography
+                    variant="subtitle2"
+                    color={theme.palette.primary.main}
+                    textAlign={"end"}
+                    marginTop={-1}
+                    sx={{ cursor: "pointer" }}
+                    onClick={() => {
+                      navigate("/passrecovery");
+                    }}
+                  >
+                    فراموشی رمز عبور؟
+                  </Typography>
+                </Box>
+                <Button
+                  type="submit"
+                  onClick={handleSubmit}
+                  variant="contained"
+                  fullWidth
+                  size="medium"
+                >
+                  ورود
+                </Button>
+                <Button
+                  onClick={() => navigate("/signup/")}
+                  variant="text"
+                  fullWidth
+                  size="medium"
+                >
+                  قبلا وارد نشده‌اید؟ ایجاد حساب کاربری
+                </Button>
               </Box>
-              <Button
-                type="submit"
-                onClick={handleSubmit}
-                variant="contained"
-                fullWidth
-                size="medium"
-              >
-                ورود
-              </Button>
-              <Button
-                onClick={()=>navigate("/signup/")}
-                variant="text"
-                fullWidth
-                size="medium"
-              >
-                قبلا وارد نشده‌اید؟ ایجاد حساب کاربری
-              </Button>
-            </Box>
-          </Form>
-        </FormikProvider>
+            </Form>
+          </FormikProvider>
+        </Box>
       </Box>
-      {isLargeScreen && (
-        <Box
-          sx={{
-            height: "100%",
-            width: "60%",
-            backgroundImage: `url(${image})`,
-            backgroundSize: "contain",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center center",
-            bgcolor: theme.palette.primary.main,
-          }}
-        />
-      )}
     </Box>
   );
 };

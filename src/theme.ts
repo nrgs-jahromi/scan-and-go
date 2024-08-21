@@ -12,7 +12,7 @@ const theme = createTheme({
       secondary:"#342D69"
     },
     background: {
-      paper: "#F8F9FF",
+      paper: "#F3F2FD",
     },
     grey: {
       50: "#F7F7F7",
@@ -102,7 +102,7 @@ const theme = createTheme({
           borderRadius: "8px",
           // padding:"0 14px",
           "& .MuiOutlinedInput-notchedOutline": {
-            border: `0.5px solid #E1DEFA`,
+            border: `0.5px solid #E8E5FA`,
           },
         },
         input: {
@@ -130,7 +130,7 @@ const theme = createTheme({
     MuiPaper: {
       styleOverrides: {
         root: {
-          border: `0.5px solid #E1DEFA`,
+          border: `0.5px solid #E8E5FA`,
           boxShadow: "none",
           borderRadius: "8px",
           backgroundColor: "white",

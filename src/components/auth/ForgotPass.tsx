@@ -26,39 +26,50 @@ const ForgotPass = () => {
       email: Yup.string()
         .email("Please enter a valid email.")
         .required("Please enter you account's email."),
-     
     }),
     onSubmit: () => {},
   });
-  const handleSubmit = () => { navigate("/passrecovery/verify")};
-
-
+  const handleSubmit = () => {
+    navigate("/verify/passrecovery");
+  };
 
   return (
-    <Box className="h-screen w-screen flex  ">
-      <Box className=" flex w-full md:w-1/2 lg:w-2/5 justify-center items-center h-full">
+    <Box
+      className={`h-screen w-full flex bg-slate-100 items-center justify-center ${
+        isLargeScreen ? "" : "p-0"
+      }`}
+    >
+      <Box
+        className={`${
+          isLargeScreen
+            ? "w-[30rem] bg-white rounded-xl shadow-2xl p-10"
+            : "w-full h-full bg-white p-4"
+        } flex flex-col`}
+      >
+        {" "}
         <FormikProvider value={formik}>
           <Form
             onSubmit={formik.handleSubmit}
-            className="h-full w-full p-10 justify-center items-center gap-10 flex flex-col"
+            className="h-full w-full justify-center items-center gap-10 flex flex-col"
           >
             {/* <img src={logo}></img> */}
             <Box>
               <Typography variant="h5" align="center" fontWeight={"bold"}>
-              بازیابی رمز عبور
+                بازیابی رمز عبور
               </Typography>
-              
+              <Typography variant="body1" align="center">
+                جهت بازیابی رمز عبور، شماره تماس خود را وارد کنید.
+              </Typography>
             </Box>
             <Box className=" w-full  ">
               <Box className="flex flex-col gap-8 my-10 w-full">
                 <FormikInput
                   type="email"
                   name="email"
-                  label="ایمیل"
-                  placeholder="ایمیل"
-                  Icon={<Sms/>}
+                  label="شماره همراه"
+                  placeholder="شماره همراه"
+                  Icon={<Sms />}
                 />
-               
               </Box>
               <Button
                 type="submit"
@@ -67,25 +78,12 @@ const ForgotPass = () => {
                 fullWidth
                 size="medium"
               >
-               ارسال کد 
+                ارسال کد
               </Button>
             </Box>
           </Form>
         </FormikProvider>
       </Box>
-      {isLargeScreen && (
-        <Box
-          sx={{
-            height: "100%",
-            width: "60%",
-            backgroundImage: `url(${changePasswod})`,
-            backgroundSize: "contain",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center center",
-            bgcolor: theme.palette.primary.main,
-          }}
-        />
-      )}
     </Box>
   );
 };

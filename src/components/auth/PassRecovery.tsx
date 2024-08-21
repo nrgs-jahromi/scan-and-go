@@ -61,20 +61,30 @@ const PassRecovery = () => {
   // }, []);
 
   return (
-    <Box className="h-screen w-screen flex  ">
-      <Box className=" flex w-full md:w-1/2 lg:w-2/5 justify-center items-center h-full">
+    <Box
+      className={`h-screen w-full flex bg-slate-100 items-center justify-center ${
+        isLargeScreen ? "" : "p-0"
+      }`}
+    >
+      <Box
+        className={`${
+          isLargeScreen
+            ? "w-[30rem] bg-white rounded-xl shadow-2xl p-10"
+            : "w-full h-full bg-white p-4"
+        } flex flex-col`}
+      >
         <FormikProvider value={formik}>
           <Form
             onSubmit={formik.handleSubmit}
-            className="h-full w-full p-10 justify-center items-center gap-10 flex flex-col"
+            className="h-full w-full justify-center items-center flex flex-col"
           >
             {/* <img src={logo}></img> */}
             <Box>
               <Typography variant="h5" align="center" fontWeight={"bold"}>
-                تغییر رمز عبور{" "}
-              </Typography>{" "}
+                تعیین رمز عبور
+              </Typography>
               <Typography variant="body1" align="center">
-                رمز عبور جدید را وارد کنید{" "}
+                رمز عبور خود را وارد کنید.
               </Typography>
             </Box>
             <Box className=" w-full  ">
@@ -107,70 +117,8 @@ const PassRecovery = () => {
           </Form>
         </FormikProvider>
       </Box>
-      {isLargeScreen && (
-        <Box
-          sx={{
-            height: "100%",
-            width: "60%",
-            backgroundImage: `url(${changePasswod})`,
-            backgroundSize: "contain",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center center",
-            bgcolor: theme.palette.primary.main,
-          }}
-        />
-      )}
+     
     </Box>
-    // <Box className="h-screen w-screen flex md:flex-row flex-col">
-
-    //   <Box className="w-full flex justify-center md:items-center items-start h-full">
-    //     <FormikProvider value={formik}>
-    //       <Form className="h-full  justify-center md:w-1/2 w-10/12 flex flex-col">
-    //         <Typography variant="h5">Password Recovery</Typography>
-    //         <Typography variant="caption">
-    //           Please enter your new password
-    //         </Typography>
-    //         <Box className="flex flex-col gap-8 my-10 w-full">
-    //           <IconTextField
-    //             fullWidth
-    //             id="password"
-    //             name="password"
-    //             label="password"
-    //             type="password"
-    //             icon={CiMail}
-    //             sx={{ color: theme.palette.primary.main }}
-    //           />
-    //           <IconTextField
-    //             fullWidth
-    //             id="confirm"
-    //             name="confirm"
-    //             label="confirm"
-    //             type="password"
-    //             icon={CiMail}
-    //             sx={{ color: theme.palette.primary.main }}
-    //           />
-    //         </Box>
-    //         <Button
-    //           type="submit"
-    //           variant="contained"
-    //           color="inherit"
-    //           // onClick={handleSet}
-    //           disabled={!formik.isValid}
-    //           sx={{
-    //             marginTop: 2,
-    //             color: "white",
-    //             bgcolor: theme.palette.primary.main,
-    //             "&:hover": {
-    //               backgroundColor: theme.palette.primary.dark,
-    //             },
-    //           }}
-    //         >
-    //           Set new Password
-    //         </Button>
-    //       </Form>
-    //     </FormikProvider>
-    //   </Box>
-    // </Box>
   );
 };
 

@@ -43,7 +43,7 @@ const Verification = () => {
   const handleResend = () => {
     setTimer(10);
     setIsTimerRunning(true);
-    setOtp("")
+    setOtp("");
   };
 
   useEffect(() => {
@@ -63,12 +63,22 @@ const Verification = () => {
   }, [timer]);
 
   return (
-    <Box className="h-screen w-screen flex  ">
-      <Box className=" flex w-full md:w-1/2 lg:w-2/5 justify-center items-center h-full">
+    <Box
+      className={`h-screen w-full flex bg-slate-100 items-center justify-center ${
+        isLargeScreen ? "" : "p-0"
+      }`}
+    >
+      <Box
+        className={`${
+          isLargeScreen
+            ? "w-[30rem] bg-white rounded-xl shadow-2xl p-10"
+            : "w-full h-full bg-white p-4"
+        } flex flex-col`}
+      >
         <FormikProvider value={formik}>
           <Form
             onSubmit={formik.handleSubmit}
-            className="h-full w-full p-10 justify-center items-center gap-10 flex flex-col"
+            className="h-full w-full justify-center items-center gap-10 flex flex-col"
           >
             {/* <img src={logo} alt="Logo"></img> */}
             <Box>
@@ -124,19 +134,6 @@ const Verification = () => {
           </Form>
         </FormikProvider>
       </Box>
-      {isLargeScreen && (
-        <Box
-          sx={{
-            height: "100%",
-            width: "60%",
-            backgroundImage: `url(${changePasswod})`,
-            backgroundSize: "contain",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center center",
-            bgcolor: theme.palette.primary.main,
-          }}
-        />
-      )}
     </Box>
   );
 };
