@@ -3,41 +3,71 @@ import { Box, Button, Typography, useMediaQuery } from "@mui/material";
 import theme from "../../theme";
 import * as Yup from "yup";
 import { useNavigate, useParams } from "react-router";
-import image from "../../assets/loginImage.png";
 import FormikInput from "../common/inputs/FormikInput";
 import { Lock1, Sms } from "iconsax-react";
+import { useLogin } from "../../api/auth/login";
+import { useEffect } from "react";
+import { notif } from "../common/notification/Notification";
+import { saveToLocalStorage } from "../../utils/localStorage";
+import { LS_ACCESS_TOKEN, LS_REFRESH_TOKEN } from "../../constants/localStorage";
 
 type LoginFormT = {
-  email: string;
+  mobile_number: string;
   password: string;
 };
+
 const Login = () => {
   const navigate = useNavigate();
-  const { token } = useParams();
-  // 'token' variable contains the decoded token
-  console.log("Decoded token:", token);
-
   const isLargeScreen = useMediaQuery("(min-width: 768px)");
+  const { mutate: loginUser, isLoading, isError:isUserLoginError, isSuccess:isUserLoginSuccess, data: loginData} = useLogin();
+
   const formik = useFormik<LoginFormT>({
     initialValues: {
-      email: "",
+      mobile_number: "",
       password: "",
     },
     validationSchema: Yup.object().shape({
-      email: Yup.string()
-        .email("Please enter a valid email.")
-        .required("Please enter you account's email."),
-      password: Yup.string().required("Please enter your password."),
+      mobile_number: Yup.string()
+        .required("لطفا شماره همراه خود را وارد کنید.")
+        .matches(/^[0-9]{11}$/, "شماره همراه باید ۱۱ رقمی باشد."),
+        password: Yup.string().required("Please enter your password."),
     }),
-    onSubmit: () => {},
+    onSubmit: (values) => {
+      loginUser(
+        {
+          body: {
+            mobile_number: values.mobile_number,
+            password: values.password,
+          },
+        },
+        
+      );
+    },
   });
-  const handleSubmit = () => {
-    navigate("/dashboard");
-  };
+
+  useEffect(() => {
+    if (isUserLoginSuccess) {
+      notif("با موفقیت وارد شدید!", { variant: "success" });
+      saveToLocalStorage(LS_ACCESS_TOKEN, loginData.access);
+      saveToLocalStorage(LS_REFRESH_TOKEN, loginData.refresh);
+
+      // dispatch(authActions.setAuth(true));
+      navigate("/dashboard");
+    } else if (isUserLoginError) {
+      notif("نام کاربری یا رمز عبور نامعتبر می‌باشد.", { variant: "error" });
+      // handleApiErrors(userLoginError, formik.setFieldError);
+    }
+  }, [
+    isUserLoginSuccess,
+    isUserLoginError,
+    formik.setFieldError,
+    navigate,
+    loginData,
+  ]);
 
   return (
-    <Box className="h-screen w-full flex bg-slate-100 items-center justify-center ">
-      <Box className="w-[30rem]  bg-white rounded-xl shadow-2xl flex flex-col p-10	">
+    <Box className="h-screen w-full flex bg-slate-100 items-center justify-center">
+      <Box className="w-[30rem] bg-white rounded-xl shadow-2xl flex flex-col p-10">
         <Box>
           <Typography variant="h5" align="center" fontWeight={"bold"}>
             ورود به بای‌نت
@@ -46,19 +76,17 @@ const Login = () => {
             به بای‌نت خوش آمدید. جهت ورود اطلاعات خود را وارد کنید.
           </Typography>
         </Box>
-        <Box className=" flex w-full justify-center items-center h-full ">
+        <Box className="flex w-full justify-center items-center h-full">
           <FormikProvider value={formik}>
             <Form
               onSubmit={formik.handleSubmit}
-              className="h-full w-full  justify-center items-center  flex flex-col"
+              className="h-full w-full justify-center items-center flex flex-col"
             >
-              {/* <img src={logo}></img> */}
-
-              <Box className=" w-full  ">
-                <Box className="flex flex-col  my-10 w-full">
+              <Box className="w-full">
+                <Box className="flex flex-col my-10 w-full">
                   <FormikInput
-                    type="email"
-                    name="email"
+                    type="text"
+                    name="mobile_number"
                     label="شماره همراه"
                     placeholder="شماره همراه"
                     Icon={<Sms />}
@@ -86,13 +114,18 @@ const Login = () => {
                 </Box>
                 <Button
                   type="submit"
-                  onClick={handleSubmit}
                   variant="contained"
                   fullWidth
                   size="medium"
+                  disabled={isLoading}
                 >
                   ورود
                 </Button>
+                {isUserLoginError && (
+                  <Typography variant="body2" color="error" align="center">
+                    مشکلی در ورود وجود دارد. لطفاً دوباره تلاش کنید.
+                  </Typography>
+                )}
                 <Button
                   onClick={() => navigate("/signup/")}
                   variant="text"
