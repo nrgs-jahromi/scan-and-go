@@ -16,6 +16,7 @@ import FormikRadioGroup from "../../common/inputs/FormikRadioGroup";
 import FormikDatePicker from "../../common/inputs/FormikDatePicker";
 import FormikTextArea from "../../common/inputs/FormikTextArea";
 import FormikFileInput from "../../common/inputs/FormikFileInput";
+import FormikAutocomplete from "../../common/inputs/FormikAutocomplete";
 
 const AddProduct = () => {
   const initialValues = {
@@ -39,6 +40,12 @@ const AddProduct = () => {
     { value: "six-monthly", label: "شش ماه" },
     { value: "annually", label: "سالانه" },
   ];
+  const categoryOptions = [
+    "الکترونیک",
+    "مد و لباس",
+    "خانه و آشپزخانه",
+    // سایر دسته‌بندی‌ها
+  ];
 
   return (
     <Box component={Paper} width={"100%"} height={"100%"} p={4}>
@@ -47,27 +54,48 @@ const AddProduct = () => {
           <FormikProvider value={formik}>
             <Form>
               <Box className="w-full md:grid md:grid-cols-2 gap-8">
-                <FormikInput
-                  fullWidth
-                  name="name"
-                  label="نام محصول"
-                  type="text"
-                />
-                <FormikInput
-                  fullWidth
-                  name="initialInterestRate"
-                  label="نرخ سود اولیه"
-                  type="number"
-                />
-                <FormikTextArea
-                  minRows={4}
-                  name="description"
-                  label="توضیحات"
-                  fullWidth
-                />
+                <Box>
+                  <FormikInput
+                    fullWidth
+                    name="name"
+                    label="نام محصول"
+                    type="text"
+                  />
+                  <FormikAutocomplete
+                    name="category"
+                    label="دسته بندی"
+                    options={categoryOptions}
+                    fullWidth
+                  />
+                  <FormikTextArea
+                    minRows={4}
+                    name="description"
+                    label="توضیحات"
+                    fullWidth
+                  />
+                </Box>
                 <FormikDatePicker name="startDate" label="تاریخ شروع" />
-                <FormikDatePicker name="finalDate" label="تاریخ پایان" />
-                {/* <FormControl component="fieldset" className="col-span-2"> */}
+                <Box>
+                  <FormikInput
+                    name="barcode"
+                    label="بارکد"
+                    fullWidth
+                    type="number"
+                  />
+                  <FormikInput
+                    name="count"
+                    label="موجودی"
+                    type="number"
+                    fullWidth
+                  />
+                  <FormikInput
+                    name="min_inventory"
+                    label="حداقل موجودی"
+                    type="number"
+                    fullWidth
+                  />
+                </Box>
+
                 <FormikRadioGroup
                   name="paymentPeriod"
                   label="دوره پرداخت"
@@ -76,55 +104,6 @@ const AddProduct = () => {
                   sx={{ width: "100%" }}
                 />
                 {/* </FormControl> */}
-                <Box className="col-span-1 ">
-                  <Typography variant="custom" marginBottom={5.5}>
-                    حساب های واریز
-                  </Typography>
-                  <Box className="w-full grid grid-cols-4 gap-4 mt-4">
-                    <Box className="col-span-3">
-                      <Typography variant="subtitle1">حساب مقصد</Typography>
-                      <FormikInput fullWidth name="account1" />
-                      <FormikInput fullWidth name="account2" />
-                      <FormikInput fullWidth name="account3" />
-                    </Box>
-                    <Box className="col-span-1">
-                      <Typography variant="subtitle1">درصد</Typography>
-                      <FormikInput fullWidth type="number" name="account11" />
-                      <FormikInput fullWidth type="number" name="account21" />
-                      <FormikInput fullWidth type="number" name="account31" />
-                    </Box>
-                  </Box>
-                </Box>
-                
-                
-
-                <FormikFileInput
-                  name="investmentNotebookFile"
-                  label=" دفترچه سرمایه‌گذاری"
-                  containerProps={{
-                    border: "dashed 1px #E1DEFA",
-                    borderRadius: "8px",
-                    height: "150px",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                />
-
-                <FormikFileInput
-                  name="contractFile"
-                  label=" فرم قرارداد"
-                  containerProps={{
-                    border: "dashed 1px #E1DEFA",
-                    borderRadius: "8px",
-                    height: "150px",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                />
               </Box>
             </Form>
           </FormikProvider>
