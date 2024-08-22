@@ -9,7 +9,10 @@ import { useLogin } from "../../api/auth/login";
 import { useEffect } from "react";
 import { notif } from "../common/notification/Notification";
 import { saveToLocalStorage } from "../../utils/localStorage";
-import { LS_ACCESS_TOKEN, LS_REFRESH_TOKEN } from "../../constants/localStorage";
+import {
+  LS_ACCESS_TOKEN,
+  LS_REFRESH_TOKEN,
+} from "../../constants/localStorage";
 
 type LoginFormT = {
   mobile_number: string;
@@ -19,7 +22,13 @@ type LoginFormT = {
 const Login = () => {
   const navigate = useNavigate();
   const isLargeScreen = useMediaQuery("(min-width: 768px)");
-  const { mutate: loginUser, isLoading, isError:isUserLoginError, isSuccess:isUserLoginSuccess, data: loginData} = useLogin();
+  const {
+    mutate: loginUser,
+    isLoading,
+    isError: isUserLoginError,
+    isSuccess: isUserLoginSuccess,
+    data: loginData,
+  } = useLogin();
 
   const formik = useFormik<LoginFormT>({
     initialValues: {
@@ -30,18 +39,15 @@ const Login = () => {
       mobile_number: Yup.string()
         .required("لطفا شماره همراه خود را وارد کنید.")
         .matches(/^[0-9]{11}$/, "شماره همراه باید ۱۱ رقمی باشد."),
-        password: Yup.string().required("Please enter your password."),
+      password: Yup.string().required("Please enter your password."),
     }),
     onSubmit: (values) => {
-      loginUser(
-        {
-          body: {
-            mobile_number: values.mobile_number,
-            password: values.password,
-          },
+      loginUser({
+        body: {
+          mobile_number: values.mobile_number,
+          password: values.password,
         },
-        
-      );
+      });
     },
   });
 
@@ -66,8 +72,18 @@ const Login = () => {
   ]);
 
   return (
-    <Box className="h-screen w-full flex bg-slate-100 items-center justify-center">
-      <Box className="w-[30rem] bg-white rounded-xl shadow-2xl flex flex-col p-10">
+    <Box
+      className={`h-screen w-full flex bg-slate-100 items-center justify-center ${
+        isLargeScreen ? "" : "p-0"
+      }`}
+    >
+      <Box
+        className={`${
+          isLargeScreen
+            ? "w-[30rem] bg-white rounded-xl shadow-2xl p-10"
+            : "w-full h-full bg-white p-4"
+        } flex flex-col`}
+      >
         <Box>
           <Typography variant="h5" align="center" fontWeight={"bold"}>
             ورود به بای‌نت
@@ -121,11 +137,7 @@ const Login = () => {
                 >
                   ورود
                 </Button>
-                {isUserLoginError && (
-                  <Typography variant="body2" color="error" align="center">
-                    مشکلی در ورود وجود دارد. لطفاً دوباره تلاش کنید.
-                  </Typography>
-                )}
+
                 <Button
                   onClick={() => navigate("/signup/")}
                   variant="text"

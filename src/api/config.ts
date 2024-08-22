@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { API_BASE_URL } from "../vars/env";
+import { setInterceptors } from "./interceptors";
 
 export const fetcher = axios.create({
   baseURL: API_BASE_URL,
@@ -8,7 +9,7 @@ export const fetcher = axios.create({
   },
 });
 
-// setInterceptors();
+setInterceptors(fetcher);
 
 export type ApiErrorData = {
   detail: {

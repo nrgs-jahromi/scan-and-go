@@ -25,6 +25,7 @@ import {
   Profile2User,
   Wallet1,
 } from "iconsax-react";
+import { useLogout } from "../../api/auth/logout";
 
 const drawerWidth = 273;
 
@@ -105,7 +106,7 @@ export default function SideNavigation() {
   const isLargeScreen = useMediaQuery("(min-width: 1024px)");
   const navigate = useNavigate();
   const today = moment().locale("fa").format("dddd DD  MMMM ماه  YYYY ");
-
+  const { mutate: logout } = useLogout();
   const navbarItems: NavbarCategory[] = useMemo(
     () => [
       {
@@ -170,7 +171,7 @@ export default function SideNavigation() {
       {
         id: "exit",
         label: "خروج",
-        path: "login",
+        path: "",
         icon1: <LogoutCurve />,
         icon2: <LogoutCurve variant="Bold" />,
       },
@@ -203,21 +204,25 @@ export default function SideNavigation() {
       setOpen(false);
     }
   }, [isLargeScreen]);
-  const navigateHandler = (item: NavbarCategory) => {
-    if (selectedCategory === item.id) {
-      setSelectedCategory(null);
-    } else {
-      setSelectedCategory(item.id);
-    }
-    setActive(item.id);
-    if (item.path) navigate(item.path);
-  };
 
   const onNestedClick = (item: NavbarItem) => {
     setActive(item.id);
     navigate(item.path);
   };
 
+  const navigateHandler = (item: NavbarCategory) => {
+    if (item.id === "exit") {
+      logout(); 
+    } else {
+      if (selectedCategory === item.id) {
+        setSelectedCategory(null);
+      } else {
+        setSelectedCategory(item.id);
+      }
+      setActive(item.id);
+      if (item.path) navigate(item.path);
+    }
+  };
   return (
     <Drawer anchor="right" variant="permanent" open={open}>
       <DrawerHeader>
