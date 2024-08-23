@@ -14,6 +14,7 @@ import FormikTextArea from "../../common/inputs/FormikTextArea";
 import FormikAutocomplete from "../../common/inputs/FormikAutocomplete";
 import FormikDatePicker from "../../common/inputs/FormikDatePicker";
 import theme from "../../../theme";
+import * as Yup from "yup";
 import { Trash } from "iconsax-react";
 import { useCategories } from "../../../api/product/getCategories";
 import {
@@ -24,6 +25,11 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+const validationSchema = Yup.object().shape({
+  name: Yup.string().required("نام محصول الزامی است"),
+  barcode: Yup.string().required("بارکد الزامی است"),
+  price: Yup.number().required("قیمت الزامی است").min(0, "قیمت نمی‌تواند منفی باشد"),
+});
 const AddProduct = () => {
   const [images, setImages] = useState<File[]>([]);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -59,7 +65,7 @@ const AddProduct = () => {
     location: null,
     discount: {
       discount_percentage: 0,
-      expiration_date: null,
+      expiration_date:null,
       min_quantity_for_discount: 1,
     },
     images: null,
@@ -113,7 +119,7 @@ const AddProduct = () => {
   return (
     <Box className="space-y-4">
       <Box component={Paper} width={"100%"} height={"100%"} p={4}>
-        <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+        <Formik initialValues={initialValues} onSubmit={handleSubmit}  validationSchema={validationSchema} >
           {(formik) => (
             <FormikProvider value={formik}>
               <Form>
