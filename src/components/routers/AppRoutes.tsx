@@ -14,6 +14,7 @@ import Signup from "../auth/signup/Signup";
 import NumberVerification from "../auth/signup/VerifyNumber";
 import StoreInformation from "../pages/storeInfo/StoreInformation";
 import ProductList from "../pages/customers/list/ProductList";
+import EditProduct from "../pages/products/EditProduct";
 
 
 const AppRoutes: FC = () => {
@@ -32,6 +33,7 @@ const AppRoutes: FC = () => {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="products" element={<ProductList />} />
           <Route path="products/add" element={<AddProduct />} />
+          <Route path="products/:productId?" element={<EditProduct />} />
           <Route path="products/categories" element={<Categories />} />
 
           <Route path="reports/invoices" element={<InvoiceList />} />
