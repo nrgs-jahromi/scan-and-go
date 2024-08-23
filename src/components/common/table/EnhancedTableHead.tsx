@@ -8,27 +8,19 @@ import {
   Typography,
 } from "@mui/material";
 import { visuallyHidden } from "@mui/utils";
+import _ from "lodash";
 
-const EnhancedTableHead = <V extends RowDataT = RowDataT>(props: {
-  columns: TableColumnDef<V>[];
-  numSelected: number;
-  onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
-  onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  order: Order;
-  orderBy: string;
-  rowCount: number;
-  showCheckbox: boolean;
-}) => {
-  const {
-    columns,
-    onSelectAllClick,
-    order,
-    orderBy,
-    numSelected,
-    rowCount,
-    onRequestSort,
-    showCheckbox,
-  } = props;
+const EnhancedTableHead = <V extends RowDataT = RowDataT>({
+  columns,
+  columnsNum,
+  onSelectAllClick,
+  order,
+  orderBy,
+  numSelected,
+  rowCount,
+  onRequestSort,
+  showCheckbox,
+}: TableHeadProps<V>) => {
   const createSortHandler = (property: string) => (event: React.MouseEvent<unknown>) => {
     onRequestSort(event, property);
   };
@@ -49,6 +41,7 @@ const EnhancedTableHead = <V extends RowDataT = RowDataT>(props: {
             />
           </TableCell>
         )}
+
         {columns.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -69,6 +62,11 @@ const EnhancedTableHead = <V extends RowDataT = RowDataT>(props: {
               ) : null}
             </TableSortLabel>
           </TableCell>
+        ))}
+
+        {/* Adding extra head cell in the end to fit the actual number of columns */}
+        {_.range(columns.length, columnsNum).map((i) => (
+          <TableCell key={i}></TableCell>
         ))}
       </TableRow>
     </TableHead>

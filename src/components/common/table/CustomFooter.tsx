@@ -1,6 +1,5 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import { GridFooterContainer } from "@mui/x-data-grid";
 import { MenuItem, Pagination, Select, SelectChangeEvent, Typography } from "@mui/material";
 
 interface CustomFooterProps {
@@ -12,7 +11,6 @@ interface CustomFooterProps {
   // setPage: (page: number) => void;
   rowsPerPageOptions: number[];
   handlePageChange: (event: unknown, newPage: number) => void;
- 
 }
 
 const CustomFooter: React.FC<CustomFooterProps> = ({
@@ -23,7 +21,6 @@ const CustomFooter: React.FC<CustomFooterProps> = ({
   rowsPerPageOptions,
   count,
   rowsPerPage,
- 
 }) => {
   const [pageCount, setPageCount] = React.useState<number | undefined>(undefined);
   React.useEffect(() => {
@@ -37,7 +34,9 @@ const CustomFooter: React.FC<CustomFooterProps> = ({
         <Typography variant="body2">تعداد نتایج در صفحه :</Typography>
         <Select sx={{ minWidth: "70px" }} value={pageSize} onChange={setPageSize} autoWidth>
           {rowsPerPageOptions.map((option) => (
-            <MenuItem value={option}>{option}</MenuItem>
+            <MenuItem key={option} value={option}>
+              {option}
+            </MenuItem>
           ))}
         </Select>
       </Box>
