@@ -11,14 +11,14 @@ type ResT = {
   message: string;
   expire_time: string;
 };
-const getOTP: MutationFunction<ResT, DataT> = async (data) => {
+const signup: MutationFunction<ResT, DataT> = async (data) => {
   const { data: dataRes } = await fetcher.post<ResT>(
-    "/stores/sent-otp/",
+    "/stores/sign-up/",
     data.body
   );
   return dataRes;
 };
 
-export const useGetOtp = () => {
-  return useMutation<ResT, ApiError, DataT>(["getOTP"], getOTP);
+export const useSignup = () => {
+  return useMutation<ResT, ApiError, DataT>(["signup"], signup);
 };

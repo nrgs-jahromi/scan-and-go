@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router";
 import { Sms } from "iconsax-react";
 import FormikInput from "../../common/inputs/FormikInput";
-import { useGetOtp } from "../../../api/auth/getOTP";
+import { useSignup } from "../../../api/auth/verifySignup";
 import { useEffect } from "react";
 import { notif } from "../../common/notification/Notification";
 
@@ -24,7 +24,7 @@ const Signup = () => {
     isSuccess,
     isError,
     data: signupData,
-  } = useGetOtp();
+  } = useSignup();
 
   const formik = useFormik<SignupFormT>({
     initialValues: {

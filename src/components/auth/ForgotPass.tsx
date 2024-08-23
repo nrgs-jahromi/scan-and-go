@@ -4,9 +4,10 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router";
 import FormikInput from "../common/inputs/FormikInput";
 import { Sms } from "iconsax-react";
-import { useGetOtp } from "../../api/auth/getOTP";
+import { useSignup } from "../../api/auth/verifySignup";
 import { useEffect } from "react";
 import { notif } from "../common/notification/Notification";
+import { useGetOtp } from "../../api/auth/getOTP";
 
 type FormT = {
   mobile_number: string;

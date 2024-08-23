@@ -9,8 +9,7 @@ type LoginDataT = {
 };
 
 type LoginResT = {
-  refresh: string;
-  access: string;
+  token: string;
 };
 
 const loginUser: MutationFunction<LoginResT, LoginDataT> = async (data) => {

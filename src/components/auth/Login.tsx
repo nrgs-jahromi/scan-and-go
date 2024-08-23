@@ -54,8 +54,8 @@ const Login = () => {
   useEffect(() => {
     if (isUserLoginSuccess) {
       notif("با موفقیت وارد شدید!", { variant: "success" });
-      saveToLocalStorage(LS_ACCESS_TOKEN, loginData.access);
-      saveToLocalStorage(LS_REFRESH_TOKEN, loginData.refresh);
+      saveToLocalStorage(LS_ACCESS_TOKEN, loginData.token);
+      // saveToLocalStorage(LS_REFRESH_TOKEN, loginData.refresh);
 
       // dispatch(authActions.setAuth(true));
       navigate("/dashboard");
