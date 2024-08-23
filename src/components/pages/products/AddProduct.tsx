@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Paper,
@@ -24,13 +24,18 @@ import {
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { notif } from "../../common/notification/Notification";
+import { useNavigate } from "react-router";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("نام محصول الزامی است"),
   barcode: Yup.string().required("بارکد الزامی است"),
-  price: Yup.number().required("قیمت الزامی است").min(0, "قیمت نمی‌تواند منفی باشد"),
+  price: Yup.number()
+    .required("قیمت الزامی است")
+    .min(0, "قیمت نمی‌تواند منفی باشد"),
 });
 const AddProduct = () => {
+  const navigate = useNavigate()
   const [images, setImages] = useState<File[]>([]);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const { data: categories = [], isLoading, isError } = useCategories();
@@ -38,6 +43,7 @@ const AddProduct = () => {
     mutate: addProduct,
     isLoading: isAdding,
     isError: addProductError,
+    isSuccess:addProductIsSuccess,
   } = useAddProduct();
 
   const categoryOptions = categories.map((category) => category.name);
@@ -65,7 +71,7 @@ const AddProduct = () => {
     location: null,
     discount: {
       discount_percentage: 0,
-      expiration_date:null,
+      expiration_date: null,
       min_quantity_for_discount: 1,
     },
     images: null,
@@ -73,7 +79,7 @@ const AddProduct = () => {
 
   const handleSubmit = (values: typeof initialValues) => {
     const formData = new FormData();
-  
+
     formData.append("name", values.name);
     formData.append("categories", JSON.stringify(values.categories));
     formData.append("description", values.description);
@@ -81,20 +87,20 @@ const AddProduct = () => {
     formData.append("price", values.price);
     formData.append("stock", values.stock.toString());
     formData.append("min_stock", values.min_stock.toString());
-  
+
     if (values.brand) formData.append("brand", values.brand);
     if (values.location) formData.append("location", values.location);
-  
+
     if (values.discount) {
       formData.append("discount", JSON.stringify(values.discount));
     }
-  
+
     if (images.length > 0) {
       images.forEach((image) => {
-        formData.append("images", image); // Appending each file directly
+        formData.append("images", image); 
       });
     }
-  
+
     addProduct(formData);
   };
 
@@ -102,7 +108,7 @@ const AddProduct = () => {
     customPaging: (i: number) => (
       <a>
         <img
-          src={URL.createObjectURL(images[i])} // Create a URL for the image file
+          src={URL.createObjectURL(images[i])}
           alt={`thumbnail-${i}`}
           style={{ width: "50px", height: "50px" }}
         />
@@ -116,13 +122,27 @@ const AddProduct = () => {
     slidesToScroll: 1,
   };
 
+  useEffect(()=>{
+    if(addProductIsSuccess){
+      notif("محصول با موفقیت اضافه شد." , {variant:"success"})
+      navigate("/products")
+    }
+    else if (addProductError){
+      notif("مشکلی در ایجاد محصول وجود دارد.", {variant:"error"})
+    }
+  },[addProductIsSuccess , addProductError])
+
   return (
     <Box className="space-y-4">
-      <Box component={Paper} width={"100%"} height={"100%"} p={4}>
-        <Formik initialValues={initialValues} onSubmit={handleSubmit}  validationSchema={validationSchema} >
-          {(formik) => (
-            <FormikProvider value={formik}>
-              <Form>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        validationSchema={validationSchema}
+      >
+        {(formik) => (
+          <FormikProvider value={formik}>
+            <Form className="space-y-4">
+              <Box component={Paper} width={"100%"} height={"100%"} p={4}>
                 <Box className="w-full md:grid md:grid-cols-2 gap-6">
                   <Box>
                     <FormikInput
@@ -285,17 +305,14 @@ const AddProduct = () => {
                     </Box>
                   </Box>
                 </Box>
-                <Button type="submit" fullWidth variant="contained">
-                  {isAdding ? "در حال افزودن..." : "ثبت"}
-                </Button>
-                {addProductError && (
-                  <Typography color="error">خطا در افزودن محصول</Typography>
-                )}
-              </Form>
-            </FormikProvider>
-          )}
-        </Formik>
-      </Box>
+              </Box>{" "}
+              <Button type="submit" fullWidth variant="contained">
+                {isAdding ? "در حال افزودن..." : "ثبت"}
+              </Button>
+            </Form>
+          </FormikProvider>
+        )}
+      </Formik>
     </Box>
   );
 };

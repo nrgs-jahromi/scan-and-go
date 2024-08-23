@@ -56,7 +56,7 @@ const ProductList = () => {
     {
       label: "ویرایش",
       onClick: (id: number) => {
-        navigate(`${id}/`);
+        navigate(`${productList?.results[id].barcode}/`);
       },
     },
   ];
