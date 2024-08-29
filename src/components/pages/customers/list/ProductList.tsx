@@ -3,6 +3,9 @@ import { Box, Button, Divider, Typography, useTheme } from "@mui/material";
 import { useNavigate } from "react-router";
 import EnhancedTable from "../../../common/table/EnhancedTable";
 import { useProducts } from "../../../../api/product/getProductsList";
+import UserAvatar from "../profile/UserAvatar";
+import { API_BASE_URL } from "../../../../api/config";
+import PageHeader from "../../pageHeader/PageHeader";
 
 type ProductData = {
   id: number;
@@ -14,14 +17,48 @@ type ProductData = {
   primary_image_url: string | null;
   category_names: string;
 };
- 
+
 const columns: TableColumnDef<ProductData>[] = [
-  { id: "barcode", disablePadding: true, label: "کد محصول ", type: "number" },
-  { id: "action", disablePadding: false, label: "عملیات", type: "text" },
-  { id: "name", disablePadding: false, label: "نام", type: "text" },
-  { id: "category_names", disablePadding: false, label: "دسته", type: "text" },
-  { id: "stock", disablePadding: false, label: "تعداد", type: "number" },
-  { id: "price", disablePadding: false, label: "قیمت (ریال)", type: "number" },
+  {
+    id: "name",
+    disablePadding: false,
+    label: "نام",
+    type: "text",
+    Cell: ({ row }) => (
+      <Box className="flex items-center justify-start gap-2">
+        <UserAvatar url={row.primary_image_url ?? undefined} size={30} />
+        <Typography>{row.name}</Typography>
+      </Box>
+    ),
+  },
+  {
+    id: "barcode",
+    disablePadding: true,
+    label: "کد محصول ",
+    type: "number",
+  },
+  {
+    id: "category_names",
+    disablePadding: false,
+    label: "دسته",
+    type: "text",
+    accessorFn: (v) => v.category_names || "-",
+  },
+  {
+    id: "stock",
+    disablePadding: false,
+    label: "تعداد",
+    type: "number",
+    accessorFn: (v) => v.stock?.toString() || "-",
+  },
+  {
+    id: "price",
+    disablePadding: false,
+    label: "قیمت (ریال)",
+    type: "number",
+    accessorFn: (v) => v.price?.toLocaleString() || "-",
+  },
+  { id: "action", disablePadding: false, label: "", type: "text" },
 ];
 
 const ProductList = () => {
@@ -86,29 +123,18 @@ const ProductList = () => {
   }, [productList, getProductsIsSuccess]);
   return (
     <Box className="w-full flex flex-col gap-5">
-      <Box className="w-full flex justify-between">
-        <Box className="flex align-middle items-center py-3 gap-3">
-          <Divider
-            orientation="vertical"
-            variant="middle"
-            className="w-1 rounded-sm"
-            sx={{ bgcolor: theme.palette.primary.main }}
-          />
-
-          <Typography variant="h6">لیست محصولات</Typography>
-        </Box>
-
-        <Button
-          variant="contained"
-          sx={{ height: "48px", width: "120px", boxShadow: "none" }}
-          onClick={() => {
-            navigate("/products/add");
-          }}
-        >
-          افزودن محصول
-        </Button>
-      </Box>
-
+      <PageHeader
+        title="لیست محصولات"
+        buttons={[
+          {
+            text: "افزودن محصول",
+            variant: "contained",
+            onClick: () => {
+              navigate("/products/add");
+            },
+          },
+        ]}
+      />
       <EnhancedTable
         columns={columns}
         rows={rows}

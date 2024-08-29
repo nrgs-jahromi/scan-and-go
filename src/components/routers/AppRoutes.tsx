@@ -7,7 +7,7 @@ import Dashboard from "../dashboard/Dashboard";
 import MainTemplate from "../mainTemplate/MainTemplate";
 import Verification from "../auth/VerifyEmail";
 import AddProduct from "../pages/products/AddProduct";
-import Profile from "../pages/profile/StoreProfile";
+import Profile from "../pages/profile/StoreProfile2";
 import Categories from "../pages/products/categories/CategoriesPage";
 import InvoiceList from "../pages/invoices/InvoiceList";
 import Signup from "../auth/signup/Signup";
@@ -15,6 +15,7 @@ import NumberVerification from "../auth/signup/VerifyNumber";
 import StoreInformation from "../pages/storeInfo/StoreInformation";
 import ProductList from "../pages/customers/list/ProductList";
 import EditProduct from "../pages/products/EditProduct";
+import StoreProfile from "../pages/profile/StoreProfile";
 
 
 const AppRoutes: FC = () => {
@@ -29,7 +30,7 @@ const AppRoutes: FC = () => {
         <Route path="/passrecovery/verify" element={<Verification />} />
         <Route path="/setpassword/:phoneNumber" element={<PassRecovery />} />
         <Route path="/*" element={<MainTemplate />}>
-          <Route path="profile" element={<Profile />} />
+          <Route path="profile" element={<StoreProfile />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="products" element={<ProductList />} />
           <Route path="products/add" element={<AddProduct />} />

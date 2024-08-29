@@ -26,6 +26,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { notif } from "../../common/notification/Notification";
 import { useNavigate } from "react-router";
+import PageHeader from "../pageHeader/PageHeader";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("نام محصول الزامی است"),
@@ -35,7 +36,7 @@ const validationSchema = Yup.object().shape({
     .min(0, "قیمت نمی‌تواند منفی باشد"),
 });
 const AddProduct = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [images, setImages] = useState<File[]>([]);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const { data: categories = [], isLoading, isError } = useCategories();
@@ -43,7 +44,7 @@ const AddProduct = () => {
     mutate: addProduct,
     isLoading: isAdding,
     isError: addProductError,
-    isSuccess:addProductIsSuccess,
+    isSuccess: addProductIsSuccess,
   } = useAddProduct();
 
   const categoryOptions = categories.map((category) => category.name);
@@ -97,7 +98,7 @@ const AddProduct = () => {
 
     if (images.length > 0) {
       images.forEach((image) => {
-        formData.append("images", image); 
+        formData.append("images", image);
       });
     }
 
@@ -122,18 +123,29 @@ const AddProduct = () => {
     slidesToScroll: 1,
   };
 
-  useEffect(()=>{
-    if(addProductIsSuccess){
-      notif("محصول با موفقیت اضافه شد." , {variant:"success"})
-      navigate("/products")
+  useEffect(() => {
+    if (addProductIsSuccess) {
+      notif("محصول با موفقیت اضافه شد.", { variant: "success" });
+      navigate("/products");
+    } else if (addProductError) {
+      notif("مشکلی در ایجاد محصول وجود دارد.", { variant: "error" });
     }
-    else if (addProductError){
-      notif("مشکلی در ایجاد محصول وجود دارد.", {variant:"error"})
-    }
-  },[addProductIsSuccess , addProductError])
+  }, [addProductIsSuccess, addProductError]);
 
   return (
     <Box className="space-y-4">
+      <PageHeader
+        title="افزودن محصول"
+        buttons={[
+          {
+            text: "بازگشت",
+            variant: "text",
+            onClick: () => {
+              navigate(-1);
+            },
+          },
+        ]}
+      />
       <Formik
         initialValues={initialValues}
         onSubmit={handleSubmit}
@@ -169,73 +181,6 @@ const AddProduct = () => {
                       label="محل قرارگیری "
                       type="text"
                     />
-                  </Box>
-                  <Box>
-                    <Box className="flex justify-between items-end col-span-1 -mt-2 mb-1">
-                      <Typography variant="custom">تصویر محصول</Typography>
-                      <label htmlFor="upload-image">
-                        <input
-                          accept="image/*"
-                          style={{ display: "none" }}
-                          id="upload-image"
-                          type="file"
-                          multiple
-                          onChange={handleAddImage}
-                        />
-                        <Button
-                          variant="contained"
-                          component="span"
-                          size="small"
-                        >
-                          افزودن تصویر
-                        </Button>
-                      </label>
-                    </Box>
-
-                    {images.length > 0 && (
-                      <Slider {...sliderSettings}>
-                        {images.map((image, index) => (
-                          <Box
-                            key={index}
-                            position="relative"
-                            onMouseEnter={() => setHoveredIndex(index)}
-                            onMouseLeave={() => setHoveredIndex(null)}
-                          >
-                            <img
-                              src={URL.createObjectURL(image)} // Create a URL for the image file
-                              alt={`product-${index}`}
-                              style={{
-                                width: "100%",
-                                maxHeight: "300px",
-                                objectFit: "cover",
-                                border: `2px solid ${theme.palette.background.paper}`,
-                                borderRadius: "8px",
-                                padding: 4,
-                                filter:
-                                  hoveredIndex === index
-                                    ? "brightness(70%)"
-                                    : "none",
-                                transition: "filter 0.3s ease-in-out",
-                              }}
-                            />
-                            {hoveredIndex === index && (
-                              <IconButton
-                                aria-label="delete"
-                                onClick={() => handleRemoveImage(index)}
-                                style={{
-                                  position: "absolute",
-                                  top: 8,
-                                  right: 8,
-                                  backgroundColor: "rgba(255, 255, 255, 0.8)",
-                                }}
-                              >
-                                <Trash color="red" size={20} />
-                              </IconButton>
-                            )}
-                          </Box>
-                        ))}
-                      </Slider>
-                    )}
                   </Box>
 
                   <Box>
@@ -303,6 +248,73 @@ const AddProduct = () => {
                         />
                       </Box>
                     </Box>
+                  </Box>
+                  <Box>
+                    <Box className="flex justify-between items-end col-span-1 -mt-2 mb-1">
+                      <Typography variant="custom">تصویر محصول</Typography>
+                      <label htmlFor="upload-image">
+                        <input
+                          accept="image/*"
+                          style={{ display: "none" }}
+                          id="upload-image"
+                          type="file"
+                          multiple
+                          onChange={handleAddImage}
+                        />
+                        <Button
+                          variant="contained"
+                          component="span"
+                          size="small"
+                        >
+                          افزودن تصویر
+                        </Button>
+                      </label>
+                    </Box>
+
+                    {images.length > 0 && (
+                      <Slider {...sliderSettings}>
+                        {images.map((image, index) => (
+                          <Box
+                            key={index}
+                            position="relative"
+                            onMouseEnter={() => setHoveredIndex(index)}
+                            onMouseLeave={() => setHoveredIndex(null)}
+                          >
+                            <img
+                              src={URL.createObjectURL(image)} // Create a URL for the image file
+                              alt={`product-${index}`}
+                              style={{
+                                width: "100%",
+                                maxHeight: "300px",
+                                objectFit: "cover",
+                                border: `2px solid ${theme.palette.background.paper}`,
+                                borderRadius: "8px",
+                                padding: 4,
+                                filter:
+                                  hoveredIndex === index
+                                    ? "brightness(70%)"
+                                    : "none",
+                                transition: "filter 0.3s ease-in-out",
+                              }}
+                            />
+                            {hoveredIndex === index && (
+                              <IconButton
+                                aria-label="delete"
+                                onClick={() => handleRemoveImage(index)}
+                                style={{
+                                  position: "absolute",
+                                  top: 8,
+                                  right: 8,
+                                  backgroundColor: "rgba(255, 255, 255, 0.8)",
+                                }}
+                              >
+                                <Trash color="red" size={20} />
+                              </IconButton>
+                            )}
+                          </Box>
+                        ))}
+                      </Slider>
+                    )}
                   </Box>
                 </Box>
               </Box>{" "}

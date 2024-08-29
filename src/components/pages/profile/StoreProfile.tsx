@@ -1,26 +1,46 @@
-import { Box, Paper } from "@mui/material";
-import GlobalInfo from "./GlobalInfo";
+import React from "react";
+import { Box, CircularProgress, Typography } from "@mui/material";
+import AdminProfileImage from "./AdminProfileImg";
+import PersonalInformation from "./PersonalInfo";
+import ChangePassword from "./ChangePassword";
 import PageHeader from "../pageHeader/PageHeader";
+import { useStoreInformation } from "../../../api/store/getStoreInfo";
+// import { useAdminInformation } from "../../../api/admin/getAdminInfo";
 
-const Profile = () => {
+const StoreProfile = () => {
+  const { data, isLoading, error } = useStoreInformation();
+
+  if (isLoading) {
+    return <CircularProgress />;
+  }
+
+  if (error) {
+    return <Typography color="error">خطا در بارگزاری اطلاعات</Typography>;
+  }
+
+  console.log("store:" , data);
+  
   return (
-    <Box className="flex flex-col gap-4 h-full">
-      <PageHeader
+    <Box className="space-y-4">
+       <PageHeader
         title="اطلاعات فروشگاه"
-        buttons={[
-          {
-            text: " ویرایش اطلاعات ",
-            onClick: () => {},
-            variant: "contained",
-          },
-        ]}
+        // buttons={[
+        //   {
+        //     text: " ویرایش اطلاعات ",
+        //     onClick: () => {},
+        //     variant: "contained",
+        //   },
+        // ]}
       />
-      <Box className="w-full md:grid md:grid-cols-4 gap-8 h-full">
-        <GlobalInfo />
-        <Box component={Paper} className="col-span-3 " height={"100%"}></Box>
-      </Box>
+      {data && (
+        <>
+          <AdminProfileImage storeData={data} />
+          {/* <PersonalInformation userInfo={data} /> */}
+          {/* <ChangePassword userInfo={data} /> */}
+        </>
+      )}
     </Box>
   );
 };
 
-export default Profile;
+export default StoreProfile;

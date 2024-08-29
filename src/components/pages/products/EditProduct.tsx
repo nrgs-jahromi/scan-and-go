@@ -27,6 +27,9 @@ import "slick-carousel/slick/slick-theme.css";
 import { notif } from "../../common/notification/Notification";
 import { useNavigate, useParams } from "react-router";
 import { useProductDetails } from "../../../api/product/getProductDetail";
+import { API_BASE_URL } from "../../../api/config";
+import PageHeader from "../pageHeader/PageHeader";
+import { useUpdateProduct } from "../../../api/product/updateProduct";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("نام محصول الزامی است"),
@@ -43,11 +46,11 @@ const EditProduct = () => {
   const { data: categories = [] } = useCategories();
   const { data: productDetails, isLoading, isError } = useProductDetails(productId!);
   const {
-    mutate: addProduct,
+    mutate: updateProduct,
     isLoading: isAdding,
     isError: addProductError,
     isSuccess: addProductIsSuccess,
-  } = useAddProduct();
+  } = useUpdateProduct();
 
   const categoryOptions = categories.map((category) => category.name);
 
@@ -69,7 +72,7 @@ const EditProduct = () => {
     location: productDetails?.location || null,
     discount: {
       discount_percentage: productDetails?.discount || 0,
-      expiration_date: null, // این را می‌توانید بر اساس نیاز مقداردهی کنید
+      expiration_date: null,
       min_quantity_for_discount: 1,
     },
     images: null,
@@ -115,14 +118,14 @@ const EditProduct = () => {
       });
     }
 
-    addProduct(formData);
-  };
+    updateProduct({ productData: formData, barcode: values.barcode });  };
 
+  
   const sliderSettings = {
     customPaging: (i: number) => (
       <a>
         <img
-          src={images[i].image}
+          src={API_BASE_URL+images[i].image}
           alt={`thumbnail-${i}`}
           style={{ width: "50px", height: "50px" }}
         />
@@ -136,6 +139,8 @@ const EditProduct = () => {
     slidesToScroll: 1,
   };
 
+  // console.log(images[0].image)
+  
   useEffect(() => {
     if (addProductIsSuccess) {
       notif("محصول با موفقیت اضافه شد.", { variant: "success" });
@@ -147,6 +152,18 @@ const EditProduct = () => {
 
   return (
     <Box className="space-y-4">
+      <PageHeader
+        title="ویرایش محصول"
+        buttons={[
+          {
+            text: "بازگشت",
+            variant: "text",
+            onClick: () => {
+              navigate(-1);
+            },
+          },
+        ]}
+      />
       <Formik
         initialValues={initialValues}
         onSubmit={handleSubmit}
@@ -216,7 +233,7 @@ const EditProduct = () => {
                             onMouseLeave={() => setHoveredIndex(null)}
                           >
                             <img
-                              src={image.image}
+                             src={`${API_BASE_URL}${image.image}`}
                               alt={`product-${index}`}
                               style={{
                                 width: "100%",

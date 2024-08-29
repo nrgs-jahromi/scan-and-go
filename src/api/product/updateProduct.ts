@@ -27,8 +27,8 @@ type ApiResponse = {
   error?: string;
 };
 
-const addProduct = async (productData: FormData): Promise<ApiResponse> => {
-  const { data } = await fetcher.post("/products/add/", productData, {
+const updateProduct = async (productData: FormData , barcode: string): Promise<ApiResponse> => {
+  const { data } = await fetcher.patch(`/products/edit/${barcode}/`, productData, {
     headers: {
       "Content-Type": undefined,
     },
@@ -36,13 +36,12 @@ const addProduct = async (productData: FormData): Promise<ApiResponse> => {
   return data;
 };
 
-export const useAddProduct = () => {
+export const useUpdateProduct = () => {
   const queryClient = useQueryClient();
-  return useMutation(addProduct, {
+  return useMutation((params: { productData: FormData, barcode: string }) => updateProduct(params.productData, params.barcode), {
     onSuccess: () => {
       queryClient.invalidateQueries(["products"]);
     },
-
     onError: (error) => {
       console.error("Error adding product:", error);
     },
