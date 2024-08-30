@@ -2,7 +2,7 @@ import * as React from "react";
 import { useEffect, ReactNode, useMemo, useState } from "react";
 import { styled, Theme, CSSObject } from "@mui/material/styles";
 import logo from "../../assets/logo.svg";
-import smallLogo from "../../assets/samllLogo.svg";
+import smallLogo from "../../assets/scan2.svg";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
@@ -127,12 +127,13 @@ export default function SideNavigation() {
             category_id: "products",
             label: "افزودن محصول",
             path: "products/add",
-          }, {
-            id: "products-category",
-            category_id: "products",
-            label: "دسته‌بندی محصولات",
-            path: "products/categories",
           },
+          //  {
+          //   id: "products-category",
+          //   category_id: "products",
+          //   label: "دسته‌بندی محصولات",
+          //   path: "products/categories",
+          // },
           {
             id: "products-list",
             category_id: "products",

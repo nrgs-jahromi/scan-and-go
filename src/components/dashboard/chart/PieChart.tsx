@@ -28,8 +28,7 @@ const CustomPieChart = () => {
     >
       <Box className="w-full text-right" flexGrow={1}>
         <Typography variant="subtitle1" fontWeight={500}>
-          طرح سرمایه گذاری
-        </Typography>
+پرفروش‌ترین‌ها        </Typography>
       </Box>
       <PieChart
         {...pieParams}

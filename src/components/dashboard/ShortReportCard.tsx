@@ -1,32 +1,47 @@
-  import { Box, Paper, Typography } from "@mui/material";
-  import { FC, ReactNode, useState } from "react";
-  import theme from "../../theme";
+import { Box, Paper, Typography } from "@mui/material";
+import { FC, ReactNode, useState } from "react";
+import theme from "../../theme";
+import IconBox from "../common/IconBox";
 
-  type ReportProps = {
-    name: string;
-    report_value: number;
-    unit?: string;
-    Icon: ReactNode;
-  };
+type ReportProps = {
+  name: string;
+  report_value: number;
+  unit?: string;
+  Icon: ReactNode;
+};
 
-  const ShortReportCard: FC<ReportProps> = ({
-    name,
-    report_value,
-    unit,
-    Icon,
-  }) => {
-    const [hover , setHover]  = useState(false)
-    return (
-      <Box component={Paper} className="p-6 min-w-56 w-full" color={hover? "white" :""} bgcolor={hover ? theme.palette.primary.main: "white"} onMouseEnter={()=>setHover(true)} onMouseLeave={()=>setHover(false)}>
-        <Box color={hover ? "white":theme.palette.primary.main}>{Icon}</Box>
-        <Typography variant="subtitle1" color={hover ? "white":theme.palette.grey[400]}>
+const ShortReportCard: FC<ReportProps> = ({
+  name,
+  report_value,
+  unit,
+  Icon,
+}) => {
+  const [hover, setHover] = useState(false);
+  return (
+    <Box  className="p-4 w-full flex col-span-1 gap-3 rounded-lg min-w-fit" >
+    
+      <IconBox
+        icon={Icon}
+        color={theme.palette.primary.main}
+        size={48}
+        borderRadius="8px"
+      />
+      {/* <Box color={hover ? "white":theme.palette.primary.main}>{Icon}</Box> */}
+      <Box>
+        <Typography
+          variant="subtitle2"
+          color={hover ? "white" : theme.palette.grey[400]}
+          className="whitespace-nowrap"
+        >
           {name}
         </Typography>
-        <Typography variant="subtitle1" fontWeight={"bold"}>
+        <Typography variant="h6" fontWeight={"bold"}>
           {report_value.toLocaleString("fa-IR")}
           {unit ? unit : ""}
         </Typography>
       </Box>
-    );
-  };
-  export default ShortReportCard;
+    
+    </Box>
+  );
+};
+export default ShortReportCard;
