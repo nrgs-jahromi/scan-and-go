@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Box, Button, Divider, Typography, useTheme } from "@mui/material";
 import { useNavigate } from "react-router";
 import EnhancedTable from "../../common/table/EnhancedTable";
@@ -7,6 +7,7 @@ import UserAvatar from "../customers/profile/UserAvatar";
 import { API_BASE_URL } from "../../../api/config";
 import PageHeader from "../pageHeader/PageHeader";
 import { Add } from "iconsax-react";
+import _ from "lodash";
 
 type ProductData = {
   id: number;
@@ -71,6 +72,8 @@ const ProductList = () => {
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [searchValue, setSearchValue] = useState("");
+  const [debouncedSearchValue, setDebouncedSearchValue] = useState("");
 
   const {
     data: productList,
@@ -81,6 +84,7 @@ const ProductList = () => {
     params: {
       page: page + 1,
       page_size: rowsPerPage,
+      q: debouncedSearchValue,
     },
   });
 
@@ -98,6 +102,18 @@ const ProductList = () => {
       },
     },
   ];
+
+  const debounceSearch = useCallback(
+    _.debounce((query) => {
+      setDebouncedSearchValue(query);
+    }, 1000),
+    []
+  );
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(event.target.value);
+    debounceSearch(event.target.value);
+  };
 
   useEffect(() => {
     if (getProductsIsSuccess) {
@@ -126,19 +142,29 @@ const ProductList = () => {
     <Box className="w-full flex flex-col gap-5">
       <PageHeader
         title="لیست محصولات"
+        showSearchBar={true}
+        searchValue={searchValue}
+        onSearchChange={handleSearchChange}
         buttons={[
           {
             text: "افزودن محصول",
             customComponent: (
-              <Button variant="contained" startIcon={<Add />}>
+              <Button
+                variant="contained"
+                startIcon={<Add />}
+                sx={{ maxHeight: 48 }}
+                onClick={() => {
+                  navigate("/products/add");
+                }}
+              >
                 {" "}
                 افزودن محصول
               </Button>
             ),
 
-            onClick: () => {
-              navigate("/products/add");
-            },
+            // onClick: () => {
+            //   navigate("/products/add");
+            // },
           },
         ]}
       />
