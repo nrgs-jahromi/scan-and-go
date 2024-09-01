@@ -179,6 +179,13 @@ export default function SideNavigation() {
     ],
     []
   );
+
+  const handleLogout = () => {
+    logout();
+    localStorage.removeItem("accessToken")
+    navigate("/login");
+  };
+
   useEffect(() => {
     const pathParts = window.location.pathname.split("/");
     const lastPathPart = pathParts[pathParts.length - 1];
@@ -213,7 +220,7 @@ export default function SideNavigation() {
 
   const navigateHandler = (item: NavbarCategory) => {
     if (item.id === "exit") {
-      logout(); 
+      handleLogout();
     } else {
       if (selectedCategory === item.id) {
         setSelectedCategory(null);

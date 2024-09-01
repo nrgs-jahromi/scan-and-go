@@ -55,13 +55,9 @@ const Login = () => {
     if (isUserLoginSuccess) {
       notif("با موفقیت وارد شدید!", { variant: "success" });
       saveToLocalStorage(LS_ACCESS_TOKEN, loginData.token);
-      // saveToLocalStorage(LS_REFRESH_TOKEN, loginData.refresh);
-
-      // dispatch(authActions.setAuth(true));
       navigate("/dashboard");
     } else if (isUserLoginError) {
       notif("نام کاربری یا رمز عبور نامعتبر می‌باشد.", { variant: "error" });
-      // handleApiErrors(userLoginError, formik.setFieldError);
     }
   }, [
     isUserLoginSuccess,
