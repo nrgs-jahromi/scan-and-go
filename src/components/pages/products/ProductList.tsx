@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Box, Button, Divider, Typography, useTheme } from "@mui/material";
 import { useNavigate } from "react-router";
-import EnhancedTable from "../../../common/table/EnhancedTable";
-import { useProducts } from "../../../../api/product/getProductsList";
-import UserAvatar from "../profile/UserAvatar";
-import { API_BASE_URL } from "../../../../api/config";
-import PageHeader from "../../pageHeader/PageHeader";
+import EnhancedTable from "../../common/table/EnhancedTable";
+import { useProducts } from "../../../api/product/getProductsList";
+import UserAvatar from "../customers/profile/UserAvatar";
+import { API_BASE_URL } from "../../../api/config";
+import PageHeader from "../pageHeader/PageHeader";
 
 type ProductData = {
   id: number;

@@ -49,12 +49,12 @@ const ConfirmInformation = () => {
   ];
 
   const BankInfo: { key: keyof BankInfoT; label: string }[] = [
-    { key: "bank1_first_name", label: "نام" },
-    { key: "bank1_last_name", label: "نام خانوادگی" },
-    { key: "bank1_account_number", label: "شماره حساب" },
-    { key: "bank1_card_number", label: "شماره کارت" },
-    { key: "bank1_iban_number", label: "شماره شبا" },
-    { key: "bank1_name", label: "نام بانک" },
+    { key: "first_name", label: "نام" },
+    { key: "last_name", label: "نام خانوادگی" },
+    { key: "account_number", label: "شماره حساب" },
+    { key: "card_number", label: "شماره کارت" },
+    { key: "iban_number", label: "شماره شبا" },
+    { key: "bank_name", label: "نام بانک" },
   ];
 
   return (

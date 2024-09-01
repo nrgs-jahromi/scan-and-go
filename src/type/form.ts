@@ -1,12 +1,3 @@
-type BankInfoT = {
-  bank1_account_number: string | null;
-  bank1_card_number: string | null;
-  bank1_first_name: string | null;
-  bank1_iban_number: string | null;
-  bank1_last_name: string | null;
-  bank1_name: string | null;
-};
-
 type CustomerInfoT = {
   customer_address: string | null;
   customer_birth_date: string | null;

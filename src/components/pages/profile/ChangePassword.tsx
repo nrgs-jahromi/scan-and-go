@@ -4,7 +4,6 @@ import { Form, FormikProvider, useFormik } from "formik";
 import * as Yup from "yup";
 import FormikInput from "../../common/inputs/FormikInput";
 import { Edit2 } from "iconsax-react";
-import { useAdminInformationUpdate } from "../../../api/admin/updateAdminInfo";
 import { notif } from "../../common/notification/Notification";
 interface PersonalInformationProps {
   userInfo: {
@@ -24,13 +23,13 @@ interface PersonalInformationProps {
 
 const ChangePassword: React.FC<PersonalInformationProps> = ({ userInfo }) => {
   const [editMode, setEditMode] = useState(false);
-  const {
-    mutate: updateAdminInfo,
-    isLoading,
-    isSuccess: isChangePassSuccess,
-    isError: isChangePassError,
-    error: errorDescription,
-  } = useAdminInformationUpdate();
+  // const {
+  //   mutate: updateAdminInfo,
+  //   isLoading,
+  //   isSuccess: isChangePassSuccess,
+  //   isError: isChangePassError,
+  //   error: errorDescription,
+  // } = useAdminInformationUpdate();
 
   const formik = useFormik({
     initialValues: {
@@ -44,21 +43,21 @@ const ChangePassword: React.FC<PersonalInformationProps> = ({ userInfo }) => {
         .required("این فیلد اجباری است."),
     }),
     onSubmit: (values) => {
-      updateAdminInfo({
-        body: {
-          ...values,
-          old_password: values.current_password,
-          new_password: values.new_password,
-          first_name: userInfo.first_name,
-          last_name: userInfo.last_name,
-          username: userInfo.username,
-          national_code: userInfo.national_code,
-          birth_date: userInfo.birth_date,
-          telephone_number: userInfo.telephone_number,
-          phone_number: userInfo.phone_number,
-          profile_image: userInfo.profile_image ? userInfo.profile_image.id : null,
-        },
-      });
+      // updateAdminInfo({
+      //   body: {
+      //     ...values,
+      //     old_password: values.current_password,
+      //     new_password: values.new_password,
+      //     first_name: userInfo.first_name,
+      //     last_name: userInfo.last_name,
+      //     username: userInfo.username,
+      //     national_code: userInfo.national_code,
+      //     birth_date: userInfo.birth_date,
+      //     telephone_number: userInfo.telephone_number,
+      //     phone_number: userInfo.phone_number,
+      //     profile_image: userInfo.profile_image ? userInfo.profile_image.id : null,
+      //   },
+      // });
     },
   });
 
@@ -67,16 +66,16 @@ const ChangePassword: React.FC<PersonalInformationProps> = ({ userInfo }) => {
     formik.resetForm();
   };
 
-  useEffect(() => {
-    if (isChangePassSuccess) {
-      notif("رمز عبور با موفقیت تغییر کرد.", { variant: "success" });
+  // useEffect(() => {
+  //   if (isChangePassSuccess) {
+  //     notif("رمز عبور با موفقیت تغییر کرد.", { variant: "success" });
 
-      setEditMode(false);
-      formik.resetForm();
-    } else if (isChangePassError) {
-      notif(`${errorDescription}`, { variant: "error" });
-    }
-  }, [isChangePassError, isChangePassSuccess]);
+  //     setEditMode(false);
+  //     formik.resetForm();
+  //   } else if (isChangePassError) {
+  //     notif(`${errorDescription}`, { variant: "error" });
+  //   }
+  // }, [isChangePassError, isChangePassSuccess]);
 
   return (
     <Box component={Paper} width={"100%"} py={2} px={4} className="space-y-4">
@@ -117,9 +116,9 @@ const ChangePassword: React.FC<PersonalInformationProps> = ({ userInfo }) => {
           <Button fullWidth variant="outlined" onClick={toggleEditMode}>
             انصراف
           </Button>
-          <Button fullWidth variant="contained" onClick={formik.submitForm} disabled={isLoading}>
+          {/* <Button fullWidth variant="contained" onClick={formik.submitForm} disabled={isLoading}>
             {isLoading ? <CircularProgress size={24} /> : "ثبت"}
-          </Button>
+          </Button> */}
         </Box>
       )}
     </Box>

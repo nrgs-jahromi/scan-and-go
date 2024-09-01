@@ -2,7 +2,7 @@ import { Box, useMediaQuery } from "@mui/material";
 import SideNavigation from "./SideNavigation";
 import { Outlet } from "react-router";
 import theme from "../../theme";
-import FixedBottomNavigation from "./MobileNavigation";
+// import FixedBottomNavigation from "./MobileNavigation";
 
 const MainTemplate = () => {
   const isLargeScreen = useMediaQuery("(min-width: 768px)");

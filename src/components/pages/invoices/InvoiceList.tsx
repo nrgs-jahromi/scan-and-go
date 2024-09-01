@@ -15,7 +15,7 @@ const InvoiceList = () => {
     new DateObject().add(4, "days"),
   ]);
 
-  const generateRandomData = (length) => {
+  const generateRandomData = (length:number ) => {
     return Array.from({ length }, () => Math.floor(Math.random() * 100) + 1);
   };
 

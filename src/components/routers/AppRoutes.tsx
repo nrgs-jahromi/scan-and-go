@@ -13,7 +13,7 @@ import InvoiceList from "../pages/invoices/InvoiceList";
 import Signup from "../auth/signup/Signup";
 import NumberVerification from "../auth/signup/VerifyNumber";
 import StoreInformation from "../pages/storeInfo/StoreInformation";
-import ProductList from "../pages/customers/list/ProductList";
+import ProductList from "../pages/products/ProductList";
 import EditProduct from "../pages/products/EditProduct";
 import StoreProfile from "../pages/profile/StoreProfile";
 

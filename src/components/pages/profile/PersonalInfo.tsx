@@ -5,7 +5,6 @@ import * as Yup from "yup";
 import FormikInput from "../../common/inputs/FormikInput";
 import FormikDatePicker from "../../common/inputs/FormikDatePicker";
 import { Edit2 } from "iconsax-react";
-import { useAdminInformationUpdate } from "../../../api/admin/updateAdminInfo";
 import { notif } from "../../common/notification/Notification";
 
 interface PersonalInformationProps {
@@ -26,13 +25,6 @@ interface PersonalInformationProps {
 
 const PersonalInformation: React.FC<PersonalInformationProps> = ({ userInfo }) => {
   const [editMode, setEditMode] = useState(false);
-  const {
-    mutate: updateAdminInfo,
-    isLoading,
-    isSuccess: isChangePassSuccess,
-    isError: isChangePassError,
-    error: errorDescription,
-  } = useAdminInformationUpdate();
 
   const initialValues = {
     first_name: userInfo.first_name,
@@ -50,21 +42,7 @@ const PersonalInformation: React.FC<PersonalInformationProps> = ({ userInfo }) =
       username: Yup.string().required("این فیلد اجباری است."),
     }),
     onSubmit: (values) => {
-      updateAdminInfo({
-        body: {
-          ...values,
-          first_name: values.first_name,
-          last_name: values.last_name,
-          username: values.username,
-          national_code: values.national_code,
-          birth_date: values.birth_date,
-          telephone_number: values.telephone_number,
-          phone_number: values.phone_number,
-          old_password: null,
-          new_password: null,
-          profile_image: userInfo.profile_image ? userInfo.profile_image.id : null,
-        },
-      });
+    
     },
   });
 
@@ -73,15 +51,15 @@ const PersonalInformation: React.FC<PersonalInformationProps> = ({ userInfo }) =
     formik.resetForm();
   };
 
-  useEffect(() => {
-    if (isChangePassSuccess) {
-      notif("اطلاعات کاربری با موفقیت تغییر کرد.", { variant: "success" });
+  // useEffect(() => {
+  //   if (isChangePassSuccess) {
+  //     notif("اطلاعات کاربری با موفقیت تغییر کرد.", { variant: "success" });
 
-      setEditMode(false);
-    } else if (isChangePassError) {
-      notif("مشکلی در ثبت فرم وجود دارد.", { variant: "error" });
-    }
-  }, [isChangePassError, isChangePassSuccess]);
+  //     setEditMode(false);
+  //   } else if (isChangePassError) {
+  //     notif("مشکلی در ثبت فرم وجود دارد.", { variant: "error" });
+  //   }
+  // }, [isChangePassError, isChangePassSuccess]);
 
   return (
     <>
@@ -134,9 +112,9 @@ const PersonalInformation: React.FC<PersonalInformationProps> = ({ userInfo }) =
             <Button fullWidth variant="outlined" onClick={toggleEditMode}>
               انصراف
             </Button>
-            <Button fullWidth variant="contained" onClick={formik.submitForm} disabled={isLoading}>
+            {/* <Button fullWidth variant="contained" onClick={formik.submitForm} disabled={isLoading}>
               {isLoading ? <CircularProgress size={24} /> : "ثبت"}
-            </Button>
+            </Button> */}
           </Box>
         )}
       </Box>

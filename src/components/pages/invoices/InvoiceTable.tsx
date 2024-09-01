@@ -124,14 +124,28 @@ const InvoiceTable = () => {
     setOpen(false);
   };
 
-  const actions = [
+  // const actions = [
+  //   {
+  //     label: "مشاهده",
+  //     function: (id: number) =>
+  //       handleClickOpen(rows.find((row) => row.id === id)!),
+  //   },
+  // ];
+
+  const actions: ActionTableT[] = [
     {
       label: "مشاهده",
-      function: (id: number) =>
+      onClick: (id: number) => 
         handleClickOpen(rows.find((row) => row.id === id)!),
+      
     },
+    // {
+    //   label: "ویرایش",
+    //   onClick: (id: number) => {
+    //     navigate(`${productList?.results[id].barcode}/`);
+    //   },
+    // },
   ];
-
   useEffect(() => {
     console.log("rowsPerPage", rowsPerPage);
   }, [rowsPerPage]);

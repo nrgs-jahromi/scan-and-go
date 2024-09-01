@@ -21,9 +21,10 @@ const FormikColorPicker: FC<Props> = ({ name, label, containerProps }) => {
       <Typography variant="custom" marginBottom={1}>
         {label}
       </Typography>
-      <ColorPickeR
+      <TextField
+      type="color"
         value={field.value || ""}
-        onChange={handleChange}
+        // onChange={handleChange}
         // Add any props specific to your color picker library here
       />
       {errorText && (
