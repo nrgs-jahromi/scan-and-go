@@ -10,19 +10,19 @@ import { useStoreInformation } from "../../../api/store/getStoreInfo";
 const StoreProfile = () => {
   const { data, isLoading, error } = useStoreInformation();
 
-  if (isLoading) {
-    return <CircularProgress />;
-  }
+  // if (isLoading) {
+  //   return <CircularProgress />;
+  // }
 
-  if (error) {
-    return <Typography color="error">خطا در بارگزاری اطلاعات</Typography>;
-  }
+  // if (error) {
+  //   return <Typography color="error">خطا در بارگزاری اطلاعات</Typography>;
+  // }
 
   console.log("store:" , data);
   
   return (
     <Box className="space-y-4">
-       <PageHeader
+       {/* <PageHeader
         title="اطلاعات فروشگاه"
         // buttons={[
         //   {
@@ -31,14 +31,14 @@ const StoreProfile = () => {
         //     variant: "contained",
         //   },
         // ]}
-      />
-      {data && (
+      /> */}
+      {/* {data && ( */}
         <>
           <AdminProfileImage storeData={data} />
           {/* <PersonalInformation userInfo={data} /> */}
           {/* <ChangePassword userInfo={data} /> */}
         </>
-      )}
+      {/* )} */}
     </Box>
   );
 };

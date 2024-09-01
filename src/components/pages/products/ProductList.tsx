@@ -6,6 +6,7 @@ import { useProducts } from "../../../api/product/getProductsList";
 import UserAvatar from "../customers/profile/UserAvatar";
 import { API_BASE_URL } from "../../../api/config";
 import PageHeader from "../pageHeader/PageHeader";
+import { Add } from "iconsax-react";
 
 type ProductData = {
   id: number;
@@ -128,7 +129,13 @@ const ProductList = () => {
         buttons={[
           {
             text: "افزودن محصول",
-            variant: "contained",
+            customComponent: (
+              <Button variant="contained" startIcon={<Add />}>
+                {" "}
+                افزودن محصول
+              </Button>
+            ),
+
             onClick: () => {
               navigate("/products/add");
             },

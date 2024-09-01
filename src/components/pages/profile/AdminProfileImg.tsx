@@ -17,9 +17,13 @@ type Props = {
   storeData: StoreT;
 };
 
+import defaultProfile from "../../../assets/react.svg"
+import { API_BASE_URL } from "../../../api/config";
+
+
 const AdminProfileImage: React.FC<Props> = ({ storeData }) => {
   const [uploadedImage, setUploadedImage] = useState<string | null>(
-    storeData.icon_url ?? null
+    storeData?.icon_url ?? null
   );
   const [isLoading, setIsLoading] = useState(false);
 
@@ -57,11 +61,19 @@ const AdminProfileImage: React.FC<Props> = ({ storeData }) => {
 
   return (
     <Box
-      component={Paper}
+      // component={Paper}
       width={"100%"}
-      className="flex flex-row items-center p-4 gap-4"
+      className="flex flex-row items-center  gap-4"
     >
-      <UserAvatar url={uploadedImage || undefined} />
+      <Box width={64} height={64} >
+      <img
+        src={uploadedImage ? API_BASE_URL + uploadedImage : defaultProfile}
+        alt="User"
+        // className="rounded-full"
+        style={{ width: "100%", height: "100%", borderRadius: "8px" , border:`2px solid ${theme.palette.primary.light}` , }}
+      />
+    </Box>
+      {/* <UserAvatar url={uploadedImage || undefined} /> */}
       <Box>
         {uploadedImage && (
           <IconButton onClick={handleRemoveImage}>
