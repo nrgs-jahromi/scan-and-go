@@ -5,7 +5,7 @@ import IconBox from "../common/IconBox";
 
 type ReportProps = {
   name: string;
-  report_value: number;
+  report_value: number| undefined;
   unit?: string;
   Icon: ReactNode;
 };
@@ -36,7 +36,7 @@ const ShortReportCard: FC<ReportProps> = ({
           {name}
         </Typography>
         <Typography variant="h6" fontWeight={"bold"}>
-          {report_value.toLocaleString("fa-IR")}
+          {report_value?.toLocaleString("fa-IR")}
           {unit ? unit : ""}
         </Typography>
       </Box>

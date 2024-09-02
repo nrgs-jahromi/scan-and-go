@@ -9,9 +9,11 @@ import CustomLineChart from "./chart/LineChart";
 import CustomPieChart from "./chart/PieChart";
 import BasicTable from "./table/DashboardTable";
 import BankAccounts from "./accounts/BankAccounts";
+import { useStatistics } from "../../api/dashboard/getDashboardStatistics";
 
 const Dashboard = () => {
   const isLargeScreen = useMediaQuery("(min-width: 640px)");
+  const { data, isLoading, isError, error } = useStatistics();
 
   return (
     <Box className="h-full w-full flex flex-col gap-6">
@@ -22,19 +24,19 @@ const Dashboard = () => {
       >
         <ShortReportCard
           name="کالاهای موجود"
-          report_value={2500}
+          report_value={data?.total_products}
           Icon={<Category2 />}
         />
         {isLargeScreen && <Divider orientation="vertical" variant="middle" sx={{ m: 0 }} />}
         <ShortReportCard
           name="فاکتورهای ثبت شده "
-          report_value={20100}
+          report_value={data?.total_invoices}
           Icon={<ArchiveTick />}
         />
         {isLargeScreen && <Divider orientation="vertical" variant="middle" sx={{ m: 0 }} />}
         <ShortReportCard
           name="فروش کل"
-          report_value={100000000000}
+          report_value={data?.total_revenue}
           unit="تومان"
           Icon={<BuyCrypto />}
         />
