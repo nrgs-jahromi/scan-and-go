@@ -38,6 +38,8 @@ const FormikAutocomplete: FC<Props> = ({
     setFieldValue(name, value);
   };
 
+  // console.log("tesy" , field.value);
+  
   return (
     <Box {...containerProps} marginBottom={2}>
       <Typography variant={labelVar ? labelVar : "custom"} marginBottom={1}>

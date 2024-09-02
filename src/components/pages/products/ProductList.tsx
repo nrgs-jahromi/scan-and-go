@@ -8,6 +8,8 @@ import { API_BASE_URL } from "../../../api/config";
 import PageHeader from "../pageHeader/PageHeader";
 import { Add } from "iconsax-react";
 import _ from "lodash";
+import { useDeleteProduct } from "../../../api/product/deleteProduct";
+import { notif } from "../../common/notification/Notification";
 
 type ProductData = {
   id: number;
@@ -87,12 +89,17 @@ const ProductList = () => {
       q: debouncedSearchValue,
     },
   });
+  const { mutate: deleteProduct , isSuccess , isError:isDeleteError } = useDeleteProduct(); // استفاده از هوک حذف محصول
 
+  
   const actions: ActionTableT[] = [
     {
       label: "حذف",
       onClick: (id: number) => {
-        console.log(`Delete product with ID: ${id}`);
+        const selectedProduct = rows.find(row => row.id === id);
+        if (selectedProduct) {
+          deleteProduct(selectedProduct.barcode); // حذف محصول با استفاده از بارکد
+        }
       },
     },
     {
@@ -138,6 +145,16 @@ const ProductList = () => {
       }
     }
   }, [productList, getProductsIsSuccess]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      notif("محصول مورد نظر با موفقیت حذف شد", { variant: "success" });
+      // navigate("/products");
+    } else if (isDeleteError) {
+      notif("مشکلی در حذف محصول وجود دارد.", { variant: "error" });
+    }
+  }, [isSuccess, isDeleteError]);
+
   return (
     <Box className="w-full flex flex-col gap-5">
       <PageHeader
