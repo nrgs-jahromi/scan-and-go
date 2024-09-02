@@ -28,7 +28,7 @@ type ApiResponse = {
 };
 
 const updateProduct = async (productData: FormData , barcode: string): Promise<ApiResponse> => {
-  const { data } = await fetcher.patch(`/products/edit/${barcode}/`, productData, {
+  const { data } = await fetcher.post(`/products/edit/${barcode}/`, productData, {
     headers: {
       "Content-Type": undefined,
     },
