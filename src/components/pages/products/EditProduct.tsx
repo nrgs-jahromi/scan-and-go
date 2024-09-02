@@ -41,7 +41,7 @@ const validationSchema = Yup.object().shape({
 const EditProduct = () => {
   const navigate = useNavigate();
   const { productId } = useParams<{ productId: string }>();
-  const [images, setImages] = useState<{ id: number; image: string; is_primary: boolean }[]>([]);
+  const [images, setImages] = useState<{ id: number; image?: string; is_primary: boolean  ; file?:File}[]>([]);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const { data: categories = [] } = useCategories();
   const { data: productDetails, isLoading, isError } = useProductDetails(productId!);
@@ -78,25 +78,38 @@ const EditProduct = () => {
     images: null,
   };
 
-  const handleAddImage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      const newImages = Array.from(files).map((file, index) => ({
-        id: images.length + index + 1,
-        image: URL.createObjectURL(file),
-        is_primary: false,
-      }));
-      setImages((prevImages) => [...prevImages, ...newImages]);
-    }
-  };
+  // const handleAddImage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const files = event.target.files;
+  //   if (files) {
+  //     const newImages = Array.from(files).map((file, index) => ({
+  //       id: images.length + index + 1,
+  //       image: URL.createObjectURL(file),
+  //       is_primary: false,
+  //     }));
+  //     setImages((prevImages) => [...prevImages, ...newImages]);
+  //   }
+  // };
 
   const handleRemoveImage = (index: number) => {
     setImages((prevImages) => prevImages.filter((_, i) => i !== index));
   };
 
+  const handleAddImage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      const newImages = Array.from(files).map((file, index) => ({
+        id: images.length + index + 1,
+        image: URL.createObjectURL(file), // برای نمایش تصویر آپلود شده
+        file, // فایل اصلی تصویر
+        is_primary: false,
+      }));
+      setImages((prevImages) => [...prevImages, ...newImages]);
+    }
+  };
+  
   const handleSubmit = (values: typeof initialValues) => {
     const formData = new FormData();
-
+  
     formData.append("name", values.name);
     formData.append("categories", JSON.stringify(values.categories));
     formData.append("description", values.description);
@@ -104,28 +117,32 @@ const EditProduct = () => {
     formData.append("price", values.price);
     formData.append("stock", values.stock.toString());
     formData.append("min_stock", values.min_stock.toString());
-
+  
     if (values.brand) formData.append("brand", values.brand);
     if (values.location) formData.append("location", values.location);
-
+  
     if (values.discount) {
       formData.append("discount", JSON.stringify(values.discount));
     }
-
+  
     if (images.length > 0) {
       images.forEach((image) => {
-        formData.append("images", image.image); 
+        if (image.file) {
+          formData.append("images", image.file); // اگر تصویر جدید است فایل را اضافه می‌کنیم
+        } else if (image.image) {
+          formData.append("images", image.image); // اگر تصویر از قبل آپلود شده بود، یو ار ال را اضافه می‌کنیم
+        }
       });
     }
-
-    updateProduct({ productData: formData, barcode: values.barcode });  };
-
+  
+    updateProduct({ productData: formData, barcode: values.barcode });
+  };
   
   const sliderSettings = {
     customPaging: (i: number) => (
       <a>
         <img
-          src={API_BASE_URL+images[i].image}
+          src={images[i].file?images[i].image :API_BASE_URL+images[i].image}
           alt={`thumbnail-${i}`}
           style={{ width: "50px", height: "50px" }}
         />
@@ -233,7 +250,7 @@ const EditProduct = () => {
                             onMouseLeave={() => setHoveredIndex(null)}
                           >
                             <img
-                             src={`${API_BASE_URL}${image.image}`}
+                             src={image.file?image.image :API_BASE_URL+image.image}
                               alt={`product-${index}`}
                               style={{
                                 width: "100%",
