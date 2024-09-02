@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetcher, ApiError } from "../config";
 
 const updateStoreInfo = async (formData: FormData): Promise<StoreT> => {
@@ -11,5 +11,11 @@ const updateStoreInfo = async (formData: FormData): Promise<StoreT> => {
 };
 
 export const useUpdateStoreInformation = () => {
-  return useMutation<StoreT, ApiError, FormData>(updateStoreInfo);
+  const queryClient = useQueryClient();
+  return useMutation<StoreT, ApiError, FormData>(updateStoreInfo ,{
+    onSuccess: () => {
+      queryClient.invalidateQueries(["storeInfo"]);
+    },
+   
+  });
 };

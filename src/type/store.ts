@@ -1,5 +1,5 @@
-type StoreT= {
-    store_id:string;
+type StoreT = {
+    store_id: string;
     name: string;
     trade_name: string;
     registration_number: string;
@@ -18,10 +18,12 @@ type StoreT= {
     bank_shaba_number: string;
     bank_name: string;
     tax_number: string;
-    opening_hours: string;
+    opening_hours: {
+        [key: string]: string;  
+    };
     discount_policy: string;
     security_certificates: string;
     security_policy: string;
     icon: string;
-    store_color:string;
-}
+    store_color: string;
+};

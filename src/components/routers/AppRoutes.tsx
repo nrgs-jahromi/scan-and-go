@@ -7,7 +7,6 @@ import Dashboard from "../dashboard/Dashboard";
 import MainTemplate from "../mainTemplate/MainTemplate";
 import Verification from "../auth/VerifyEmail";
 import AddProduct from "../pages/products/AddProduct";
-import Profile from "../pages/profile/StoreProfile2";
 import Categories from "../pages/products/categories/CategoriesPage";
 import InvoiceList from "../pages/invoices/InvoiceList";
 import Signup from "../auth/signup/Signup";
