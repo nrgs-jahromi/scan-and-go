@@ -10,14 +10,10 @@ import DatePicker, { DateObject } from "react-multi-date-picker";
 import "../../../assets/style/date-picker-style.css";
 import { useDailySales } from "../../../api/dashboard/getStatisticPayments";
 
-// Define the type for the data returned by the API
 type DailySalesData = { date: string; amount: number }[];
 
 const CustomLineChart = () => {
-  const color = useMemo(
-    () => ["#C2BDF5", "#675AE7", "#E1DEFA", "#191440"],
-    []
-  );
+  const color = useMemo(() => ["#C2BDF5", "#675AE7", "#E1DEFA", "#191440"], []);
 
   const [values, setValues] = useState<DateObject[]>([
     new DateObject().subtract(4, "days"),
@@ -29,16 +25,27 @@ const CustomLineChart = () => {
 
   const { data, isLoading, isError } = useDailySales(startDateGregorian, endDateGregorian);
 
-  const shouldRenderChart = startDateGregorian && endDateGregorian && !isLoading && !isError && data;
+  const isDataArray = Array.isArray(data);
+  const parsedData = isDataArray
+  ? data
+  : data
+  ? Object.keys(data).map((date) => ({
+      date,
+      amount: (data as Record<string, number>)[date], 
+    }))
+  : [];
 
-  // Extract the day and month in Persian for each data point
-  const chartLabels = data?.map((item) => {
-    const date = new Date(item.date);
-    const persianDate = new DateObject(date).setCalendar(persian).setLocale(persian_fa);
-    return persianDate.format("D MMMM");
-  }) || [];
+const shouldRenderChart = startDateGregorian && endDateGregorian && !isLoading && !isError && parsedData.length > 0;
 
-  const seriesData = data?.map((item) => item.amount) || [];
+// برچسب‌های محور x
+const chartLabels = parsedData.map((item) => {
+  const date = new Date(item.date);
+  const persianDate = new DateObject(date).setCalendar(persian).setLocale(persian_fa);
+  return persianDate.format("D MMMM");
+});
+
+// داده‌های سری برای رسم نمودار
+const seriesData = parsedData.map((item) => item.amount);
 
   const formatDate = (date: DateObject) => {
     return date ? date.setLocale(persian_fa).format("D MMMM") : "";
@@ -46,7 +53,7 @@ const CustomLineChart = () => {
 
   const handleDateChange = (
     date: DateObject | DateObject[] | null,
-    options: { validatedValue: string | string[]; input: HTMLElement; isTyping: boolean; }
+    options: { validatedValue: string | string[]; input: HTMLElement; isTyping: boolean }
   ) => {
     if (Array.isArray(date)) {
       setValues(date);
@@ -82,14 +89,14 @@ const CustomLineChart = () => {
 
       {shouldRenderChart && (
         <LineChart
-          xAxis={[{ scaleType: 'point', data: chartLabels }]}
+          xAxis={[{ scaleType: "point", data: chartLabels }]}
           series={[
             {
-              data: seriesData, 
+              data: seriesData,
             },
           ]}
           height={250}
-          margin={{ right: 30, top: 30, bottom: 30 , left:70 }}
+          margin={{ right: 30, top: 30, bottom: 30, left: 70 }}
           grid={{ vertical: true, horizontal: true }}
           sx={{ direction: "ltr", minWidth: 1000, maxHeight: 500 }}
           colors={color}

@@ -6,6 +6,8 @@ type Props = {
 };
 
 const WorkTimeInfo: React.FC<Props> = ({ storeData }) => {
+  const openingHours = storeData.opening_hours || {}; // Provide a fallback empty object
+
   return (
     <Box
       component={Paper}
@@ -16,7 +18,7 @@ const WorkTimeInfo: React.FC<Props> = ({ storeData }) => {
         ساعات کار
       </Typography>
       <Divider />
-      {Object.entries(storeData.opening_hours).map(([day, hours]) => (
+      {Object.entries(openingHours).map(([day, hours]) => (
         <Box key={day} className="flex w-full justify-between items-center">
           <Typography variant="body1">{day}</Typography>
           <Typography variant="body2">{hours || "-"}</Typography>
