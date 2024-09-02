@@ -81,9 +81,9 @@ const EditProduct = () => {
     brand: productDetails?.brand || null,
     location: productDetails?.location || null,
     discount: {
-      discount_percentage: productDetails?.discount || 0,
-      expiration_date: null,
-      min_quantity_for_discount: 1,
+      discount_percentage: productDetails?.discount?.discount_percentage || 0,
+      expiration_date: productDetails?.discount?.expiration_date || null,
+      min_quantity_for_discount: productDetails?.discount?.min_quantity_for_discount  ||1,
     },
     images: null,
   };

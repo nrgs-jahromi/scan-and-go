@@ -1,6 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetcher } from "../config";
-
+type Discount = {
+  discount_percentage: number | null;
+  expiration_date: string | null;
+  min_quantity_for_discount: number | null;
+};
 type ProductDetailsResponse = {
     barcode: string;
     name: string;
@@ -12,7 +16,7 @@ type ProductDetailsResponse = {
     location: string | null;
     description: string | null;
     store: number | null;
-    discount: number | null;
+    discount: Discount | null;
     categories: string[];
     primary_image: string | null;
     images: { id: number; image: string; is_primary: boolean }[];
