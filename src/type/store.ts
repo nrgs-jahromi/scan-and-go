@@ -1,4 +1,5 @@
 type StoreT= {
+    store_id:string;
     name: string;
     trade_name: string;
     registration_number: string;
@@ -21,5 +22,6 @@ type StoreT= {
     discount_policy: string;
     security_certificates: string;
     security_policy: string;
-    icon_url: string;
+    icon: string;
+    store_color:string;
 }

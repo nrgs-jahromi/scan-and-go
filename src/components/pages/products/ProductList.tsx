@@ -42,7 +42,7 @@ const columns: TableColumnDef<ProductData>[] = [
   {
     id: "category_names",
     disablePadding: false,
-    label: "دسته",
+    label: "دسته بندی",
     type: "text",
     accessorFn: (v) => v.category_names || "-",
   },
