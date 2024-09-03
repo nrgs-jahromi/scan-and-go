@@ -10,6 +10,7 @@ type StoreT = {
     city: string;
     postal_code: string;
     phone: string;
+    mobile_number:string;
     email: string;
     instagram: string;
     telegram: string;

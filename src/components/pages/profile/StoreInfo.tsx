@@ -42,12 +42,24 @@ const StoreInfo: React.FC<Props> = ({ storeData, refetchStoreData }) => {
 
   const formItems: FormItem[] = [
     { label: "نام مالک", key: "owner_name", placeholder: " علی احمدی" },
-    { label: "کد ملی مالک", key: "owner_national_code", placeholder: " 1280000000" },
-    { label: "شماره همراه", key: "phone", placeholder: " ۰۹۱۲۱۲۳۴۵۶۷" },
+    {
+      label: "کد ملی مالک",
+      key: "owner_national_code",
+      placeholder: " 1280000000",
+    },
+    { label: "شماره همراه", key: "mobile_number", placeholder: " ۰۹۱۲۱۲۳۴۵۶۷" },
     { label: "تلفن", key: "phone", placeholder: " ۰۲۱۱۲۳۴۵۶۷۸" },
-    { label: "شماره ثبت", key: "registration_number", placeholder: " ۱۲۳۴۵۶۷۸۹" },
+    {
+      label: "شماره ثبت",
+      key: "registration_number",
+      placeholder: " ۱۲۳۴۵۶۷۸۹",
+    },
     { label: "شماره مالیاتی", key: "tax_number", placeholder: " ۹۸۷۶۵۴۳۲۱" },
-    { label: "سیاست تخفیف", key: "discount_policy", placeholder: "توضیحی برای سیاست تخفیف" },
+    {
+      label: "سیاست تخفیف",
+      key: "discount_policy",
+      placeholder: "توضیحی برای سیاست تخفیف",
+    },
     { label: "رنگ سازمانی", key: "store_color", placeholder: "#000000" },
     { label: "کد پستی", key: "postal_code", placeholder: " ۱۲۳۴۵۶۷۸۹" },
     { label: "شهر", key: "city", placeholder: " تهران" },
@@ -56,7 +68,9 @@ const StoreInfo: React.FC<Props> = ({ storeData, refetchStoreData }) => {
 
   useEffect(() => {
     if (isChangeProfileSuccess) {
-      notif("ویرایش اطلاعات فروشگاه با موفقیت انجام شد.", { variant: "success" });
+      notif("ویرایش اطلاعات فروشگاه با موفقیت انجام شد.", {
+        variant: "success",
+      });
       setIsLoading(false);
     } else if (isChangeProfileError) {
       notif(`${errorDescription}`, { variant: "error" });
@@ -186,7 +200,6 @@ const StoreInfo: React.FC<Props> = ({ storeData, refetchStoreData }) => {
                   variant="outlined"
                   size="small"
                   fullWidth
-                  
                 />
               </Box>
               <Box>
@@ -222,7 +235,7 @@ const StoreInfo: React.FC<Props> = ({ storeData, refetchStoreData }) => {
       </Box>
       <Divider />
       <Box className="space-y-3">
-        {formItems.map(({ label, key , placeholder }) => (
+        {formItems.map(({ label, key, placeholder }) => (
           <Box
             key={key}
             className="flex w-full justify-between items-center gap-2"
@@ -241,9 +254,17 @@ const StoreInfo: React.FC<Props> = ({ storeData, refetchStoreData }) => {
                   size="small"
                   fullWidth
                   // sx={{ width: 80 }}
-                  />
-                ) : (
-                  <TextField
+                />
+              ) : key === "mobile_number" ? (
+                <Typography variant="body2">
+                  {typeof storeData[key] === "object"
+                    ? storeData[key]
+                      ? JSON.stringify(storeData[key])
+                      : "-"
+                    : storeData[key]?.toString() || "-"}
+                </Typography>
+              ) : (
+                <TextField
                   name={key}
                   value={formData[key] || ""}
                   placeholder={placeholder}
@@ -270,7 +291,9 @@ const StoreInfo: React.FC<Props> = ({ storeData, refetchStoreData }) => {
             ) : (
               <Typography variant="body2">
                 {typeof storeData[key] === "object"
-                  ? (storeData[key]?JSON.stringify(storeData[key]) :"-")
+                  ? storeData[key]
+                    ? JSON.stringify(storeData[key])
+                    : "-"
                   : storeData[key]?.toString() || "-"}
               </Typography>
             )}
@@ -283,7 +306,7 @@ const StoreInfo: React.FC<Props> = ({ storeData, refetchStoreData }) => {
             variant="outlined"
             fullWidth
             sx={{ height: 40 }}
-            onClick={()=>setIsEditing(false)}
+            onClick={() => setIsEditing(false)}
           >
             لغو
           </Button>
