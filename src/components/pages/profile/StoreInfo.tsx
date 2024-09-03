@@ -17,21 +17,20 @@ import { Edit } from "iconsax-react";
 
 type Props = {
   storeData: StoreT;
-  refetchStoreData: () => void; // تابع برای بارگذاری مجدد داده‌ها
+  refetchStoreData: () => void;
 };
 
 type FormItem = {
   label: string;
-  key: keyof StoreT; // استفاده از keyof برای ارتباط دادن با نوع StoreT
+  key: keyof StoreT;
 };
 
 const StoreInfo: React.FC<Props> = ({ storeData, refetchStoreData }) => {
-  const [uploadedImage, setUploadedImage] = useState<string | null>(
-    storeData?.icon ?? null
-  );
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState(storeData);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
   const {
     mutate: updateAdminInfo,
@@ -57,7 +56,6 @@ const StoreInfo: React.FC<Props> = ({ storeData, refetchStoreData }) => {
   useEffect(() => {
     if (isChangeProfileSuccess) {
       notif("تصویر پروفایل با موفقیت تغییر کرد.", { variant: "success" });
-      // refetchStoreData(); // بارگذاری مجدد داده‌ها
       setIsLoading(false);
     } else if (isChangeProfileError) {
       notif(`${errorDescription}`, { variant: "error" });
@@ -74,6 +72,14 @@ const StoreInfo: React.FC<Props> = ({ storeData, refetchStoreData }) => {
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedImage(file);
+      setUploadedImage(URL.createObjectURL(file));
+    }
+  };
+
   const handleSave = () => {
     const formDataToSubmit = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
@@ -83,9 +89,23 @@ const StoreInfo: React.FC<Props> = ({ storeData, refetchStoreData }) => {
         formDataToSubmit.append(key, String(value));
       }
     });
+
+    if (selectedImage) {
+      formDataToSubmit.append("icon", selectedImage);
+    }
+
+    for (const pair of formDataToSubmit.entries()) {
+      console.log(pair[0], pair[1]);
+  }
+  
     updateAdminInfo(formDataToSubmit);
     setIsEditing(false);
   };
+
+  useEffect(() => {
+    setUploadedImage(API_BASE_URL + storeData.icon);
+  }, [storeData]);
+
   return (
     <Box
       component={Paper}
@@ -109,7 +129,7 @@ const StoreInfo: React.FC<Props> = ({ storeData, refetchStoreData }) => {
       <Box className="flex justify-start items-center gap-3">
         <Box width={88} height={88}>
           <img
-            src={uploadedImage ? API_BASE_URL + uploadedImage : defaultProfile}
+            src={uploadedImage || defaultProfile}
             alt="User"
             style={{
               width: "100%",
@@ -146,6 +166,15 @@ const StoreInfo: React.FC<Props> = ({ storeData, refetchStoreData }) => {
                 size="small"
                 fullWidth
               />
+              <Button variant="contained" component="label" color="primary">
+                بارگذاری تصویر
+                <input
+                  type="file"
+                  accept="image/*"
+                  hidden
+                  onChange={handleImageChange}
+                />
+              </Button>
             </>
           ) : (
             <>
@@ -208,10 +237,10 @@ const StoreInfo: React.FC<Props> = ({ storeData, refetchStoreData }) => {
               </Box>
             ) : (
               <Typography>
-              {typeof storeData[key] === "object"
-                ? JSON.stringify(storeData[key])
-                : storeData[key]?.toString() || ""}
-            </Typography>
+                {typeof storeData[key] === "object"
+                  ? JSON.stringify(storeData[key])
+                  : storeData[key]?.toString() || ""}
+              </Typography>
             )}
           </Box>
         ))}
