@@ -13,7 +13,7 @@ import { notif } from "../../common/notification/Notification";
 import { useUpdateStoreInformation } from "../../../api/store/editStoreInfo";
 import defaultProfile from "../../../assets/react.svg";
 import { API_BASE_URL } from "../../../api/config";
-import { Edit } from "iconsax-react";
+import { Camera, Edit } from "iconsax-react";
 
 type Props = {
   storeData: StoreT;
@@ -23,6 +23,7 @@ type Props = {
 type FormItem = {
   label: string;
   key: keyof StoreT;
+  placeholder?: string;
 };
 
 const StoreInfo: React.FC<Props> = ({ storeData, refetchStoreData }) => {
@@ -40,22 +41,22 @@ const StoreInfo: React.FC<Props> = ({ storeData, refetchStoreData }) => {
   } = useUpdateStoreInformation();
 
   const formItems: FormItem[] = [
-    { label: "نام مالک", key: "owner_name" },
-    { label: "کد ملی مالک", key: "owner_national_code" },
-    { label: "شماره همراه", key: "phone" },
-    { label: "تلفن", key: "phone" },
-    { label: "شماره ثبت", key: "registration_number" },
-    { label: "شماره مالیاتی", key: "tax_number" },
-    { label: "سیاست تخفیف", key: "discount_policy" },
-    { label: "رنگ سازمانی", key: "store_color" },
-    { label: "کد پستی", key: "postal_code" },
-    { label: "شهر", key: "city" },
-    { label: "آدرس", key: "address" },
+    { label: "نام مالک", key: "owner_name", placeholder: " علی احمدی" },
+    { label: "کد ملی مالک", key: "owner_national_code", placeholder: " 1280000000" },
+    { label: "شماره همراه", key: "phone", placeholder: " ۰۹۱۲۱۲۳۴۵۶۷" },
+    { label: "تلفن", key: "phone", placeholder: " ۰۲۱۱۲۳۴۵۶۷۸" },
+    { label: "شماره ثبت", key: "registration_number", placeholder: " ۱۲۳۴۵۶۷۸۹" },
+    { label: "شماره مالیاتی", key: "tax_number", placeholder: " ۹۸۷۶۵۴۳۲۱" },
+    { label: "سیاست تخفیف", key: "discount_policy", placeholder: "توضیحی برای سیاست تخفیف" },
+    { label: "رنگ سازمانی", key: "store_color", placeholder: "#000000" },
+    { label: "کد پستی", key: "postal_code", placeholder: " ۱۲۳۴۵۶۷۸۹" },
+    { label: "شهر", key: "city", placeholder: " تهران" },
+    { label: "آدرس", key: "address", placeholder: " خیابان ولیعصر، پلاک ۱۰" },
   ];
 
   useEffect(() => {
     if (isChangeProfileSuccess) {
-      notif("تصویر پروفایل با موفقیت تغییر کرد.", { variant: "success" });
+      notif("ویرایش اطلاعات فروشگاه با موفقیت انجام شد.", { variant: "success" });
       setIsLoading(false);
     } else if (isChangeProfileError) {
       notif(`${errorDescription}`, { variant: "error" });
@@ -64,7 +65,7 @@ const StoreInfo: React.FC<Props> = ({ storeData, refetchStoreData }) => {
   }, [isChangeProfileError, isChangeProfileSuccess, refetchStoreData]);
 
   const handleEditToggle = () => {
-    setIsEditing(!isEditing);
+    if (!isEditing) setIsEditing(true);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -96,14 +97,15 @@ const StoreInfo: React.FC<Props> = ({ storeData, refetchStoreData }) => {
 
     for (const pair of formDataToSubmit.entries()) {
       console.log(pair[0], pair[1]);
-  }
-  
+    }
+
     updateAdminInfo(formDataToSubmit);
     setIsEditing(false);
   };
 
   useEffect(() => {
-    setUploadedImage(API_BASE_URL + storeData.icon);
+    if (storeData.icon) setUploadedImage(API_BASE_URL + storeData.icon);
+    else setUploadedImage(defaultProfile);
   }, [storeData]);
 
   return (
@@ -111,23 +113,16 @@ const StoreInfo: React.FC<Props> = ({ storeData, refetchStoreData }) => {
       component={Paper}
       width={"100%"}
       height={"100%"}
-      className="p-6 space-y-5"
+      className="p-6 space-y-5 cursor-pointer"
       position="relative"
+      onClick={handleEditToggle}
     >
-      <IconButton
-        aria-label="edit"
-        size="small"
-        sx={{
-          position: "absolute",
-          top: theme.spacing(1),
-          left: theme.spacing(1),
-        }}
-        onClick={handleEditToggle}
+      <Box
+        className={`${
+          isEditing ? "" : "flex"
+        } justify-start items-center gap-3`}
       >
-        <Edit />
-      </IconButton>
-      <Box className="flex justify-start items-center gap-3">
-        <Box width={88} height={88}>
+        <Box width={88} height={88} position="relative">
           <img
             src={uploadedImage || defaultProfile}
             alt="User"
@@ -138,44 +133,74 @@ const StoreInfo: React.FC<Props> = ({ storeData, refetchStoreData }) => {
               border: `2px solid ${theme.palette.primary.light}`,
             }}
           />
+          {isEditing && (
+            <Box
+              sx={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                padding: 1,
+                borderRadius: "50%",
+                backgroundColor: theme.palette.primary.main,
+                color: theme.palette.background.default,
+                border: `2px solid ${theme.palette.background.default}`,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+              }}
+            >
+              <input
+                type="file"
+                accept="image/*"
+                hidden
+                id="icon-button-file"
+                onChange={handleImageChange}
+              />
+              <label htmlFor="icon-button-file" style={{ cursor: "pointer" }}>
+                <Camera size={18} />
+              </label>
+            </Box>
+          )}
         </Box>
-        <Box className="flex flex-col justify-between">
+        <Box className="flex flex-col justify-between ">
           {isEditing ? (
-            <>
-              <TextField
-                name="name"
-                value={formData.name || ""}
-                onChange={handleInputChange}
-                variant="outlined"
-                size="small"
-                fullWidth
-              />
-              <TextField
-                name="business_type"
-                value={formData.business_type || ""}
-                onChange={handleInputChange}
-                variant="outlined"
-                size="small"
-                fullWidth
-              />
-              <TextField
-                name="trade_name"
-                value={formData.trade_name || ""}
-                onChange={handleInputChange}
-                variant="outlined"
-                size="small"
-                fullWidth
-              />
-              <Button variant="contained" component="label" color="primary">
-                بارگذاری تصویر
-                <input
-                  type="file"
-                  accept="image/*"
-                  hidden
-                  onChange={handleImageChange}
+            <Box className="space-y-3">
+              <Box>
+                <Typography> نام فروشگاه</Typography>
+                <TextField
+                  name="name"
+                  value={formData.name || ""}
+                  onChange={handleInputChange}
+                  variant="outlined"
+                  size="small"
+                  fullWidth
                 />
-              </Button>
-            </>
+              </Box>
+              <Box>
+                <Typography> نوع فروشگاه</Typography>
+                <TextField
+                  name="business_type"
+                  value={formData.business_type || ""}
+                  onChange={handleInputChange}
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                  
+                />
+              </Box>
+              <Box>
+                <Typography> نام تجاری</Typography>
+                <TextField
+                  name="trade_name"
+                  value={formData.trade_name || ""}
+                  onChange={handleInputChange}
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                />
+              </Box>
+            </Box>
           ) : (
             <>
               <Typography variant="h6" fontWeight={"bold"}>
@@ -197,9 +222,14 @@ const StoreInfo: React.FC<Props> = ({ storeData, refetchStoreData }) => {
       </Box>
       <Divider />
       <Box className="space-y-3">
-        {formItems.map(({ label, key }) => (
-          <Box key={key} className="flex w-full justify-between items-center">
-            <Typography variant="body1">{label}</Typography>
+        {formItems.map(({ label, key , placeholder }) => (
+          <Box
+            key={key}
+            className="flex w-full justify-between items-center gap-2"
+          >
+            <Typography variant="body1" sx={{ whiteSpace: "nowrap" }}>
+              {label}
+            </Typography>
             {isEditing ? (
               key === "store_color" ? (
                 <TextField
@@ -209,12 +239,14 @@ const StoreInfo: React.FC<Props> = ({ storeData, refetchStoreData }) => {
                   onChange={handleInputChange}
                   variant="outlined"
                   size="small"
-                  sx={{ width: 80 }}
-                />
-              ) : (
-                <TextField
+                  fullWidth
+                  // sx={{ width: 80 }}
+                  />
+                ) : (
+                  <TextField
                   name={key}
                   value={formData[key] || ""}
+                  placeholder={placeholder}
                   onChange={handleInputChange}
                   variant="outlined"
                   size="small"
@@ -236,21 +268,32 @@ const StoreInfo: React.FC<Props> = ({ storeData, refetchStoreData }) => {
                 </Typography>
               </Box>
             ) : (
-              <Typography>
+              <Typography variant="body2">
                 {typeof storeData[key] === "object"
-                  ? JSON.stringify(storeData[key])
-                  : storeData[key]?.toString() || ""}
+                  ? (storeData[key]?JSON.stringify(storeData[key]) :"-")
+                  : storeData[key]?.toString() || "-"}
               </Typography>
             )}
           </Box>
         ))}
       </Box>
       {isEditing && (
-        <Box className="flex justify-end space-x-2 mt-4">
-          <Button variant="outlined" onClick={handleEditToggle}>
+        <Box className="flex justify-end space-x-2 mt-4 gap-3">
+          <Button
+            variant="outlined"
+            fullWidth
+            sx={{ height: 40 }}
+            onClick={()=>setIsEditing(false)}
+          >
             لغو
           </Button>
-          <Button variant="contained" color="primary" onClick={handleSave}>
+          <Button
+            variant="contained"
+            fullWidth
+            sx={{ height: 40 }}
+            color="primary"
+            onClick={handleSave}
+          >
             ذخیره
           </Button>
         </Box>
