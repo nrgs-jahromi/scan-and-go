@@ -25,6 +25,7 @@ import {
   Profile,
   Profile2User,
   Save2,
+  UserSquare,
   Wallet1,
 } from "iconsax-react";
 import { useLogout } from "../../api/auth/logout";
@@ -135,6 +136,12 @@ export default function SideNavigation() {
         icon1: <Element4 />,
         icon2: <Element4 variant="Bold" />,
         path: "products",
+      },{
+        id: "invoices",
+        label: "فاکتورها ",
+        icon1: <Save2 />,
+        icon2: <Save2 variant="Bold" />,
+        path: "reports/invoices",
       },
       {
         id: "periodic-reports",
@@ -144,18 +151,19 @@ export default function SideNavigation() {
         path: "reports/periodic",
       },
       {
-        id: "invoices",
-        label: "فاکتورها ",
-        icon1: <Save2 />,
-        icon2: <Save2 variant="Bold" />,
-        path: "reports/invoices",
+        id: "customer-reports",
+        label: "مشتریان",
+        icon1: <Profile2User />,
+        icon2: <Profile2User variant="Bold" />,
+        path: "reports/periodic",
       },
+      
       {
         id: "profile",
-        label: "اطلاعات پروفایل",
+        label: "اطلاعات فروشگاه",
         path: "profile",
-        icon1: <Profile />,
-        icon2: <Profile variant="Bold" />,
+        icon1: <UserSquare />,
+        icon2: <UserSquare variant="Bold" />,
       },
       {
         id: "exit",
