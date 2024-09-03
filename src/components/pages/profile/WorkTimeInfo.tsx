@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Box, Divider, Paper, Typography, TextField, Button } from "@mui/material";
+import {
+  Box,
+  Divider,
+  Paper,
+  Typography,
+  TextField,
+  Button,
+} from "@mui/material";
 import { useUpdateStoreInformation } from "../../../api/store/editStoreInfo";
 import { notif } from "../../common/notification/Notification";
 
@@ -11,7 +18,9 @@ type Props = {
 
 const WorkTimeInfo: React.FC<Props> = ({ storeData }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState<OpeningHours>(storeData.opening_hours);
+  const [formData, setFormData] = useState<OpeningHours>(
+    storeData.opening_hours
+  );
 
   const {
     mutate: updateStoreInfo,
@@ -28,27 +37,26 @@ const WorkTimeInfo: React.FC<Props> = ({ storeData }) => {
     if (!isEditing) setIsEditing(true);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, day: string) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    day: string
+  ) => {
     const { value } = e.target;
     setFormData((prevState) => ({
       ...prevState,
-      [day]: value || null
+      [day]: value || null,
     }));
   };
 
   const handleSave = () => {
     const formDataToSubmit = new FormData();
 
-
-    Object.entries(formData).forEach(([key, value]) => {
-      formDataToSubmit.append(`${key}`, value || '');    
-    });
+    formDataToSubmit.append("opening_hours", JSON.stringify(formData));
 
     console.log("FormData to submit:", formDataToSubmit);
 
     updateStoreInfo(formDataToSubmit);
     setIsEditing(false);
-    // refetchStoreData(); // Re-fetch store data after update
   };
   useEffect(() => {
     if (isChangeMediaSuccess) {
@@ -72,20 +80,25 @@ const WorkTimeInfo: React.FC<Props> = ({ storeData }) => {
       </Typography>
       <Divider />
       {Object.entries(formData).map(([day, hours]) => (
-        <Box key={day} className="flex w-full justify-between items-center gap-3">
+        <Box
+          key={day}
+          className="flex w-full justify-between items-center gap-3"
+        >
           <Typography variant="body1">{day}</Typography>
           {isEditing ? (
             <TextField
               name={day}
               value={hours || ""}
-              onChange={(e) => handleInputChange(e as React.ChangeEvent<HTMLInputElement>, day)}
+              onChange={(e) =>
+                handleInputChange(e as React.ChangeEvent<HTMLInputElement>, day)
+              }
               variant="outlined"
               size="small"
               fullWidth
               placeholder="8:00-12:00"
             />
           ) : (
-            <Typography variant="body2">{hours || "-"}</Typography>
+            <Typography variant="body2">{hours || "تعطیل"}</Typography>
           )}
         </Box>
       ))}
