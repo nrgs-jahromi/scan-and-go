@@ -41,10 +41,17 @@ const validationSchema = Yup.object().shape({
 const EditProduct = () => {
   const navigate = useNavigate();
   const { productId } = useParams<{ productId: string }>();
-  const [images, setImages] = useState<{ id: number; image: string; is_primary: boolean }[]>([]);
+  const [images, setImages] = useState<
+    { id: number; image?: string; is_primary: boolean; file?: File }[]
+  >([]);
+  const [currenrImages, setCurrentImages] = useState<number[]>([]);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const { data: categories = [] } = useCategories();
-  const { data: productDetails, isLoading, isError } = useProductDetails(productId!);
+  const {
+    data: productDetails,
+    isLoading,
+    isError,
+  } = useProductDetails(productId!);
   const {
     mutate: updateProduct,
     isLoading: isAdding,
@@ -57,6 +64,9 @@ const EditProduct = () => {
   useEffect(() => {
     if (productDetails?.images) {
       setImages(productDetails.images);
+      const imageIds = productDetails.images.map((image) => image.id);
+      setCurrentImages(imageIds);
+      console.log("currenrImages", currenrImages);
     }
   }, [productDetails]);
 
@@ -71,27 +81,41 @@ const EditProduct = () => {
     brand: productDetails?.brand || null,
     location: productDetails?.location || null,
     discount: {
-      discount_percentage: productDetails?.discount || 0,
-      expiration_date: null,
-      min_quantity_for_discount: 1,
+      discount_percentage: productDetails?.discount?.discount_percentage || 0,
+      expiration_date: productDetails?.discount?.expiration_date || null,
+      min_quantity_for_discount: productDetails?.discount?.min_quantity_for_discount  ||1,
     },
     images: null,
   };
 
+  useEffect(() => {
+    setImages((prevImages) => [...prevImages]);
+  }, [images]);
+
+  const handleRemoveImage = (index: number) => {
+    setImages((prevImages) => {
+      const updatedImages = prevImages.filter((_, i) => i !== index);
+
+      const removedImageId = prevImages[index].id;
+
+      setCurrentImages((prevIds) =>
+        prevIds.filter((id) => id !== removedImageId)
+      );
+
+      return updatedImages;
+    });
+  };
   const handleAddImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
       const newImages = Array.from(files).map((file, index) => ({
         id: images.length + index + 1,
         image: URL.createObjectURL(file),
+        file,
         is_primary: false,
       }));
       setImages((prevImages) => [...prevImages, ...newImages]);
     }
-  };
-
-  const handleRemoveImage = (index: number) => {
-    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
   };
 
   const handleSubmit = (values: typeof initialValues) => {
@@ -104,6 +128,7 @@ const EditProduct = () => {
     formData.append("price", values.price);
     formData.append("stock", values.stock.toString());
     formData.append("min_stock", values.min_stock.toString());
+    formData.append("current_images", JSON.stringify(currenrImages));
 
     if (values.brand) formData.append("brand", values.brand);
     if (values.location) formData.append("location", values.location);
@@ -114,18 +139,26 @@ const EditProduct = () => {
 
     if (images.length > 0) {
       images.forEach((image) => {
-        formData.append("images", image.image); 
+        if (image.file) {
+          formData.append("images", image.file);
+        }
       });
     }
 
-    updateProduct({ productData: formData, barcode: values.barcode });  };
+    updateProduct({ productData: formData, barcode: values.barcode });
+  };
 
-  
   const sliderSettings = {
     customPaging: (i: number) => (
       <a>
         <img
-          src={API_BASE_URL+images[i].image}
+          src={
+            images[i] && images[i].file
+              ? images[i].image
+              : images[i]
+              ? API_BASE_URL + images[i].image
+              : ""
+          }
           alt={`thumbnail-${i}`}
           style={{ width: "50px", height: "50px" }}
         />
@@ -139,14 +172,12 @@ const EditProduct = () => {
     slidesToScroll: 1,
   };
 
-  // console.log(images[0].image)
-  
   useEffect(() => {
     if (addProductIsSuccess) {
-      notif("محصول با موفقیت اضافه شد.", { variant: "success" });
+      notif("محصول با موفقیت ویرایش شد.", { variant: "success" });
       navigate("/products");
     } else if (addProductError) {
-      notif("مشکلی در ایجاد محصول وجود دارد.", { variant: "error" });
+      notif("مشکلی در ویرایش محصول وجود دارد.", { variant: "error" });
     }
   }, [addProductIsSuccess, addProductError]);
 
@@ -233,7 +264,11 @@ const EditProduct = () => {
                             onMouseLeave={() => setHoveredIndex(null)}
                           >
                             <img
-                             src={`${API_BASE_URL}${image.image}`}
+                              src={
+                                image.file
+                                  ? image.image
+                                  : API_BASE_URL + image.image
+                              }
                               alt={`product-${index}`}
                               style={{
                                 width: "100%",

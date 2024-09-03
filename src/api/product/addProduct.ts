@@ -20,6 +20,7 @@ export type AddProductPayload = {
   location?: string | null;
   discount: Discount | null;
   images?: File[] | null;
+  current_images?: number[] | null;
 };
 
 type ApiResponse = {

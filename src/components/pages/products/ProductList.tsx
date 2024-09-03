@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Box, Button, Divider, Typography, useTheme } from "@mui/material";
 import { useNavigate } from "react-router";
 import EnhancedTable from "../../common/table/EnhancedTable";
@@ -6,6 +6,10 @@ import { useProducts } from "../../../api/product/getProductsList";
 import UserAvatar from "../customers/profile/UserAvatar";
 import { API_BASE_URL } from "../../../api/config";
 import PageHeader from "../pageHeader/PageHeader";
+import { Add } from "iconsax-react";
+import _ from "lodash";
+import { useDeleteProduct } from "../../../api/product/deleteProduct";
+import { notif } from "../../common/notification/Notification";
 
 type ProductData = {
   id: number;
@@ -40,7 +44,7 @@ const columns: TableColumnDef<ProductData>[] = [
   {
     id: "category_names",
     disablePadding: false,
-    label: "دسته",
+    label: "دسته بندی",
     type: "text",
     accessorFn: (v) => v.category_names || "-",
   },
@@ -70,6 +74,8 @@ const ProductList = () => {
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [searchValue, setSearchValue] = useState("");
+  const [debouncedSearchValue, setDebouncedSearchValue] = useState("");
 
   const {
     data: productList,
@@ -80,14 +86,20 @@ const ProductList = () => {
     params: {
       page: page + 1,
       page_size: rowsPerPage,
+      q: debouncedSearchValue,
     },
   });
+  const { mutate: deleteProduct , isSuccess , isError:isDeleteError } = useDeleteProduct(); // استفاده از هوک حذف محصول
 
+  
   const actions: ActionTableT[] = [
     {
       label: "حذف",
       onClick: (id: number) => {
-        console.log(`Delete product with ID: ${id}`);
+        const selectedProduct = rows.find(row => row.id === id);
+        if (selectedProduct) {
+          deleteProduct(selectedProduct.barcode); // حذف محصول با استفاده از بارکد
+        }
       },
     },
     {
@@ -97,6 +109,18 @@ const ProductList = () => {
       },
     },
   ];
+
+  const debounceSearch = useCallback(
+    _.debounce((query) => {
+      setDebouncedSearchValue(query);
+    }, 1000),
+    []
+  );
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(event.target.value);
+    debounceSearch(event.target.value);
+  };
 
   useEffect(() => {
     if (getProductsIsSuccess) {
@@ -121,17 +145,43 @@ const ProductList = () => {
       }
     }
   }, [productList, getProductsIsSuccess]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      notif("محصول مورد نظر با موفقیت حذف شد", { variant: "success" });
+      // navigate("/products");
+    } else if (isDeleteError) {
+      notif("مشکلی در حذف محصول وجود دارد.", { variant: "error" });
+    }
+  }, [isSuccess, isDeleteError]);
+
   return (
     <Box className="w-full flex flex-col gap-5">
       <PageHeader
         title="لیست محصولات"
+        showSearchBar={true}
+        searchValue={searchValue}
+        onSearchChange={handleSearchChange}
         buttons={[
           {
             text: "افزودن محصول",
-            variant: "contained",
-            onClick: () => {
-              navigate("/products/add");
-            },
+            customComponent: (
+              <Button
+                variant="contained"
+                startIcon={<Add />}
+                sx={{ maxHeight: 48 }}
+                onClick={() => {
+                  navigate("/products/add");
+                }}
+              >
+                {" "}
+                افزودن محصول
+              </Button>
+            ),
+
+            // onClick: () => {
+            //   navigate("/products/add");
+            // },
           },
         ]}
       />

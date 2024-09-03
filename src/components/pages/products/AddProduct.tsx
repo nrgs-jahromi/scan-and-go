@@ -319,7 +319,7 @@ const AddProduct = () => {
                 </Box>
               </Box>{" "}
               <Button type="submit" fullWidth variant="contained">
-                {isAdding ? "در حال افزودن..." : "ثبت"}
+                {isAdding ? "در حال افزودن..." : " ثبت محصول"}
               </Button>
             </Form>
           </FormikProvider>

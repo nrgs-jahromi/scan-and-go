@@ -9,6 +9,7 @@ type DataT = {
   params: {
     page?: number;
     page_size?: number;
+    q?: string;
   };
 };
 
@@ -32,9 +33,9 @@ type ResT = {
 type QueryKey = ["products", DataT];
 
 const fetchProducts: QueryFunction<ResT, QueryKey> = async ({ queryKey }) => {
-  const { page = 1, page_size = 10 } = queryKey[1].params;
+  const { page = 1, page_size = 10  , q = ""} = queryKey[1].params;
   const { data: dataRes } = await fetcher.get<ResT>("/products/list", {
-    params: { page, page_size },
+    params: { page, page_size , q },
   });
   return dataRes;
 };
