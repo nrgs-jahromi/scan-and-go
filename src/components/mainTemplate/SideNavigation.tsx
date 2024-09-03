@@ -10,7 +10,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import { Collapse, Typography, useMediaQuery } from "@mui/material";
+import { Collapse, Tooltip, tooltipClasses, TooltipProps, Typography, useMediaQuery } from "@mui/material";
 import { useNavigate } from "react-router";
 import theme from "../../theme";
 import moment from "jalali-moment";
@@ -18,11 +18,13 @@ import moment from "jalali-moment";
 import {
   ArrowDown2,
   ArrowUp2,
+  Diagram,
   Element4,
   Home,
   LogoutCurve,
   Profile,
   Profile2User,
+  Save2,
   Wallet1,
 } from "iconsax-react";
 import { useLogout } from "../../api/auth/logout";
@@ -99,6 +101,17 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
+const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.common.white,
+    color: theme.palette.text.primary,
+    boxShadow: theme.shadows[1],
+    fontSize: 14,
+  },
+}));
+
 export default function SideNavigation() {
   const [active, setActive] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
@@ -121,46 +134,21 @@ export default function SideNavigation() {
         label: "محصولات",
         icon1: <Element4 />,
         icon2: <Element4 variant="Bold" />,
-        options: [
-          {
-            id: "products-add",
-            category_id: "products",
-            label: "افزودن محصول",
-            path: "products/add",
-          },
-          //  {
-          //   id: "products-category",
-          //   category_id: "products",
-          //   label: "دسته‌بندی محصولات",
-          //   path: "products/categories",
-          // },
-          {
-            id: "products-list",
-            category_id: "products",
-            label: "لیست محصولات",
-            path: "products",
-          },
-        ],
+        path: "products",
       },
       {
-        id: "reports",
-        label: "گزارشات",
-        icon1: <Element4 />,
-        icon2: <Element4 variant="Bold" />,
-        options: [
-          {
-            id: "periodic-reports",
-            category_id: "reports",
-            label: "گزارشات دوره‌ای",
-            path: "reports/periodic",
-          },
-          {
-            id: "invoices",
-            category_id: "reports",
-            label: "فاکتورها",
-            path: "reports/invoices",
-          },
-        ],
+        id: "periodic-reports",
+        label: "گزارشات دوره‌ای",
+        icon1: <Diagram />,
+        icon2: <Diagram variant="Bold" />,
+        path: "reports/periodic",
+      },
+      {
+        id: "invoices",
+        label: "فاکتورها ",
+        icon1: <Save2 />,
+        icon2: <Save2 variant="Bold" />,
+        path: "reports/invoices",
       },
       {
         id: "profile",
@@ -182,7 +170,7 @@ export default function SideNavigation() {
 
   const handleLogout = () => {
     logout();
-    localStorage.removeItem("accessToken")
+    localStorage.removeItem("accessToken");
     navigate("/login");
   };
 
@@ -202,12 +190,12 @@ export default function SideNavigation() {
   // };
 
   const handleDrawerClose = () => {
-    setOpen(!open);
+    setOpen(false);
   };
 
   useEffect(() => {
     if (isLargeScreen) {
-      setOpen(true);
+      setOpen(false);
     } else {
       setOpen(false);
     }
@@ -240,10 +228,12 @@ export default function SideNavigation() {
       </DrawerHeader>
       <List>
         {navbarItems.map((item) => (
-          <ListItem
+          
+          <LightTooltip title={item.label} placement="left"  color={theme.palette.primary.main}>
+             <ListItem
             disablePadding
             sx={{ display: "block" }}
-            onMouseDown={() => setOpen(true)}
+            onMouseDown={() => setOpen(false)}
           >
             <ListItemButton
               onClick={() => navigateHandler(item)}
@@ -334,6 +324,7 @@ export default function SideNavigation() {
               </Collapse>
             )}
           </ListItem>
+          </LightTooltip>
         ))}
       </List>
       {open && (
