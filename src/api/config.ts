@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 export const API_BASE_URL = "http://127.0.0.1:8000";
 // export const API_BASE_URL = "https://scanbuy-backend.liara.run/";
@@ -19,6 +19,28 @@ fetcher.interceptors.request.use(
     return config;
   },
   (error) => {
+    return Promise.reject(error);
+  }
+);
+
+fetcher.interceptors.response.use(
+  (response: AxiosResponse) => {
+    return response;
+  },
+  (error: AxiosError) => {
+    console.log("222222222222");
+    
+    console.log(error.response?.status , "lllll");
+    
+    if (error.response?.status === 401) {
+      console.log("Unauthorized: Redirecting to login...");
+
+      // حذف accessToken
+      localStorage.removeItem("accessToken");
+
+      // هدایت به صفحه ورود
+      window.location.replace("/login");
+    }
     return Promise.reject(error);
   }
 );
