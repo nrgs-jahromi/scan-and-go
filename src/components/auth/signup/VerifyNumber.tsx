@@ -2,13 +2,12 @@ import { useFormik, FormikProvider, Form } from "formik";
 import { Box, Button, Typography, useMediaQuery } from "@mui/material";
 import * as Yup from "yup";
 import { useNavigate, useParams } from "react-router";
-import changePasswod from "../../../assets/changePassword.png";
 import { MuiOtpInput } from "mui-one-time-password-input";
 import { useState, useEffect } from "react";
 import theme from "../../../theme";
-import ConfirmationModal from "../../modal/ConfirmationModal";
 import { notif } from "../../common/notification/Notification";
 import { useUserVerification } from "../../../api/auth/verifyUser";
+import logo from "../../../assets/scanbuy.svg";
 
 type LoginFormT = {
   otp: string;
@@ -131,8 +130,12 @@ const NumberVerification = () => {
         <FormikProvider value={formik}>
           <Form
             onSubmit={formik.handleSubmit}
-            className="h-full w-full justify-center items-center gap-10 flex flex-col"
+            className="h-full w-full justify-center items-center gap-4 flex flex-col"
           >
+            <Box className="flex w-full justify-center items-center h-full ">
+              <img src={logo} width={200} />
+            </Box>
+
             <Box>
               <Typography variant="h5" align="center" fontWeight={"bold"}>
                 تایید شماره همراه{" "}
