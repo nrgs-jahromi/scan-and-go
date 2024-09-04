@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { FC } from "react";
 import Login from "../auth/Login";
 import ForgotPass from "../auth/ForgotPass";
@@ -16,11 +16,11 @@ import ProductList from "../pages/products/ProductList";
 import EditProduct from "../pages/products/EditProduct";
 import StoreProfile from "../pages/profile/StoreProfile";
 
-
 const AppRoutes: FC = () => {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/login/:token?/" element={<Login />} />
         <Route path="/signup/" element={<Signup />} />
         <Route path="/verify/:phoneNumber" element={<NumberVerification />} />
