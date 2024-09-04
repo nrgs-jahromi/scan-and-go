@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { FC } from "react";
 import MockAvatar from "../../../../assets/changePassword.png";
-import { API_BASE_URL } from "../../../../vars/env";
+import { API_BASE_URL } from "../../../../api/config";
 
 interface Props {
   size?: number;
