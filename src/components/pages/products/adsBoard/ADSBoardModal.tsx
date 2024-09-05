@@ -42,7 +42,7 @@ const AddBannerModal: React.FC<Props> = ({ open, onClose, barcode }) => {
 
   const handleSubmit = () => {
     if (image) {
-      addBanner({ barcode, image });
+      addBanner({ product_barcode: barcode, image });
     }
   };
 
@@ -56,6 +56,7 @@ const AddBannerModal: React.FC<Props> = ({ open, onClose, barcode }) => {
   useEffect(() => {
     if (isSuccess) {
       notif("بنر با موفقیت افزوده شد.", { variant: "success" });
+      onClose()
     } else if (isError) {
       const errorMessage = (error as any)?.response?.data?.error;
       if (errorMessage === "Product not found.") {

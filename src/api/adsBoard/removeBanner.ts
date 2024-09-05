@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetcher } from "../config";
 
 export type DeleteBannerPayload = {
-  barcode: string;
+  product_barcode: string;
   image_url: string;
 };
 
@@ -12,7 +12,7 @@ type ApiResponse = {
 };
 
 const deleteBanner = async (payload: DeleteBannerPayload): Promise<ApiResponse> => {
-  const { data } = await fetcher.delete("delete-banners/", {
+  const { data } = await fetcher.delete("stores/delete-banner/", {
     data: payload,
   });
   return data;

@@ -5,11 +5,13 @@ import EnhancedTable from "../../common/table/EnhancedTable";
 import { useProducts } from "../../../api/product/getProductsList";
 import UserAvatar from "../customers/profile/UserAvatar";
 import PageHeader from "../pageHeader/PageHeader";
-import { Add } from "iconsax-react";
+import { Add, PlayCricle } from "iconsax-react";
 import _ from "lodash";
 import { useDeleteProduct } from "../../../api/product/deleteProduct";
 import { notif } from "../../common/notification/Notification";
 import AddAdvertisementBoardModal from "./adsBoard/ADSBoardModal";
+import IconBox from "../../common/IconBox";
+import BannerListModal from "./adsBoard/BannersList";
 
 type ProductData = {
   id: number;
@@ -76,7 +78,7 @@ const ProductList = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchValue, setSearchValue] = useState("");
   const [debouncedSearchValue, setDebouncedSearchValue] = useState("");
-
+  const [openBannersModal, setOpenBannersModal] = useState(false);
   const [openAdModal, setOpenAdModal] = useState(false); // State for controlling the advertisement modal
   const [selectedBarcode, setSelectedBarcode] = useState<string | null>(null); // State for selected product barcode
 
@@ -92,14 +94,17 @@ const ProductList = () => {
       q: debouncedSearchValue,
     },
   });
-  const { mutate: deleteProduct , isSuccess , isError:isDeleteError } = useDeleteProduct(); // استفاده از هوک حذف محصول
+  const {
+    mutate: deleteProduct,
+    isSuccess,
+    isError: isDeleteError,
+  } = useDeleteProduct(); // استفاده از هوک حذف محصول
 
-  
   const actions: ActionTableT[] = [
     {
       label: "حذف",
       onClick: (id: number) => {
-        const selectedProduct = rows.find(row => row.id === id);
+        const selectedProduct = rows.find((row) => row.id === id);
         if (selectedProduct) {
           deleteProduct(selectedProduct.barcode); // حذف محصول با استفاده از بارکد
         }
@@ -114,7 +119,7 @@ const ProductList = () => {
     {
       label: "افزودن تبلیغ",
       onClick: (id: number) => {
-        const selectedProduct = rows.find(row => row.id === id);
+        const selectedProduct = rows.find((row) => row.id === id);
         if (selectedProduct) {
           setSelectedBarcode(selectedProduct.barcode); // ذخیره بارکد محصول انتخاب شده
           setOpenAdModal(true); // باز کردن مودال تبلیغ
@@ -192,6 +197,25 @@ const ProductList = () => {
               </Button>
             ),
           },
+          {
+            text: "افزودن محصول",
+
+            customComponent: (
+              <Box
+                border={`1.5px solid ${theme.palette.primary.main}`}
+                height={"fit-content"}
+                borderRadius="8px"
+              >
+                <IconBox
+                  color="none"
+                  icon={<PlayCricle color={theme.palette.primary.main} />}
+                  borderRadius="8px"
+                  size={47}
+                  onClick={() => setOpenBannersModal(true)}
+                />
+              </Box>
+            ),
+          },
         ]}
       />
       <EnhancedTable
@@ -221,6 +245,12 @@ const ProductList = () => {
           open={openAdModal}
           onClose={() => setOpenAdModal(false)}
           barcode={selectedBarcode}
+        />
+      )}
+      {openBannersModal && (
+        <BannerListModal
+          open={openBannersModal}
+          onClose={() => setOpenBannersModal(false)}
         />
       )}
     </Box>

@@ -38,14 +38,14 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   const theme = useTheme();
   return (
     <Box className="w-full flex justify-between">
-      <Box className="flex align-middle items-center py-3 gap-3">
+      <Box className=" h-full align-middle items-center py-3 gap-3">
+        <Typography variant="h6">{title}</Typography>
         <Divider
-          orientation="vertical"
-          variant="middle"
-          className="w-1 rounded-sm"
+          orientation="horizontal"
+          // variant="middle"
+          className="h-1 rounded-sm"
           sx={{ bgcolor: theme.palette.primary.main }}
         />
-        <Typography variant="h6">{title}</Typography>
       </Box>
       <Box className="flex gap-3">
         {showSearchBar && (
