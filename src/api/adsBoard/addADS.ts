@@ -13,7 +13,7 @@ type ApiResponse = {
 
 const addBanner = async (payload: AddBannerPayload): Promise<ApiResponse> => {
   const formData = new FormData();
-  formData.append("barcode", payload.product_barcode);
+  formData.append("product_barcode", payload.product_barcode);
   if (payload.image) {
     formData.append("image", payload.image);
   }
