@@ -4,12 +4,12 @@ import { useNavigate } from "react-router";
 import EnhancedTable from "../../common/table/EnhancedTable";
 import { useProducts } from "../../../api/product/getProductsList";
 import UserAvatar from "../customers/profile/UserAvatar";
-import { API_BASE_URL } from "../../../api/config";
 import PageHeader from "../pageHeader/PageHeader";
 import { Add } from "iconsax-react";
 import _ from "lodash";
 import { useDeleteProduct } from "../../../api/product/deleteProduct";
 import { notif } from "../../common/notification/Notification";
+import AddAdvertisementBoardModal from "./adsBoard/ADSBoardModal";
 
 type ProductData = {
   id: number;
@@ -77,6 +77,9 @@ const ProductList = () => {
   const [searchValue, setSearchValue] = useState("");
   const [debouncedSearchValue, setDebouncedSearchValue] = useState("");
 
+  const [openAdModal, setOpenAdModal] = useState(false); // State for controlling the advertisement modal
+  const [selectedBarcode, setSelectedBarcode] = useState<string | null>(null); // State for selected product barcode
+
   const {
     data: productList,
     isLoading,
@@ -106,6 +109,16 @@ const ProductList = () => {
       label: "ویرایش",
       onClick: (id: number) => {
         navigate(`${productList?.results[id].barcode}/`);
+      },
+    },
+    {
+      label: "افزودن تبلیغ",
+      onClick: (id: number) => {
+        const selectedProduct = rows.find(row => row.id === id);
+        if (selectedProduct) {
+          setSelectedBarcode(selectedProduct.barcode); // ذخیره بارکد محصول انتخاب شده
+          setOpenAdModal(true); // باز کردن مودال تبلیغ
+        }
       },
     },
   ];
@@ -178,10 +191,6 @@ const ProductList = () => {
                 افزودن محصول
               </Button>
             ),
-
-            // onClick: () => {
-            //   navigate("/products/add");
-            // },
           },
         ]}
       />
@@ -206,6 +215,14 @@ const ProductList = () => {
           navigate(`${row.barcode}/`);
         }}
       />
+      {/* Add Advertisement Board Modal */}
+      {selectedBarcode && (
+        <AddAdvertisementBoardModal
+          open={openAdModal}
+          onClose={() => setOpenAdModal(false)}
+          barcode={selectedBarcode}
+        />
+      )}
     </Box>
   );
 };
