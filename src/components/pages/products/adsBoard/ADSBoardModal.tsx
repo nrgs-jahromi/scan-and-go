@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import theme from "../../../../theme";
 import { useAddBanner } from "../../../../api/adsBoard/addADS";
+import { notif } from "../../../common/notification/Notification";
 
 interface Props {
   open: boolean;
@@ -22,7 +23,13 @@ interface Props {
 const AddBannerModal: React.FC<Props> = ({ open, onClose, barcode }) => {
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const { mutate: addBanner, isLoading } = useAddBanner();
+  const {
+    mutate: addBanner,
+    isLoading,
+    isSuccess,
+    isError,
+    error,
+  } = useAddBanner();
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -38,14 +45,28 @@ const AddBannerModal: React.FC<Props> = ({ open, onClose, barcode }) => {
       addBanner({ barcode, image });
     }
   };
-  
+
   useEffect(() => {
     if (open) {
-      // Reset form when modal opens
       setImage(null);
       setImagePreview(null);
     }
   }, [open]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      notif("بنر با موفقیت افزوده شد.", { variant: "success" });
+    } else if (isError) {
+      const errorMessage = (error as any)?.response?.data?.error;
+      if (errorMessage === "Product not found.") {
+        notif("محصولی با این بارکد یافت نشد.", { variant: "error" });
+      } else {
+        notif("مشکلی در ثبت بنر وجود دارد، لطفا دوباره تلاش کنید.", {
+          variant: "error",
+        });
+      }
+    }
+  }, [isSuccess, isError, error]);
 
   return (
     <Dialog
@@ -98,8 +119,15 @@ const AddBannerModal: React.FC<Props> = ({ open, onClose, barcode }) => {
           )}
         </Box>
       </DialogContent>
-      <DialogActions sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
-        <Button fullWidth variant="contained" onClick={handleSubmit} disabled={isLoading}>
+      <DialogActions
+        sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}
+      >
+        <Button
+          fullWidth
+          variant="contained"
+          onClick={handleSubmit}
+          disabled={isLoading}
+        >
           {isLoading ? "در حال ارسال..." : "ثبت بنر"}
         </Button>
         <Button fullWidth variant="outlined" onClick={onClose}>

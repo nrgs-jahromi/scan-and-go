@@ -18,7 +18,7 @@ const addBanner = async (payload: AddBannerPayload): Promise<ApiResponse> => {
     formData.append("image", payload.image);
   }
 
-  const { data } = await fetcher.post("/add-banner/", formData, {
+  const { data } = await fetcher.post("/stores/add-banner/", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
