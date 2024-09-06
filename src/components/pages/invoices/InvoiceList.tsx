@@ -13,7 +13,7 @@ import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import EnhancedTable from "../../common/table/EnhancedTable";
 import PageHeader from "../pageHeader/PageHeader";
-// import InvoiceDetailsModal from "./InvoiceDetail";
+import InvoiceDetailsModal from "./InvoiceDetail";
 import { useInvoices } from "../../../api/invoice/getInvoices";
 import moment from "jalali-moment";
 import _ from "lodash";
@@ -125,9 +125,11 @@ const InvoiceList = () => {
 
   const { data, isLoading, isError, isSuccess } = useInvoices({
     params: {
-      start_date: startDate,
-      end_date: endDate,
-      q: debouncedSearchValue,
+      page: page + 1,
+      page_size: rowsPerPage,
+      create_time__gte: startDate,
+      create_time__lte: endDate,
+      search: debouncedSearchValue,
     },
   });
 
@@ -235,11 +237,13 @@ const InvoiceList = () => {
           handleClickOpen(row);
         }}
       />
-      {/* <InvoiceDetailsModal
-        open={open}
-        handleClose={handleClose}
-        selectedRow={selectedRow}
-      /> */}
+      {selectedRow && (
+        <InvoiceDetailsModal
+          open={open}
+          handleClose={handleClose}
+          InvoiceId={selectedRow?.invoice_number}
+        />
+      )}
     </Box>
   );
 };

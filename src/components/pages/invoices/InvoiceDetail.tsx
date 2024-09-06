@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Dialog,
   DialogActions,
@@ -16,42 +17,39 @@ import {
   Typography,
 } from "@mui/material";
 import theme from "../../../theme";
-
-type Invoice = {
-  id: number;
-  invoice_number: number;
-  date: string;
-  time: string;
-  customer: string;
-  amount: number;
-  payment_tracking_code: string;
-};
-
-type Item = {
-  name: string;
-  quantity: number;
-  unit_price: number;
-  discount: number;
-};
+import { useInvoiceDetail } from "../../../api/invoice/getInvoiceDetail";
 
 interface InvoiceDetailsModalProps {
   open: boolean;
   handleClose: () => void;
-  selectedRow: Invoice | null;
+  InvoiceId: string;
 }
-
-// داده‌های فیک برای آیتم‌ها
-const fakeItems: Item[] = [
-  { name: "کالا ۱", quantity: 2, unit_price: 50000, discount: 5000 },
-  { name: "کالا ۲", quantity: 1, unit_price: 120000, discount: 10000 },
-  { name: "کالا ۳", quantity: 3, unit_price: 30000, discount: 0 },
-];
 
 const InvoiceDetailsModal: React.FC<InvoiceDetailsModalProps> = ({
   open,
   handleClose,
-  selectedRow,
+  InvoiceId,
 }) => {
+  // استفاده از هوک useInvoiceDetail برای دریافت اطلاعات فاکتور
+  const { data: invoiceData, isLoading, error } = useInvoiceDetail(InvoiceId);
+
+  // نمایش لودینگ و خطا
+  if (isLoading) {
+    return (
+      <Dialog open={open} onClose={handleClose}>
+        <DialogContent>در حال بارگذاری...</DialogContent>
+      </Dialog>
+    );
+  }
+
+  if (error) {
+    return (
+      <Dialog open={open} onClose={handleClose}>
+        <DialogContent>خطا در دریافت اطلاعات فاکتور</DialogContent>
+      </Dialog>
+    );
+  }
+
   return (
     <Dialog
       open={open}
@@ -59,32 +57,20 @@ const InvoiceDetailsModal: React.FC<InvoiceDetailsModalProps> = ({
       maxWidth="lg"
       PaperProps={{ sx: { padding: 2, width: 800 } }}
     >
-      <DialogTitle
-      // bgcolor={theme.palette.background.paper}
-      >
-        {selectedRow && (
-          <Box
-            component={Paper}
-            className="grid grid-cols-2 p-5"
-          >
-            {/* شماره فاکتور */}
-            <DialogContentText>
-              شماره فاکتور: {selectedRow.invoice_number}
+      <DialogTitle>
+        {invoiceData && (
+          <Box component={Paper} className="grid grid-cols-2 p-5">
+            <DialogContentText >
+              شماره فاکتور: {invoiceData.invoice_number}
             </DialogContentText>
-
-            {/* تاریخ و ساعت در یک خط */}
-            <DialogContentText>
-              تاریخ و ساعت: {selectedRow.date} - {selectedRow.time}
+            <DialogContentText >
+              تاریخ و ساعت: {invoiceData.invoice_number}
             </DialogContentText>
-
-            {/* نام/شماره خریدار */}
-            <DialogContentText>
-              نام/شماره خریدار: {selectedRow.customer}
+            <DialogContentText >
+              خریدار: {invoiceData.invoice_number}
             </DialogContentText>
-
-            {/* کد پیگیری پرداخت */}
-            <DialogContentText>
-              کد پیگیری پرداخت: {selectedRow.payment_tracking_code}
+            <DialogContentText >
+              کد پیگری پرداخت: _
             </DialogContentText>
           </Box>
         )}
@@ -96,12 +82,13 @@ const InvoiceDetailsModal: React.FC<InvoiceDetailsModalProps> = ({
               <TableRow>
                 <TableCell align="right">نام</TableCell>
                 <TableCell align="center">تعداد</TableCell>
-                <TableCell align="center">قیمت</TableCell>
-                <TableCell align="center">تخفیف</TableCell>
+                <TableCell align="center">قیمت واحد</TableCell>
+                <TableCell align="center">قیمت کل بدون تخفیف</TableCell>
+                <TableCell align="center">قیمت کل با تخفیف</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {fakeItems.map((item, index) => (
+              {invoiceData.items.map((item, index) => (
                 <TableRow
                   key={index}
                   sx={{
@@ -110,47 +97,55 @@ const InvoiceDetailsModal: React.FC<InvoiceDetailsModalProps> = ({
                     },
                   }}
                 >
-                  <TableCell align="right">{item.name}</TableCell>
+                  <TableCell align="right">{item.product.name}</TableCell>
                   <TableCell align="center">x{item.quantity}</TableCell>
                   <TableCell align="center">
-                    {item.unit_price.toLocaleString()}
+                    {item.product.price.toLocaleString()}
                   </TableCell>
                   <TableCell align="center">
-                    {item.discount.toLocaleString()}
+                    {item.total_price_without_discount.toLocaleString()}
+                  </TableCell>
+                  <TableCell align="center">
+                    {item.total_price_with_discount.toLocaleString()}
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
-        <Box component={Paper} className="w-full grid grid-cols-4 items-center gap-5 p-5 mt-4">
+        <Box
+          component={Paper}
+          className="w-full grid grid-cols-2 items-center gap-5 p-5 mt-4"
+        >
           <Box className="flex items-center justify-between">
-            <Typography variant="body2">تخفیف</Typography>
+            <Typography variant="body2">مبلغ کل بدون تخفیف:</Typography>
             <Typography variant="body1" fontWeight={"bold"}>
-              1200000
+              {invoiceData?.total_price_without_discount.toLocaleString()}
+            </Typography>
+          </Box>
+          <Box className="flex items-center justify-between">
+            <Typography variant="body2">مالیات:</Typography>
+            <Typography variant="body1" fontWeight={"bold"}>
+              {invoiceData.tax.toLocaleString()}
             </Typography>
           </Box>
           <Box className="flex items-center justify-between">
             <Typography variant="body2">تخفیف</Typography>
             <Typography variant="body1" fontWeight={"bold"}>
-              1200000
+              {(
+                invoiceData?.total_price_without_discount -
+                invoiceData?.total_price_with_discount
+              ).toLocaleString()}
             </Typography>
           </Box>
           <Box className="flex items-center justify-between">
-            <Typography variant="body2">تخفیف</Typography>
+            <Typography variant="body2">مبلغ پرداخت‌شده</Typography>
             <Typography variant="body1" fontWeight={"bold"}>
-              1200000
-            </Typography>
-          </Box>
-          <Box className="flex items-center justify-between">
-            <Typography variant="body2">تخفیف</Typography>
-            <Typography variant="body1" fontWeight={"bold"}>
-              1200000
+              {invoiceData?.payable_amount.toLocaleString()}
             </Typography>
           </Box>
         </Box>
       </DialogContent>
-      
     </Dialog>
   );
 };

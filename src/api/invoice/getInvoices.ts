@@ -9,9 +9,9 @@ type DataT = {
   params: {
     page?: number;
     page_size?: number;
-    start_date?: string;
-    end_date?: string;
-    q?: string;
+    create_time__gte?: string;
+    create_time__lte?: string;
+    search?: string;
   };
 };
 
@@ -35,12 +35,12 @@ const fetchInvoices: QueryFunction<ResT, QueryKey> = async ({ queryKey }) => {
   const {
     page = 1,
     page_size = 10,
-    start_date = "",
-    end_date = "",
-    q = "",
+    create_time__gte = "",
+    create_time__lte = "",
+    search= "",
   } = queryKey[1].params;
   const { data: dataRes } = await fetcher.get<ResT>("/invoices/list", {
-    params: { page, page_size, start_date, end_date, q },
+    params: { page, page_size, create_time__gte, create_time__lte, search },
   });
   return dataRes;
 };
