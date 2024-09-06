@@ -2,17 +2,15 @@ import { useFormik, FormikProvider, Form } from "formik";
 import { Box, Button, Typography, useMediaQuery } from "@mui/material";
 import theme from "../../theme";
 import * as Yup from "yup";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import FormikInput from "../common/inputs/FormikInput";
 import { Lock1, Sms } from "iconsax-react";
 import { useLogin } from "../../api/auth/login";
 import { useEffect } from "react";
 import { notif } from "../common/notification/Notification";
 import { saveToLocalStorage } from "../../utils/localStorage";
-import {
-  LS_ACCESS_TOKEN,
-  LS_REFRESH_TOKEN,
-} from "../../constants/localStorage";
+import { LS_ACCESS_TOKEN } from "../../constants/localStorage";
+import logo from "../../assets/scanbuy.svg";
 
 type LoginFormT = {
   mobile_number: string;
@@ -76,16 +74,19 @@ const Login = () => {
       <Box
         className={`${
           isLargeScreen
-            ? "w-[30rem] bg-white rounded-xl shadow-2xl p-10"
+            ? "w-[30rem] bg-white rounded-xl shadow-2xl p-8"
             : "w-full h-full bg-white p-4"
         } flex flex-col`}
       >
+        <Box className="flex w-full justify-center items-center h-full mb-4">
+          <img src={logo} width={200} />
+        </Box>
         <Box>
           <Typography variant="h5" align="center" fontWeight={"bold"}>
-            ورود به بای‌نت
+            ورود
           </Typography>
           <Typography variant="body1" align="center">
-            به بای‌نت خوش آمدید. جهت ورود اطلاعات خود را وارد کنید.
+            جهت ورود به اسکن‌بای اطلاعات خود را وارد کنید.
           </Typography>
         </Box>
         <Box className="flex w-full justify-center items-center h-full">

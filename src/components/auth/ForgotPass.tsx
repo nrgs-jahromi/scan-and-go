@@ -4,10 +4,10 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router";
 import FormikInput from "../common/inputs/FormikInput";
 import { Sms } from "iconsax-react";
-import { useSignup } from "../../api/auth/verifySignup";
 import { useEffect } from "react";
 import { notif } from "../common/notification/Notification";
 import { useGetOtp } from "../../api/auth/getOTP";
+import logo from "../../assets/scanbuy.svg";
 
 type FormT = {
   mobile_number: string;
@@ -15,13 +15,7 @@ type FormT = {
 const ForgotPass = () => {
   const navigate = useNavigate();
   const isLargeScreen = useMediaQuery("(min-width: 768px)");
-  const {
-    mutate: getOtp,
-    isLoading,
-    isSuccess,
-    isError,
-    data: signupData,
-  } = useGetOtp();
+  const { mutate: getOtp, isSuccess, isError, data: signupData } = useGetOtp();
 
   const formik = useFormik<FormT>({
     initialValues: {
@@ -63,13 +57,15 @@ const ForgotPass = () => {
             : "w-full h-full bg-white p-4"
         } flex flex-col`}
       >
-        {" "}
+        <Box className="flex w-full justify-center items-center h-full mb-4">
+          <img src={logo} width={200} />
+        </Box>
+
         <FormikProvider value={formik}>
           <Form
             onSubmit={formik.handleSubmit}
             className="h-full w-full justify-center items-center gap-10 flex flex-col"
           >
-            {/* <img src={logo}></img> */}
             <Box>
               <Typography variant="h5" align="center" fontWeight={"bold"}>
                 بازیابی رمز عبور

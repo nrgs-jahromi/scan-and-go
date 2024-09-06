@@ -3,8 +3,7 @@ import { Box, Button, Typography, useMediaQuery } from "@mui/material";
 import theme from "../../theme";
 import * as Yup from "yup";
 import { useNavigate, useParams } from "react-router";
-import changePasswod from "../../assets/changePassword.png";
-import logo from "../../assets/logo.svg";
+import logo from "../../assets/scanbuy.svg";
 import { MuiOtpInput } from "mui-one-time-password-input";
 import { useState, useEffect } from "react";
 
@@ -75,6 +74,10 @@ const Verification = () => {
             : "w-full h-full bg-white p-4"
         } flex flex-col`}
       >
+        <Box className="flex w-full justify-center items-center h-full mb-4">
+          <img src={logo} width={200} />
+        </Box>
+
         <FormikProvider value={formik}>
           <Form
             onSubmit={formik.handleSubmit}

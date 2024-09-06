@@ -66,7 +66,7 @@ const seriesData = parsedData.map((item) => item.amount);
     <Box component={Paper} className="py-6 px-8 lg:col-span-3 max-w-full overflow-auto" height={"100%"}>
       <Box className="w-full justify-between items-center flex flex-row">
         <Typography variant="subtitle1" fontWeight={500}>
-          میزان سود پرداختی
+          فروش روزانه
         </Typography>
         <DatePicker
           className="teal"
@@ -93,6 +93,8 @@ const seriesData = parsedData.map((item) => item.amount);
           series={[
             {
               data: seriesData,
+              area: true,
+              curve: "step"  ,
             },
           ]}
           height={250}

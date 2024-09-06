@@ -6,33 +6,38 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Typography, CircularProgress } from "@mui/material";
 import { ArrowLeft2 } from "iconsax-react";
-
-function createData(
-  name: number,
-  lastName: string,
-  cost: number,
-  time: string
-) {
-  return { name, lastName, cost, time };
-}
-
-const rows = [
-  createData(8456892, "09138750959", 10657000, "10:30 "),
-  createData(8456892, "09138750959", 10657000, "10:30"),
-  createData(8456892, "09138750959", 10657000, "10:30 "),
-  createData(8456892, "09138750959", 10657000, "10:30 "),
-];
+import { useDailyInvoices } from "../../../api/dashboard/getTodayInvoices";
+import moment from "jalali-moment";
 
 export default function BasicTable() {
-  // const currentTime = moment().format("HH:mm");
+  const todayDate = new Date().toISOString().split("T")[0];
+
+  const { data, isLoading, isError } = useDailyInvoices({ date: todayDate });
+
+  if (isLoading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (isError) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+        <Typography color="error">خطا در دریافت اطلاعات</Typography>
+      </Box>
+    );
+  }
+
   return (
     <Box
       component={Paper}
-      className="px-8 py-6 h-full lg:col-span-3 overflow-auto"
+      className="px-8 py-6 max-h-fit lg:col-span-3 overflow-auto"
     >
-      <Box className="w-full  justify-between items-center flex flex-row mb-4 ">
+      <Box className="w-full justify-between items-center flex flex-row mb-4">
         <Typography variant="subtitle1" fontWeight={500}>
           فاکتورهای امروز
         </Typography>
@@ -54,7 +59,6 @@ export default function BasicTable() {
                 sx={{
                   color: "#A3A3A3",
                   borderBottom: "none",
-                  // paddingRight: "64px",
                 }}
               >
                 شماره فاکتور
@@ -80,9 +84,9 @@ export default function BasicTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {data?.slice(0,5 ).map((row) => (
               <TableRow
-                key={row.name}
+                key={row.invoice_number}
                 sx={{
                   "&:last-child td, &:last-child th": { border: 0 },
                   ":hover": {
@@ -100,14 +104,13 @@ export default function BasicTable() {
                     alignItems: "center",
                   }}
                 >
-                  
-                  {row.name}
+                  {row.invoice_number}
                 </TableCell>
-                <TableCell align="center">{row.lastName}</TableCell>
+                <TableCell align="center">{row.customer_mobile_number}</TableCell>
                 <TableCell align="center">
-                  {row.cost.toLocaleString("fa-IR")}
+                  {row.total_amount.toLocaleString("fa-IR")}
                 </TableCell>
-                <TableCell align="center">{row.time}</TableCell>
+                <TableCell align="center">{ moment(row.create_time).locale("fa").format(" HH:mm ")}</TableCell>
               </TableRow>
             ))}
           </TableBody>

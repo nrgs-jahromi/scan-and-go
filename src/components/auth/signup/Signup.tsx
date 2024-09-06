@@ -7,14 +7,13 @@ import FormikInput from "../../common/inputs/FormikInput";
 import { useSignup } from "../../../api/auth/verifySignup";
 import { useEffect } from "react";
 import { notif } from "../../common/notification/Notification";
-
+import logo from "../../../assets/scanbuy.svg";
 type SignupFormT = {
   mobile_number: string;
 };
 
 const Signup = () => {
   const navigate = useNavigate();
-
 
   const isLargeScreen = useMediaQuery("(min-width: 768px)");
 
@@ -68,14 +67,18 @@ const Signup = () => {
         <FormikProvider value={formik}>
           <Form
             onSubmit={formik.handleSubmit}
-            className="h-full w-full justify-center items-center gap-10 flex flex-col"
+            className="h-full w-full justify-center items-center gap-4 flex flex-col"
           >
+            <Box className="flex w-full justify-center items-center h-full ">
+              <img src={logo} width={200} />
+            </Box>
+
             <Box>
               <Typography variant="h5" align="center" fontWeight={"bold"}>
-                ثبت‌نام در بای‌نت
+                ثبت‌نام
               </Typography>
               <Typography variant="body1" align="center">
-                به بای‌نت خوش آمدید. جهت ثبت‌نام شماره تماس خود را وارد کنید.
+                جهت ثبت‌نام شماره تماس خود را وارد کنید.
               </Typography>
             </Box>
             <Box className="w-full">
