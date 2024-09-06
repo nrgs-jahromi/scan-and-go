@@ -43,8 +43,8 @@ const Dashboard = () => {
       </Box>
      
       <Box className="grid grid-rows-1 lg:grid-cols-5 gap-6 w-full ">
-        <CustomLineChart />
         <CustomPieChart />
+        <CustomLineChart />
       </Box>
       <Box className="grid lg:grid-cols-5 gap-6 w-full h-fit ">
         <BasicTable />

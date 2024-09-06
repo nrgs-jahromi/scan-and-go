@@ -49,6 +49,8 @@ const InvoiceDetailsModal: React.FC<InvoiceDetailsModalProps> = ({
       </Dialog>
     );
   }
+  console.log("invoiceData :",invoiceData);
+  
 
   return (
     <Dialog

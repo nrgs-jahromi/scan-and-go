@@ -1,24 +1,32 @@
-import * as React from "react";
-import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import React from "react";
+import {
+  Alert,
+  Box,
+  Button,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import { ArrowLeft2 } from "iconsax-react";
 import theme from "../../../theme";
+import { useLowStockProducts } from "../../../api/dashboard/getLowStock";
 
-function createData(
-  name: number,
-  lastName: string,
-  cost: number,
-  
-) {
-  return { name, lastName, cost };
-}
-
-const rows = [
-  createData(123456, "محصول A", 0 ), 
-  createData(789012, "محصول B", 5),
-  createData(345678, "محصول C", 12),
-  createData(901234, "محصول D", 0), 
-]
 const BankAccounts = () => {
+  const { data, isLoading, error } = useLowStockProducts();
+
+  if (isLoading) {
+    return <Typography>در حال بارگذاری...</Typography>;
+  }
+
+  if (error) {
+    return <Typography>خطا در بارگذاری داده‌ها</Typography>;
+  }
+
   return (
     <Box
       component={Paper}
@@ -37,65 +45,77 @@ const BankAccounts = () => {
           مشاهده همه
         </Button>
       </Box>
-      <TableContainer component={Paper} sx={{ border: "none" }}>
-        <Table aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell
-                align="right"
-                sx={{
-                  color: "#A3A3A3",
-                  borderBottom: "none",
-                }}
-              >
-                کد کالا
-              </TableCell>
-              <TableCell
-                align="right"
-                sx={{ color: "#A3A3A3", borderBottom: "none" }}
-              >
-                نام
-              </TableCell>
-              <TableCell
-                align="center"
-                sx={{ color: "#A3A3A3", borderBottom: "none" }}
-              >
-                تعداد
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow
-                key={row.name}
-                sx={{
-                  "&:last-child td, &:last-child th": { border: 0 },
-                  ":hover": {
-                    bgcolor: "#F0EEFD",
-                  },
-                  borderRadius: "8px",
-                }}
-              >
+      {data && data.length > 0 ? (
+        <TableContainer component={Paper} sx={{ border: "none" }}>
+          <Table aria-label="simple table">
+            <TableHead>
+              <TableRow>
                 <TableCell
                   align="right"
                   sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: 1,
-                    alignItems: "center",
+                    color: "#A3A3A3",
+                    borderBottom: "none",
                   }}
                 >
-                  {row.name}
+                  کد کالا
                 </TableCell>
-                <TableCell align="right">{row.lastName}</TableCell>
-                <TableCell align="center" sx={{color:row.cost === 0 ? theme.palette.error.main:""}} >
-                  {row.cost === 0 ? "ناموجود" : row.cost.toLocaleString("fa-IR")}
+                <TableCell
+                  align="right"
+                  sx={{ color: "#A3A3A3", borderBottom: "none" }}
+                >
+                  نام
+                </TableCell>
+                <TableCell
+                  align="center"
+                  sx={{ color: "#A3A3A3", borderBottom: "none" }}
+                >
+                  تعداد
                 </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {data.map((product) => (
+                <TableRow
+                  key={product.barcode}
+                  sx={{
+                    "&:last-child td, &:last-child th": { border: 0 },
+                    ":hover": {
+                      bgcolor: "#F0EEFD",
+                    },
+                    borderRadius: "8px",
+                  }}
+                >
+                  <TableCell
+                    align="right"
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      gap: 1,
+                      alignItems: "center",
+                    }}
+                  >
+                    {product.barcode}
+                  </TableCell>
+                  <TableCell align="right">{product.name}</TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      color:
+                        product.stock === 0 ? theme.palette.error.main : "",
+                    }}
+                  >
+                    {product.stock === 0
+                      ? "ناموجود"
+                      : product.stock.toLocaleString("fa-IR")}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : (
+        <Alert severity="info">محصولی یافت نشد</Alert>
+      )}
     </Box>
   );
 };
