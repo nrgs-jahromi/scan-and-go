@@ -145,7 +145,7 @@ const EditProduct = () => {
       });
     }
 
-    updateProduct({ productData: formData, barcode: values.barcode });
+    updateProduct({ productData: formData, barcode: productId! });
   };
 
   const sliderSettings = {
