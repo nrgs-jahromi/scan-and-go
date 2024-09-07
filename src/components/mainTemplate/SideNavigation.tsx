@@ -155,7 +155,7 @@ export default function SideNavigation() {
         label: "مشتریان",
         icon1: <Profile2User />,
         icon2: <Profile2User variant="Bold" />,
-        path: "reports/periodic",
+        path: "reports/customers",
       },
       
       {
