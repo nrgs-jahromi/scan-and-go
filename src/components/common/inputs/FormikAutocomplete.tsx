@@ -38,7 +38,6 @@ const FormikAutocomplete: FC<Props> = ({
     setFieldValue(name, value);
   };
 
-  // console.log("tesy" , field.value);
   
   return (
     <Box {...containerProps} marginBottom={2}>
@@ -50,7 +49,7 @@ const FormikAutocomplete: FC<Props> = ({
         freeSolo
         options={options}
         getOptionLabel={(option) => option} // Ensure label and value are the same
-        defaultValue={field.value || []}
+        value={field.value||[]}
         onChange={handleChange}
         renderTags={(value: string[], getTagProps) =>
           value.map((option, index) => (

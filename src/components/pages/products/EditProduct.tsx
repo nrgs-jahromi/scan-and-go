@@ -317,6 +317,7 @@ const EditProduct = () => {
                       label="بارکد"
                       fullWidth
                       type="text"
+                      disabled ={true}
                     />
                     <FormikInput
                       name="stock"
