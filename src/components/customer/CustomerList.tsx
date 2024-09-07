@@ -48,16 +48,16 @@ const columns: TableColumnDef<CustomerData>[] = [
   },
 
   {
-    id: "mobile_number",
+    id: "username",
     disablePadding: false,
-    label: "شماره تلفن",
+    label: "نام کاربری",
     type: "text",
     accessorFn: (v) => v.mobile_number || "-",
   },
   {
-    id: "username",
+    id: "mobile_number",
     disablePadding: false,
-    label: "شماره تلفن",
+    label: "شماره موبایل",
     type: "text",
     accessorFn: (v) => v.username || "-",
   },
@@ -71,15 +71,15 @@ const columns: TableColumnDef<CustomerData>[] = [
   {
     id: "birth_date",
     disablePadding: false,
-    label: "آخرین خرید",
+    label: "تاریخ تولد",
     type: "date",
     accessorFn: (v) => v.birth_date || "-",
   },
   {
     id: "purchase_count",
     disablePadding: false,
-    label: "آخرین خرید",
-    type: "date",
+    label: "دفعات خرید",
+    type: "number",
    
   },
   
@@ -180,9 +180,9 @@ const CustomerList = () => {
         setSelected={setSelected}
         setPage={setPage}
         setRowsPerPage={setRowsPerPage}
-        onRowDoubleClick={(row) => {
-          navigate(`${row.id}/`);
-        }}
+        // onRowDoubleClick={(row) => {
+        //   navigate(`${row.id}/`);
+        // }}
       />
       
     </Box>
