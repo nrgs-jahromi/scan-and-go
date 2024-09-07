@@ -162,25 +162,6 @@ const CustomerList = () => {
         showSearchBar={true}
         searchValue={searchValue}
         onSearchChange={handleSearchChange}
-        buttons={[
-          {
-            text: "افزودن کاربر",
-            customComponent: (
-              <Button
-                variant="contained"
-                startIcon={<Add />}
-                sx={{ maxHeight: 48 }}
-                onClick={() => {
-                  navigate("/users/add");
-                }}
-              >
-                {" "}
-                افزودن کاربر
-              </Button>
-            ),
-          },
-         
-        ]}
       />
       <EnhancedTable
         columns={columns}
