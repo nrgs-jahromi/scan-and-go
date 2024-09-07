@@ -11,7 +11,7 @@ import {
 import theme from "../../../theme";
 import { notif } from "../../common/notification/Notification";
 import { useUpdateStoreInformation } from "../../../api/store/editStoreInfo";
-import defaultProfile from "../../../assets/react.svg";
+import defaultProfile from "../../../assets/scangray.svg";
 import { API_BASE_URL } from "../../../api/config";
 import { Camera, Edit } from "iconsax-react";
 

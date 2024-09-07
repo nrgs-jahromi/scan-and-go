@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { FC } from "react";
-import MockAvatar from "../../../../assets/changePassword.png";
+import MockAvatar from "../../../../assets/scangray.svg"
 import { API_BASE_URL } from "../../../../api/config";
 
 interface Props {
