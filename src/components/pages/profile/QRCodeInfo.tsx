@@ -34,7 +34,7 @@ const QRCodeInfo: React.FC<Props> = ({ storeData }) => {
       <Box className="space-y-2 m-0 flex flex-col justify-end items-center">
         <QRCodeCanvas
           ref={qrRef}
-          value={`https://scanbuy.liara.run/${storeData.store_id}`}
+          value={`https://scanbuy2.liara.run/${storeData.store_id}`}
           title={"Title for my QR Code"}
           size={200}
           bgColor={"#ffffff"}
@@ -68,7 +68,7 @@ const QRCodeInfo: React.FC<Props> = ({ storeData }) => {
         id="outlined-start-adornment"
         size="small"
         fullWidth
-        value={`scanbuy.liara.run/${storeData.store_id}`}
+        value={`scanbuy2.liara.run/${storeData.store_id}`}
         sx={{ direction: "ltr" }}
         InputProps={{
           startAdornment: (
