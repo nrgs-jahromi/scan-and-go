@@ -41,7 +41,8 @@ export const useAddProduct = () => {
   const queryClient = useQueryClient();
   return useMutation(addProduct, {
     onSuccess: () => {
-      queryClient.invalidateQueries(["products"]);
+      queryClient.invalidateQueries(["products", { page: 1, page_size: 10 }]);
+      queryClient.refetchQueries(["products"]);
     },
 
     onError: (error) => {

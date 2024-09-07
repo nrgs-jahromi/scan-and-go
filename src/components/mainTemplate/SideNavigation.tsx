@@ -143,13 +143,13 @@ export default function SideNavigation() {
         icon2: <Save2 variant="Bold" />,
         path: "reports/invoices",
       },
-      {
-        id: "periodic-reports",
-        label: "گزارشات دوره‌ای",
-        icon1: <Diagram />,
-        icon2: <Diagram variant="Bold" />,
-        path: "reports/periodic",
-      },
+      // {
+      //   id: "periodic-reports",
+      //   label: "گزارشات دوره‌ای",
+      //   icon1: <Diagram />,
+      //   icon2: <Diagram variant="Bold" />,
+      //   path: "reports/periodic",
+      // },
       {
         id: "customer-reports",
         label: "مشتریان",

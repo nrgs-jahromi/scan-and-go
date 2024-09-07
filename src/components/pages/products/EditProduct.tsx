@@ -233,6 +233,73 @@ const EditProduct = () => {
                     />
                   </Box>
                   <Box>
+                    <FormikTextArea
+                      minRows={4}
+                      name="description"
+                      label="توضیحات"
+                      fullWidth
+                      maxRows={4}
+                    />
+                    <FormikInput
+                      name="barcode"
+                      label="بارکد"
+                      fullWidth
+                      type="text"
+                      disabled ={true}
+                    />
+                    <FormikInput
+                      name="stock"
+                      label="موجودی"
+                      type="number"
+                      fullWidth
+                    />
+                    <FormikInput
+                      name="min_stock"
+                      label="حداقل موجودی"
+                      type="number"
+                      fullWidth
+                    />
+                  </Box>
+                  <Box>
+                    <FormikInput
+                      name="price"
+                      label="قیمت"
+                      formatted={true}
+                      fullWidth
+                    />
+                    <Box className="space-y-8">
+                      <FormikInput
+                        name="discount.discount_percentage"
+                        label="تخفیف (درصد)"
+                        type="number"
+                        fullWidth
+                      />
+                      <Box className="grid grid-cols-2 items-center">
+                        <FormControlLabel
+                          name="discountForQuantity"
+                          control={<Checkbox defaultChecked />}
+                          label="تخفیف برای تعداد"
+                        />
+                        <FormikInput
+                          name="discount.min_quantity_for_discount"
+                          type="number"
+                          fullWidth
+                        />
+                      </Box>
+                      <Box className="grid grid-cols-2 items-center">
+                        <FormControlLabel
+                          name="discountEnd"
+                          control={<Checkbox defaultChecked />}
+                          label="تاریخ پایان تخفیف"
+                        />
+                        <FormikDatePicker
+                          name="discount.expiration_date"
+                          type="number"
+                        />
+                      </Box>
+                    </Box>
+                  </Box>
+                  <Box>
                     <Box className="flex justify-between items-end col-span-1 -mt-2 mb-1">
                       <Typography variant="custom">تصویر محصول</Typography>
                       <label htmlFor="upload-image">
@@ -304,72 +371,8 @@ const EditProduct = () => {
                     )}
                   </Box>
 
-                  <Box>
-                    <FormikTextArea
-                      minRows={4}
-                      name="description"
-                      label="توضیحات"
-                      fullWidth
-                      maxRows={4}
-                    />
-                    <FormikInput
-                      name="barcode"
-                      label="بارکد"
-                      fullWidth
-                      type="text"
-                    />
-                    <FormikInput
-                      name="stock"
-                      label="موجودی"
-                      type="number"
-                      fullWidth
-                    />
-                    <FormikInput
-                      name="min_stock"
-                      label="حداقل موجودی"
-                      type="number"
-                      fullWidth
-                    />
-                  </Box>
-                  <Box>
-                    <FormikInput
-                      name="price"
-                      label="قیمت"
-                      formatted={true}
-                      fullWidth
-                    />
-                    <Box className="space-y-8">
-                      <FormikInput
-                        name="discount.discount_percentage"
-                        label="تخفیف (درصد)"
-                        type="number"
-                        fullWidth
-                      />
-                      <Box className="grid grid-cols-2 items-center">
-                        <FormControlLabel
-                          name="discountForQuantity"
-                          control={<Checkbox defaultChecked />}
-                          label="تخفیف برای تعداد"
-                        />
-                        <FormikInput
-                          name="discount.min_quantity_for_discount"
-                          type="number"
-                          fullWidth
-                        />
-                      </Box>
-                      <Box className="grid grid-cols-2 items-center">
-                        <FormControlLabel
-                          name="discountEnd"
-                          control={<Checkbox defaultChecked />}
-                          label="تاریخ پایان تخفیف"
-                        />
-                        <FormikDatePicker
-                          name="discount.expiration_date"
-                          type="number"
-                        />
-                      </Box>
-                    </Box>
-                  </Box>
+                 
+                  
                 </Box>
               </Box>{" "}
               <Button type="submit" fullWidth variant="contained">
