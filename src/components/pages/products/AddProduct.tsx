@@ -213,7 +213,7 @@ const AddProduct = () => {
                   <Box>
                     <FormikInput
                       name="price"
-                      label="قیمت"
+                      label="قیمت (تومان)"
                       formatted={true}
                       fullWidth
                     />
