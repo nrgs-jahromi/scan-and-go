@@ -52,14 +52,14 @@ const columns: TableColumnDef<CustomerData>[] = [
     disablePadding: false,
     label: "نام کاربری",
     type: "text",
-    accessorFn: (v) => v.mobile_number || "-",
+    accessorFn: (v) => v.username || "-",
   },
   {
     id: "mobile_number",
     disablePadding: false,
     label: "شماره موبایل",
     type: "text",
-    accessorFn: (v) => v.username || "-",
+    accessorFn: (v) => v.mobile_number || "-",
   },
   {
     id: "gender",
