@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 import theme from "../../../theme";
 import { useInvoiceDetail } from "../../../api/invoice/getInvoiceDetail";
+import moment from "jalali-moment";
 
 interface InvoiceDetailsModalProps {
   open: boolean;
@@ -65,11 +66,15 @@ const InvoiceDetailsModal: React.FC<InvoiceDetailsModalProps> = ({
             <DialogContentText >
               شماره فاکتور: {invoiceData.invoice_number}
             </DialogContentText>
-            <DialogContentText >
-              تاریخ و ساعت: {invoiceData.invoice_number}
+            <DialogContentText>
+              تاریخ و ساعت:
+             {invoiceData?.create_time? moment(invoiceData?.create_time)
+                .locale("fa")
+                .format("jYYYY/jMM/jDD - HH:mm:ss"):
+                "-"}
             </DialogContentText>
             <DialogContentText >
-              خریدار: {invoiceData.invoice_number}
+              خریدار: {invoiceData.customer_mobile_number} _ {invoiceData.customer_first_name + " "+ invoiceData.customer_last_name}
             </DialogContentText>
             <DialogContentText >
               کد پیگری پرداخت: _

@@ -24,13 +24,21 @@ type InvoiceDetailT = {
   total_price_with_discount: number;
   tax: number;
   items: InvoiceItemT[];
+  create_time:string | null;
+  customer_mobile_number: string | null;
+  customer_first_name: string | null;
+  customer_last_name: string | null;
 };
 
 type QueryKey = ["invoiceDetail", { invoice_id: string }];
 
-const getInvoiceDetail: QueryFunction<InvoiceDetailT, QueryKey> = async ({ queryKey }) => {
+const getInvoiceDetail: QueryFunction<InvoiceDetailT, QueryKey> = async ({
+  queryKey,
+}) => {
   const [, { invoice_id }] = queryKey;
-  const { data: dataRes } = await fetcher.get<InvoiceDetailT>(`/invoices/info/${invoice_id}/`);
+  const { data: dataRes } = await fetcher.get<InvoiceDetailT>(
+    `/invoices/info/${invoice_id}/`
+  );
   return dataRes;
 };
 
