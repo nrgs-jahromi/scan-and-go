@@ -82,7 +82,16 @@ const AddBannerModal: React.FC<Props> = ({ open, onClose, barcode }) => {
     >
       <DialogTitle>
         <Box className="min-w-80 flex justify-between gap-20">
-          <Box className="flex align-middle items-center gap-3">
+        <Box className=" h-full align-middle items-center py-3 gap-3">
+        <Typography variant="h6">افزودن بنر تبلیغاتی</Typography>
+        <Divider
+          orientation="horizontal"
+          // variant="middle"
+          className="h-1 rounded-sm"
+          sx={{ bgcolor: theme.palette.primary.main }}
+        />
+      </Box>
+          {/* <Box className="flex align-middle items-center gap-3">
             <Divider
               orientation="vertical"
               variant="middle"
@@ -90,7 +99,7 @@ const AddBannerModal: React.FC<Props> = ({ open, onClose, barcode }) => {
               sx={{ bgcolor: theme.palette.primary.main }}
             />
             <Typography variant="h6">افزودن بنر تبلیغاتی</Typography>
-          </Box>
+          </Box> */}
         </Box>
       </DialogTitle>
       <DialogContent sx={{ gap: 3, marginY: 2 }} className="space-y-4">

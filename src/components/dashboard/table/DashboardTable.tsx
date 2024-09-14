@@ -41,16 +41,16 @@ export default function BasicTable() {
         <Typography variant="subtitle1" fontWeight={500}>
           فاکتورهای امروز
         </Typography>
-        <Button
+        {/* <Button
           variant="text"
           size="small"
           sx={{ color: "#2C266A", columnGap: 1 }}
           endIcon={<ArrowLeft2 size={16} />}
         >
           مشاهده همه
-        </Button>
+        </Button> */}
       </Box>
-      <TableContainer component={Paper} sx={{ border: "none" }}>
+      <TableContainer sx={{ border: "none" }}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>

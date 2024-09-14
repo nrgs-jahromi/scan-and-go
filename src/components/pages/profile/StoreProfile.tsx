@@ -59,9 +59,10 @@ const StoreProfile = () => {
       sx={{
         display: 'grid',
         gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '1fr 1fr 1fr' },
-        gap: 4,
+        gap: 3,
         height: '100%',
         gridAutoRows: 'minmax(100px, auto)',
+        overflow:"auto"
       }}
     >
       <Box
@@ -80,7 +81,7 @@ const StoreProfile = () => {
           gridColumn: { xs: '1 / span 1', sm: '2 / span 1' },
           display: 'flex',
           flexDirection: 'column',
-          gap: 4,
+          gap: 3,
           justifyContent: "initial",
           width: "100%",
           alignItems: "start"
@@ -97,7 +98,7 @@ const StoreProfile = () => {
           gridColumn: { xs: '1 / span 1', sm: '3 / span 1' },
           display: 'flex',
           flexDirection: 'column',
-          gap: 4,
+          gap: 3,
         }}
       >
          <QRCodeInfo storeData={data} />

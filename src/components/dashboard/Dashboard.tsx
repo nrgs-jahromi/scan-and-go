@@ -16,11 +16,11 @@ const Dashboard = () => {
   const { data, isLoading, isError, error } = useStatistics();
 
   return (
-    <Box className="h-full w-full flex flex-col gap-6">
+    <Box className="h-full w-full flex flex-col gap-6 overflow-auto">
       <Box
         component={Paper}
         width={"100%"}
-        className="sm:flex items-center p-3 justify-between overflow-auto gap-4"
+        className="sm:flex items-center p-3  min-h-24 justify-between overflow-auto gap-4"
       >
         <ShortReportCard
           name="کالاهای موجود"

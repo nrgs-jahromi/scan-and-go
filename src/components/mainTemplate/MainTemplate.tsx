@@ -8,15 +8,25 @@ const MainTemplate = () => {
   const isLargeScreen = useMediaQuery("(min-width: 768px)");
 
   return (
-    <Box className="flex flex-row h-screen w-screen ">
- <SideNavigation />
-      <Box className="flex flex-col w-full h-full  overflow-auto">
-        {/* <TemplateHeader /> */}
-        <Box component="main" sx={{ flexGrow: 1 , bgcolor: theme.palette.background.paper , padding:"32px", paddingBottom:isLargeScreen?"":"100px"}}>
-          <Outlet />
-        </Box>
+    <Box
+      className="flex flex-row h-screen w-screen box-border"
+      sx={{
+        flexGrow: 1,
+        bgcolor: theme.palette.background.paper,
+        padding: "32px",
+        gap: 4,
+        paddingBottom: isLargeScreen ? "" : "100px",
+      }}
+      component="main"
+    >
+      <SideNavigation />
+
+      <Box
+        component="main"
+        sx={{ flexGrow: 1, paddingBottom: isLargeScreen ? "" : "100px" }}
+      >
+        <Outlet />
       </Box>
-    
     </Box>
   );
 };

@@ -18,7 +18,7 @@ const ShortReportCard: FC<ReportProps> = ({
 }) => {
   const [hover, setHover] = useState(false);
   return (
-    <Box  className="p-4 w-full flex col-span-1 gap-3 rounded-lg min-w-fit" >
+    <Box  className="p-4 w-full  flex col-span-1 gap-3 rounded-lg min-w-fit" >
     
       <IconBox
         icon={Icon}

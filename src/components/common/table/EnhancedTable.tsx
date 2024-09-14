@@ -111,7 +111,7 @@ const EnhancedTable = <DV extends RowDataT>({
       sx={{
         display: "flex",
         flexDirection: "column",
-        height: "100%",
+        // height: "100%",
         justifyContent: "space-between",
       }}
     >
@@ -127,6 +127,7 @@ const EnhancedTable = <DV extends RowDataT>({
             onRequestSort={handleRequestSort}
             rowCount={rows.length}
             showCheckbox={showCheckbox}
+            
           />
           {isLoading && (
             <TableBody>
