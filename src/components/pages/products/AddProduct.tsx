@@ -133,7 +133,7 @@ const AddProduct = () => {
   }, [addProductIsSuccess, addProductError]);
 
   return (
-    <Box className="space-y-4">
+    <Box className="space-y-4 h-full overflow-auto">
       <PageHeader
         title="افزودن محصول"
         buttons={[
@@ -144,6 +144,7 @@ const AddProduct = () => {
               navigate(-1);
             },
           },
+          
         ]}
       />
       <Formik
@@ -318,7 +319,7 @@ const AddProduct = () => {
                   </Box>
                 </Box>
               </Box>{" "}
-              <Button type="submit" fullWidth variant="contained">
+              <Button onClick={formik.submitForm} fullWidth variant="contained">
                 {isAdding ? "در حال افزودن..." : " ثبت محصول"}
               </Button>
             </Form>

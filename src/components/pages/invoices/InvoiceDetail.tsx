@@ -62,7 +62,13 @@ const InvoiceDetailsModal: React.FC<InvoiceDetailsModalProps> = ({
     >
       <DialogTitle>
         {invoiceData && (
-          <Box component={Paper} className="grid grid-cols-2 p-5">
+          <Box 
+          sx={{
+          border: `0.5px solid #E8E5FA`,
+          borderRadius:2,
+            bgcolor:theme.palette.background.paper
+          }}
+          className="grid grid-cols-2 p-5">
             <DialogContentText >
               شماره فاکتور: {invoiceData.invoice_number}
             </DialogContentText>
@@ -83,7 +89,13 @@ const InvoiceDetailsModal: React.FC<InvoiceDetailsModalProps> = ({
         )}
       </DialogTitle>
       <DialogContent sx={{ width: "100%" }}>
-        <TableContainer component={Paper} sx={{ width: "100%" }}>
+        <TableContainer 
+         sx={{
+          border: `0.5px solid #E8E5FA`,
+          borderRadius:2,
+           width: "100%" 
+          }}
+        >
           <Table size="small">
             <TableHead>
               <TableRow>
@@ -121,7 +133,12 @@ const InvoiceDetailsModal: React.FC<InvoiceDetailsModalProps> = ({
           </Table>
         </TableContainer>
         <Box
-          component={Paper}
+         sx={{
+          border: `0.5px solid #E8E5FA`,
+          borderRadius:2,
+
+          }}
+          // component={Paper}
           className="w-full grid grid-cols-2 items-center gap-5 p-5 mt-4"
         >
           <Box className="flex items-center justify-between">

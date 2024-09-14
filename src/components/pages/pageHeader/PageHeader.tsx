@@ -37,8 +37,12 @@ const PageHeader: React.FC<PageHeaderProps> = ({
 }) => {
   const theme = useTheme();
   return (
-    <Box className="w-full flex justify-between">
-      <Box className=" h-full align-middle items-center py-3 gap-3">
+    <Box className="w-full flex justify-between items-center px-6 py-2 sticky top-0 z-10 rounded-lg" 
+    sx={{
+      background: `linear-gradient(to left, white, ${theme.palette.background.paper})`,
+    }}
+    >
+      <Box className=" h-full align-middle items-center gap-3">
         <Typography variant="h6">{title}</Typography>
         <Divider
           orientation="horizontal"

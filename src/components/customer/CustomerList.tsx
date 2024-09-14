@@ -156,7 +156,7 @@ const CustomerList = () => {
 
 
   return (
-    <Box className="w-full flex flex-col gap-5">
+    <Box className="w-full flex flex-col gap-5 h-full overflow-auto">
       <PageHeader
         title="لیست کاربران"
         showSearchBar={true}

@@ -174,7 +174,7 @@ const ProductList = () => {
   }, [isSuccess, isDeleteError]);
 
   return (
-    <Box className="w-full flex flex-col gap-5">
+    <Box className="w-full h-full flex flex-col gap-5 overflow-auto">
       <PageHeader
         title="لیست محصولات"
         showSearchBar={true}

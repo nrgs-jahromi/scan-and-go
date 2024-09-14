@@ -182,7 +182,7 @@ const InvoiceList = () => {
   if (isError) return <Typography>خطایی رخ داده است.</Typography>;
 
   return (
-    <Box className="w-full flex flex-col gap-5">
+    <Box className="w-full h-full overflow-auto flex flex-col gap-5">
       <PageHeader
         title="فاکتورها"
         showSearchBar={true}

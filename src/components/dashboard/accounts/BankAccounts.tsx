@@ -36,17 +36,17 @@ const BankAccounts = () => {
         <Typography variant="subtitle1" fontWeight={500}>
           کالاهای رو به اتمام
         </Typography>
-        <Button
+        {/* <Button
           variant="text"
           size="small"
           sx={{ color: "#2C266A", columnGap: 1 }}
           endIcon={<ArrowLeft2 size={16} />}
         >
           مشاهده همه
-        </Button>
+        </Button> */}
       </Box>
       {data && data.length > 0 ? (
-        <TableContainer component={Paper} sx={{ border: "none" }}>
+        <TableContainer sx={{ border: "none" }}>
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>

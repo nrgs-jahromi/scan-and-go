@@ -10,7 +10,15 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import { Collapse, Tooltip, tooltipClasses, TooltipProps, Typography, useMediaQuery } from "@mui/material";
+import {
+  Collapse,
+  Paper,
+  Tooltip,
+  tooltipClasses,
+  TooltipProps,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { useNavigate } from "react-router";
 import theme from "../../theme";
 import moment from "jalali-moment";
@@ -47,61 +55,6 @@ type NavbarCategory = {
   options?: NavbarItem[] | undefined;
 };
 
-const openedMixin = (theme: Theme): CSSObject => ({
-  width: drawerWidth,
-  borderLeft: "none",
-  backgroundColor: "white",
-  padding: theme.spacing(4, 4),
-  border: "none",
-  transition: theme.transitions.create("width", {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.enteringScreen,
-  }),
-  overflowX: "hidden",
-});
-
-const closedMixin = (theme: Theme): CSSObject => ({
-  borderLeft: "none",
-  backgroundColor: "white",
-  border: "none",
-  transition: theme.transitions.create("width", {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  overflowX: "hidden",
-  width: `calc(${theme.spacing(7)} + 1px)`,
-  padding: "0",
-  [theme.breakpoints.up("sm")]: {
-    padding: theme.spacing(4, 4),
-    width: "112px",
-  },
-});
-
-const DrawerHeader = styled("div")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "flex-start",
-  ...theme.mixins.toolbar,
-}));
-
-const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
-  width: drawerWidth,
-  flexShrink: 0,
-  whiteSpace: "nowrap",
-
-  boxSizing: "border-box",
-  ...(open && {
-    ...openedMixin(theme),
-    "& .MuiDrawer-paper": openedMixin(theme),
-  }),
-  ...(!open && {
-    ...closedMixin(theme),
-    "& .MuiDrawer-paper": closedMixin(theme),
-  }),
-}));
-
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
 ))(({ theme }) => ({
@@ -136,7 +89,8 @@ export default function SideNavigation() {
         icon1: <Element4 />,
         icon2: <Element4 variant="Bold" />,
         path: "products",
-      },{
+      },
+      {
         id: "invoices",
         label: "فاکتورها ",
         icon1: <Save2 />,
@@ -157,7 +111,7 @@ export default function SideNavigation() {
         icon2: <Profile2User variant="Bold" />,
         path: "reports/customers",
       },
-      
+
       {
         id: "profile",
         label: "اطلاعات فروشگاه",
@@ -228,110 +182,113 @@ export default function SideNavigation() {
     }
   };
   return (
-    <Drawer anchor="right" variant="permanent" open={open}>
-      <DrawerHeader>
-        <Box onClick={handleDrawerClose} className="flex flex-row gap-2">
-          {<img src={smallLogo}></img>}
-        </Box>
-      </DrawerHeader>
+    <Box component={Paper} height={"100%"} padding={3} width={"100px"}>
+      <Box onClick={handleDrawerClose} className="flex flex-row gap-2">
+        {<img src={smallLogo}></img>}
+      </Box>
+
       <List>
         {navbarItems.map((item) => (
-          
-          <LightTooltip title={item.label} placement="left"  color={theme.palette.primary.main}>
-             <ListItem
-            disablePadding
-            sx={{ display: "block" }}
-            onMouseDown={() => setOpen(false)}
+          <LightTooltip
+            title={item.label}
+            placement="left"
+            color={theme.palette.primary.main}
           >
-            <ListItemButton
-              onClick={() => navigateHandler(item)}
-              sx={{
-                minHeight: 43,
-                borderRadius: "12px",
-                marginY: 3,
-                justifyContent: open ? "initial" : "center",
-                padding: "8px 12px",
-                columnGap: 1,
-                bgcolor: active === item.id ? "#F0EEFD" : "white",
-                ":hover": {
-                  bgcolor: "#F0EEFD", // Change to the desired hover color
-                  color: theme.palette.primary.main,
-                },
-                color:
-                  active === item.id
-                    ? theme.palette.primary.main
-                    : theme.palette.grey[400],
-              }}
+            <ListItem
+              disablePadding
+              sx={{ display: "block" }}
+              onMouseDown={() => setOpen(false)}
             >
-              <ListItemIcon
+              <ListItemButton
+                onClick={() => navigateHandler(item)}
                 sx={{
-                  minWidth: 0,
-                  mx: 0,
-                  justifyContent: "center",
-                  fontSize: 20,
+                  minHeight: 50,
+
+                  borderRadius: "12px",
+                  marginY: 2,
+                  justifyContent: open ? "initial" : "center",
+                  padding: "8px 12px",
+                  // columnGap: 1,
+                  bgcolor: active === item.id ? "#F0EEFD" : "white",
+                  ":hover": {
+                    bgcolor: "#F0EEFD", // Change to the desired hover color
+                    color: theme.palette.primary.main,
+                  },
                   color:
                     active === item.id
                       ? theme.palette.primary.main
                       : theme.palette.grey[400],
                 }}
               >
-                {active === item.id ? item.icon2 : item.icon1}
-              </ListItemIcon>
-              {open && (
-                <ListItemText
-                  primary={item.label}
+                <ListItemIcon
                   sx={{
-                    textAlign: "initial",
-                    fontSize: "18px",
+                    minWidth: 0,
+                    mx: 0,
+                    justifyContent: "center",
+                    fontSize: 20,
+                    color:
+                      active === item.id
+                        ? theme.palette.primary.main
+                        : theme.palette.grey[400],
                   }}
-                />
-              )}
-              {item.options ? (
-                selectedCategory === item.id ? (
-                  <ArrowUp2 size={16} />
+                >
+                  {active === item.id ? item.icon2 : item.icon1}
+                </ListItemIcon>
+                {open && (
+                  <ListItemText
+                    primary={item.label}
+                    sx={{
+                      textAlign: "initial",
+                      fontSize: "18px",
+                    }}
+                  />
+                )}
+                {item.options ? (
+                  selectedCategory === item.id ? (
+                    <ArrowUp2 size={16} />
+                  ) : (
+                    <ArrowDown2 size={16} />
+                  )
                 ) : (
-                  <ArrowDown2 size={16} />
-                )
-              ) : (
-                <></>
-              )}
-            </ListItemButton>
-            {item.options && open && (
-              <Collapse
-                in={selectedCategory === item.id}
-                timeout="auto"
-                unmountOnExit
-                sx={{ marginTop: "-16px" }}
-              >
-                <List component="div" disablePadding>
-                  {item.options.map((option) => (
-                    <ListItemButton
-                      sx={{
-                        padding: "8px 12px",
-                        maxHeight: "32px",
-                        bgcolor: "white",
-                        ":hover": {
+                  <></>
+                )}
+              </ListItemButton>
+              {item.options && open && (
+                <Collapse
+                  in={selectedCategory === item.id}
+                  timeout="auto"
+                  unmountOnExit
+                  sx={{ marginTop: "-16px" }}
+                >
+                  <List component="div" disablePadding>
+                    {item.options.map((option) => (
+                      <ListItemButton
+                        sx={{
+                          padding: "8px 12px",
+                          maxHeight: "32px",
                           bgcolor: "white",
-                          borderRight: "1px solid #C2BDF5",
-                          color: theme.palette.primary.main,
-                        },
-                        color:
-                          active === option.id
-                            ? theme.palette.primary.main
-                            : theme.palette.grey[400],
-                      }}
-                      onClick={() => onNestedClick(option)}
-                    >
-                      <ListItemText
-                        sx={{ textAlign: "initial" }}
-                        primary={option.label}
-                      />
-                    </ListItemButton>
-                  ))}
-                </List>
-              </Collapse>
-            )}
-          </ListItem>
+                          ":hover": {
+                            bgcolor: "white",
+                            borderRight: "1px solid #C2BDF5",
+                            color: theme.palette.primary.main,
+                          },
+                          color:
+                            active === option.id
+                              ? theme.palette.primary.main
+                              : theme.palette.grey[400],
+                        }}
+                        onClick={() => onNestedClick(option)}
+                      >
+                        <ListItemText
+                          sx={{ textAlign: "initial" }}
+                          primary={option.label}
+                        />
+                      </ListItemButton>
+                    ))}
+                  </List>
+                </Collapse>
+              )}
+            </ListItem>
           </LightTooltip>
         ))}
       </List>
@@ -350,6 +307,6 @@ export default function SideNavigation() {
           {today}
         </Typography>
       )}
-    </Drawer>
+    </Box>
   );
 }

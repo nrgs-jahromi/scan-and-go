@@ -130,8 +130,8 @@ const theme = createTheme({
     MuiPaper: {
       styleOverrides: {
         root: {
-          border: `0.5px solid #E8E5FA`,
-          boxShadow: "none",
+          // border: `0.5px solid #E8E5FA`,
+          boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.05)", // باکس شادوی نرم
           borderRadius: "8px",
           backgroundColor: "white",
           height: "fit-content",

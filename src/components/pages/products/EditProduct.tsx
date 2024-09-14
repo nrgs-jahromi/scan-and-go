@@ -182,7 +182,7 @@ const EditProduct = () => {
   }, [addProductIsSuccess, addProductError]);
 
   return (
-    <Box className="space-y-4">
+    <Box className="space-y-4 h-full overflow-auto">
       <PageHeader
         title="ویرایش محصول"
         buttons={[
